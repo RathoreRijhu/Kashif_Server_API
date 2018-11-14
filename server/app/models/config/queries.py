@@ -8,28 +8,28 @@ QUERIES = {
                "WHERE product_asin=%s limit 1",
 
     "GetWatches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='watches'",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='watches' LIMIT %s OFFSET %s",
 
     "GetBracelet": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='161' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='161' LIMIT %s OFFSET %s ",
 
     "GetJewelry": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='163' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='163' LIMIT %s OFFSET %s",
 
     "GetHandbags": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='handbags' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='handbags' LIMIT %s OFFSET %s",
 
     "GetClutches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='clutches' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='clutches' LIMIT %s OFFSET %s",
 
     "GetBagpack": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='bagpacks' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='bagpacks' LIMIT %s OFFSET %s",
 
     "GetRunning": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='running' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='running' LIMIT %s OFFSET %s",
     
     "GetMainProductAsinSandals": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
-                                  "WHERE category='sandals' OR category='sandal' "       ,
+                                  "WHERE category='sandals' OR category='sandal' LIMIT %s OFFSET %s"       ,
 
     "GetDataAgainstAsin": "SELECT title, price, color, brand, image_link, category, product_size, "
                           "all_images_links, description1, description2 "
@@ -37,32 +37,32 @@ QUERIES = {
                           "WHERE main_product_asin=%s",
 
     "GetMainProductAsinRunnings": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
-                          "WHERE category='running'",
+                          "WHERE category='running' LIMIT %s OFFSET %s",
 
     "GetMainProductAsinFlats": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
-                          "WHERE category='flat'",
+                          "WHERE category='flat' LIMIT %s OFFSET %s",
 
     "GetMainProductAsinSneakers": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
-                          "WHERE category='sneaker'",
+                          "WHERE category='sneaker' LIMIT %s OFFSET %s",
 
 
     "GetMainProductAsinTrainings": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
-                              "WHERE category='training'",
+                              "WHERE category='training' LIMIT %s OFFSET %s",
 
     "GetMainProductAsinBracelets": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
-                              "WHERE category='bracelet'",
+                              "WHERE category='bracelet' LIMIT %s OFFSET %s",
 
     "GetMainProductAsinWatches": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
                               "WHERE category='watches' LIMIT %s OFFSET %s",
 
     "GetMainProductAsinHandbags": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
-                              "WHERE category='handbags'",
+                              "WHERE category='handbags' LIMIT %s OFFSET %s",
 
     "GetMainProductAsinClutches": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
-                              "WHERE category='clutches' OR category='cultches'",
+                              "WHERE category='clutches' OR category='cultches' LIMIT %s OFFSET %s",
 
     "GetMainProductAsinBagpacks": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
-                              "WHERE category='bagpacks'",
+                              "WHERE category='bagpacks' LIMIT %s OFFSET %s",
 
     "GetShopSpringData": "SELECT  product_asin, title, new_price, color, category, " 
       "production_descr, allsizes, allimages_links, brand_name, image_link, category " 
