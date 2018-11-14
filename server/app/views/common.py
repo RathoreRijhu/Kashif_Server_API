@@ -5,7 +5,9 @@ from flask_cors import CORS
 from app.models.database import *
 from app.models.set_price import *
 from flask_autodoc import Autodoc
-from selenium.webdriver import Chrome
+#from selenium.webdriver import Chrome
+#from selenium.webdriver.firefox.options import Options
+from selenium.webdriver import Firefox
 from selenium.webdriver.firefox.options import Options
 import json
 
@@ -18,7 +20,8 @@ url = 'http://www.forex.pk/open_market_rates.asp'
 opts = Options()
 opts.add_argument('--no-sandbox')
 opts.add_argument('--headless')
-browser = Chrome(options=opts )
+#browser = Chrome(options=opts )
+browser = Firefox(firefox_options=opts )
 browser.get(url)
 
 price = browser.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[2]/table/tbody/tr[3]/td/table/tbody/tr[3]/td/table/tbody/tr/td[2]/table/tbody/tr[24]/td[3]')
