@@ -1,35 +1,55 @@
 QUERIES = {
     "GetEarings": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='162' limit 60",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='162' LIMIT %s OFFSET %s",
 
-    "GetLink": "SELECT product_link FROM sorted_db.sorted_ebay_scraped_data "
+    "GetLink": "SELECT product_link FROM sorted_db.sorted_amazon_products_details "
                "WHERE main_product_asin=%s "
                "UNION SELECT product_link FROM sorted_db.sorted_ebay_scraped_data "
-               "WHERE product_asin=%s limit 1",
+               "WHERE product_asin=%s "
+               "UNION SELECT product_link FROM shopify_db.dillards_scraped_data "
+               "WHERE product_asin=%s "
+               "UNION SELECT product_link FROM shopify_db.macys_scraped_data "
+               "WHERE product_asin=%s "
+               "UNION SELECT product_link FROM shopify_db.pm6_scraped_data "
+               "WHERE main_asin=%s "
+               "UNION SELECT product_link FROM shopify_db.spring_scraped_data "
+               "WHERE product_asin=%s "
+               "UNION SELECT product_link FROM shopify_db.zappos_scraped_data "
+               "WHERE product_asin=%s "
+               "UNION SELECT product_link FROM shopify_db.zara_scraped_data "
+               "WHERE product_asin=%s",
 
     "GetWatches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='watches' LIMIT %s OFFSET %s",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='watches' "
+                      "LIMIT %s OFFSET %s",
 
     "GetBracelet": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='161' LIMIT %s OFFSET %s ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='161' "
+                      "LIMIT %s OFFSET %s ",
 
     "GetJewelry": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='163' LIMIT %s OFFSET %s",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='163' "
+                      "LIMIT %s OFFSET %s",
 
     "GetHandbags": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='handbags' LIMIT %s OFFSET %s",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='handbags' "
+                      "LIMIT %s OFFSET %s",
 
     "GetClutches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='clutches' LIMIT %s OFFSET %s",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='clutches' "
+                      "LIMIT %s OFFSET %s",
 
     "GetBagpack": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='bagpacks' LIMIT %s OFFSET %s",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='bagpacks' "
+                      "LIMIT %s OFFSET %s",
 
     "GetRunning": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.sorted_ebay_scraped_data where category='running' LIMIT %s OFFSET %s",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='running' "
+                      "LIMIT %s OFFSET %s",
     
     "GetMainProductAsinSandals": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
-                                  "WHERE category='sandals' OR category='sandal' LIMIT %s OFFSET %s"       ,
+                      "WHERE category='sandals' OR category='sandal' "
+                      "LIMIT %s OFFSET %s",
 
     "GetDataAgainstAsin": "SELECT title, price, color, brand, image_link, category, product_size, "
                           "all_images_links, description1, description2 "
