@@ -16,8 +16,8 @@ global dollar_price
 url = 'http://www.forex.pk/open_market_rates.asp'
 
 opts = Options()
-#opts.add_argument('--no-sandbox')
-#opts.add_argument('--headless')
+opts.add_argument('--no-sandbox')
+opts.add_argument('--headless')
 browser = Chrome(options=opts )
 browser.get(url)
 
