@@ -123,6 +123,7 @@ def ebay_bagpack(limit, offset):
 @auto.doc()
 def ebay_running(limit, offset):
     return_data = get_ebay_running(limit, offset)
+    print(return_data)
     set_category_id = '85'
     category_text = 'running'
     response = ebay_attributes(return_data, set_category_id, category_text)

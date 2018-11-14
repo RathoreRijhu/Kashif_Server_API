@@ -1,67 +1,67 @@
 QUERIES = {
     "GetEarings": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM public.sorted_ebay_scraped_data where category='162' limit 60",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='162' limit 60",
 
-    "GetLink": "SELECT product_link FROM public.sorted_amazon_products_details "
+    "GetLink": "SELECT product_link FROM sorted_db.sorted_ebay_scraped_data "
                "WHERE main_product_asin=%s "
-               "UNION SELECT product_link FROM public.sorted_ebay_scraped_data "
+               "UNION SELECT product_link FROM sorted_db.sorted_ebay_scraped_data "
                "WHERE product_asin=%s limit 1",
 
     "GetWatches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM public.sorted_ebay_scraped_data where category='watches'",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='watches'",
 
     "GetBracelet": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM public.sorted_ebay_scraped_data where category='161' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='161' ",
 
     "GetJewelry": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM public.sorted_ebay_scraped_data where category='163' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='163' ",
 
     "GetHandbags": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM public.sorted_ebay_scraped_data where category='handbags' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='handbags' ",
 
     "GetClutches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM public.sorted_ebay_scraped_data where category='clutches' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='clutches' ",
 
     "GetBagpack": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM public.sorted_ebay_scraped_data where category='bagpacks' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='bagpacks' ",
 
     "GetRunning": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM public.sorted_ebay_scraped_data where category='running' ",
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='running' ",
     
-    "GetMainProductAsinSandals": "SELECT DISTINCT(main_product_asin) FROM public.sorted_amazon_products_details "
+    "GetMainProductAsinSandals": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
                                   "WHERE category='sandals' OR category='sandal' "       ,
 
     "GetDataAgainstAsin": "SELECT title, price, color, brand, image_link, category, product_size, "
                           "all_images_links, description1, description2 "
-                          "FROM public.sorted_amazon_products_details "
+                          "FROM sorted_db.sorted_amazon_products_details "
                           "WHERE main_product_asin=%s",
 
-    "GetMainProductAsinRunnings": "SELECT DISTINCT(main_product_asin) FROM public.sorted_amazon_products_details "
+    "GetMainProductAsinRunnings": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
                           "WHERE category='running'",
 
-    "GetMainProductAsinFlats": "SELECT DISTINCT(main_product_asin) FROM public.sorted_amazon_products_details "
+    "GetMainProductAsinFlats": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
                           "WHERE category='flat'",
 
-    "GetMainProductAsinSneakers": "SELECT DISTINCT(main_product_asin) FROM public.sorted_amazon_products_details "
+    "GetMainProductAsinSneakers": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
                           "WHERE category='sneaker'",
 
 
-    "GetMainProductAsinTrainings": "SELECT DISTINCT(main_product_asin) FROM public.sorted_amazon_products_details "
+    "GetMainProductAsinTrainings": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
                               "WHERE category='training'",
 
-    "GetMainProductAsinBracelets": "SELECT DISTINCT(main_product_asin) FROM public.sorted_amazon_products_details "
+    "GetMainProductAsinBracelets": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
                               "WHERE category='bracelet'",
 
-    "GetMainProductAsinWatches": "SELECT DISTINCT(main_product_asin) FROM public.sorted_amazon_products_details "
+    "GetMainProductAsinWatches": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
                               "WHERE category='watches' LIMIT %s OFFSET %s",
 
-    "GetMainProductAsinHandbags": "SELECT DISTINCT(main_product_asin) FROM public.sorted_amazon_products_details "
+    "GetMainProductAsinHandbags": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
                               "WHERE category='handbags'",
 
-    "GetMainProductAsinClutches": "SELECT DISTINCT(main_product_asin) FROM public.sorted_amazon_products_details "
+    "GetMainProductAsinClutches": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
                               "WHERE category='clutches' OR category='cultches'",
 
-    "GetMainProductAsinBagpacks": "SELECT DISTINCT(main_product_asin) FROM public.sorted_amazon_products_details "
+    "GetMainProductAsinBagpacks": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
                               "WHERE category='bagpacks'",
 
     "GetShopSpringData": "SELECT  product_asin, title, new_price, color, category, " 
