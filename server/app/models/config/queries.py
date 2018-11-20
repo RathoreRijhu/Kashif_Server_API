@@ -53,10 +53,10 @@ QUERIES = {
 
     "GetDataAgainstAsin": "SELECT title, price, color, brand, image_link, category, product_size, "
                           "all_images_links, description1, description2 "
-                          "FROM sorted_db.sorted_amazon_products_details "
+                          "FROM shopify_db.amazon_products_details "
                           "WHERE main_product_asin=%s",
 
-    "GetMainProductAsinRunnings": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
+    "GetMainProductAsinRunnings": "SELECT DISTINCT(main_product_asin) FROM shopify_db.amazon_products_details "
                           "WHERE category='running' LIMIT %s OFFSET %s",
 
     "GetMainProductAsinFlats": "SELECT DISTINCT(main_product_asin) FROM sorted_db.sorted_amazon_products_details "
