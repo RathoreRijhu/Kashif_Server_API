@@ -5,12 +5,18 @@ from flask_cors import CORS
 from app.models.database import *
 from app.models.set_price import *
 from flask_autodoc import Autodoc
-#from selenium.webdriver import Chrome
+from selenium.webdriver import Chrome
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.select import Select
+from bs4 import BeautifulSoup
+import time
+import re
+from fake_useragent import UserAgent
+#from selenium.webdriver import Firefox
 #from selenium.webdriver.firefox.options import Options
-from selenium.webdriver import Firefox
-from selenium.webdriver.firefox.options import Options
 import json
-
+import random
+from app.common.proxy_rotator import ProxyRotator
 CORS(app)
 auto = Autodoc(app)
 
@@ -20,8 +26,8 @@ url = 'http://www.forex.pk/open_market_rates.asp'
 opts = Options()
 opts.add_argument('--no-sandbox')
 opts.add_argument('--headless')
-#browser = Chrome(options=opts )
-browser = Firefox(firefox_options=opts )
+browser = Chrome(options=opts )
+#browser = Firefox(firefox_options=opts )
 browser.get(url)
 
 price = browser.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[2]/table/tbody/tr[3]/td/table/tbody/tr[3]/td/table/tbody/tr/td[2]/table/tbody/tr[24]/td[3]')
@@ -45,7 +51,178 @@ def return_product_link(sku):
     print(sku)
     link = get_product_link(sku)[0][0]
     print(link)
-    return link
+    if(link is not None and "amazon" in link):
+        opts = Options()
+        opts.add_argument('--no-sandbox')
+        opts.add_argument('--headless')
+        browser = Chrome(options=opts)
+        browser.get(link)
+
+        try:
+            quantity = None
+            select=Select(browser.find_element_by_id("quantity"))
+            for opt in select.options:
+                quantity=opt.text
+                print(quantity)
+        except Exception as e:
+            print(e)
+
+        price =None
+        try:
+            availability = browser.find_element_by_xpath('//*[@id="availability"]/span').text
+            print(availability)
+            price = browser.find_element_by_xpath('//*[@id="priceblock_ourprice"]').text[1:]
+            data={'availability':availability, 'price':price, 'quantity':int(quantity)}
+            browser.close()
+        except Exception as e:
+            print(e)
+            browser.close()
+            data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+        return json.dumps(data)
+    elif(link is not None and "ebay" in link):
+        opts = Options()
+        opts.add_argument('--no-sandbox')
+        opts.add_argument('--headless')
+        browser = Chrome(options=opts)
+        browser.get(link)
+        #time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        try:
+            quantity = None
+            quantity=soup.find("span",{'id':'qtySubTxt'}).text
+	    quantity=re.findall("\d+",quantity)[0]
+        except Exception as e:
+            print(e)
+        price = None
+        availability = None
+        try:
+            availability = soup.find("span",{'id':'qtySubTxt'}).text.strip()
+            price = soup.find("span",{'id':"prcIsum"}).text.split('$')[1] or soup.find("span",{'id':"mm-saleDscPrc"}).text.split('$')[1]
+            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
+            browser.close()
+        except Exception as e:
+            browser.close()
+            data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+        return json.dumps(data)
+    else:
+        data={'availability':None, 'price':None, 'quantity':None}
+        return json.dumps(data)
+
+
+@app.route('/get-color-size/<sku>/<color>/<size>', methods=['GET'])
+@auto.doc()
+def get_color_size(sku, color, size):
+    """
+    Returns Stock and price
+    """
+    print(sku, size, color)
+    url = get_url(sku, color, size,)
+    print(url)
+    user_agent = UserAgent()
+    headers = {'User-Agent': str( user_agent.random )}
+    #from selenium.webdriver import Firefox
+    #from selenium.webdriver.firefox.options import Options
+    if(url is not None and "amazon" in url):
+        opts = Options()
+	rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxies.txt')
+        opts.add_argument('--user-agent= Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0')
+        #opts.add_argument('--proxy-server=104.202.147.26:61336')
+	opts.add_argument('--no-sandbox')
+        opts.add_argument('--headless')
+	opts.add_argument('--proxy-server %s' % rotator.get_proxy())
+        browser = Chrome(options=opts)
+        browser.get(url)
+        time.sleep(5)
+	print(browser.title)
+        # try:
+        #     quantity = None
+        #     select=Select(browser.find_element_by_id("quantity"))
+        #     for opt in select.options:
+        #         quantity=opt.text
+        #     print(quantity)
+        # except Exception as e:
+        #     print(e)
+        #     pass
+
+        price = None
+        availability = None
+        quantity = None
+        try:
+            availability = browser.find_element_by_xpath('//*[@id="availability"]/span').text
+            price = browser.find_element_by_xpath('//*[@id="priceblock_ourprice"]').text[1:]
+            if(availability.strip()=='In Stock.'):
+                #try:
+                select=Select(browser.find_element_by_id("quantity"))
+                for opt in select.options:
+                    quantity=opt.text
+                print(quantity)
+                #except Exception as e:
+                #print(e)
+                data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
+            else:
+                quantity=re.findall('\d+',availability)[0]
+                data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
+            browser.close()
+        except Exception as e:
+            browser.close()
+            data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+        return json.dumps(data)
+    elif(url is not None and "ebay" in url):
+        opts = Options()
+	rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxies.txt')
+        opts.add_argument('--user-agent= Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0')
+        opts.add_argument('--no-sandbox')
+        opts.add_argument('--headless')
+	opts.add_argument('--proxy-server %s' % rotator.get_proxy())
+        browser = Chrome(chrome_options=opts)
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        try:
+            quantity = None
+            quantity=soup.find("span",{'id':'qtySubTxt'}).text.split()[0]
+        except Exception as e:
+            print(e)
+        price = None
+        availability = None
+        try:
+            availability = soup.find("span",{'id':'qtySubTxt'}).text.split()[1]
+            price = soup.find("span",{'id':"prcIsum"}).text.split('$')[1] or soup.find("span",{'id':"mm-saleDscPrc"}).text.split('$')[1]
+            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
+            browser.close()
+        except Exception as e:
+            browser.close()
+            data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+        return json.dumps(data)
+    # elif(url is not None and "6pm" in url):
+    #     opts = Options()
+    #     opts.add_argument('--no-sandbox')
+    #     opts.add_argument('--headless')
+    #     browser = Chrome(options=opts)
+    #     browser.get(url)
+    #     time.sleep(5)
+    #     soup=BeautifulSoup(browser.page_source, 'lxml')
+    #     select=Select(browser.find_element_by_id("pdp-size-select"))
+    #     price=None
+    #     availability=None
+    #     try:
+    #         price=soup.find('span',{"class":'_1q0kwWbBMG _3pxa4LdwPN'}).text.split('$')[1]
+    #         for opt in select.options:
+    #             if(opt.text.strip('')==size):
+    #                 select.select_by_visible_text(opt.text)
+    #                 time.sleep(2)
+    #                 try:
+    #                     availability=browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text
+    #                 except Exception as e:
+    #                     pass
+    #         data={'availability':availability}
+    #     except:
+
+
+    else:
+        data={'availability':None, 'price':None, 'quantity':None}
+        return json.dumps(data)
+
 
 @app.route('/ebay_earings/<limit>/<offset>', methods=['GET'])
 @auto.doc()
@@ -356,7 +533,7 @@ def ebay_attributes(return_data, set_category_id, category_text):
 @auto.doc()
 def amazon_sandals(limit, offset):
     asins = get_product_asin_sandals(int(limit), int(offset))
-    category_id = '560'
+    category_id = '84'
     category_text = 'sandal'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -480,7 +657,7 @@ def amazon_attributes(asins, category_id, category_text):
                     "regular_price": str(price),
                     "image":{ 'src': single_row[4] },
                     'attributes':[{'slug':'color', 'name':"Color", 'option':single_row[2]},
-                    			{'slug':'size', 'name':"Size", 'option':single_row[6]} ]
+                    			{'slug':'size', 'name':"Size", 'option':single_row[6]}]
                 }
                 variation_list.append(variation)
             
@@ -539,10 +716,10 @@ def amazon_attributes(asins, category_id, category_text):
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
 
-@app.route('/shopspring')
+@app.route('/shopspring/<limit>/<offset>')
 @auto.doc()
-def shopspring_data():
-    all_rows = get_all_data_of_shopspring()
+def shopspring_data(limit, offset):
+    all_rows = get_all_data_of_shopspring(limit,offset)
     all_data=[]
     for row in all_rows:
         

@@ -8,15 +8,17 @@ pg_ = PgPool()
 def get_product_link(sku):
     pg_conn, pg_cursor = pg_.get_conn()
     query = QUERIES["GetLink"]
-    params = (sku, sku, sku, sku, sku, sku, sku, sku,)
+    params = (sku, sku, sku, sku, sku, sku, sku, sku,sku,)
     try:
         res = pg_.execute_query(pg_cursor, query, params)
         pg_.commit_changes(pg_conn)
         pg_.put_conn(pg_conn)
+        print(res)
         return res
     except Exception as e:
         pg_.put_conn(pg_conn)
         return None
+
 
 
 def get_ebay_earings(limit, offset):
@@ -36,6 +38,8 @@ def get_ebay_earings(limit, offset):
     except Exception as e:
         pg_.put_conn(pg_conn)
         return None
+
+
 
 def get_ebay_watches(limit, offset):
     """
@@ -306,12 +310,27 @@ def get_product_asin_bagpack(limit, offset):
         pg_.put_conn(pg_conn)
         return None
 
-def get_all_data_of_shopspring():
+
+def get_url(sku, color, size):
+    pg_conn, pg_cursor = pg_.get_conn()
+    query = QUERIES["GetUrl"]
+    params = (sku, color, size,sku,)
+    try:
+        res = pg_.execute_query(pg_cursor, query, params)
+        pg_.commit_changes(pg_conn)
+        pg_.put_conn(pg_conn)
+        return res[0][0]
+    except Exception as e:
+        pg_.put_conn(pg_conn)
+        return None
+
+def get_all_data_of_shopspring(limit, offset):
     pg_conn, pg_cursor = pg_.get_conn()
     query = QUERIES["GetShopSpringData"]
+    params=(limit, offset,)
 
     try:
-        res = pg_.execute_query(pg_cursor, query, params='')
+        res = pg_.execute_query(pg_cursor, query, params)
         pg_.commit_changes(pg_conn)
         pg_.put_conn(pg_conn)
         return res
