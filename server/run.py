@@ -6,7 +6,7 @@ from app.common.db.postgres import PgPool
 app.config.from_object('config.DevelopmentConfig')
 
 config = ConfigParser.ConfigParser()
-config.read("/home/rijhu/Desktop/server/config.ini")
+config.read("/root/Kashif_Server_API/server/config.ini")
 
 db_conn_params = {
     "Host": config.get('Database', 'Host'),
@@ -19,7 +19,7 @@ db_conn_params = {
 db_conn = PgPool()
 db_conn.create_pool(db_conn_params)
 
-app.run(host='0.0.0.0', port=9000, threaded=True)
+app.run(host='0.0.0.0', port=8000, threaded=True)
 '''
 if __name__ == '__main__':
 	app.run()
