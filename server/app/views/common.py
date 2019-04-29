@@ -990,7 +990,7 @@ def pm6_data():
                     'name': "Size",
                     "visible": True,
                     "variation": True,
-                    "options": row[6]                
+                    "options": row[6][0]                
                 }
                 ]
             price = ""
