@@ -863,7 +863,7 @@ def macys_data():
         l2=[]
         if row[7] is not None:
             count = 0
-            for x in row[7].split(','):
+            for x in row[7].split('","'):
                 dict_object = {
                     
                     "src": x,
