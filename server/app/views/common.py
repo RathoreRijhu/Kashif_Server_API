@@ -980,7 +980,7 @@ def pm6_data():
                 l2.append(dict_object)
             # setting up properties or attributes
             if row[6] is not None:
-                option=row[6].split('{')[1].split('}')[0]
+                option=row[6].split('{')[1].split('}')[0].split(',')[0]
             else:
                 option=row[6]
 
