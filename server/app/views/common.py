@@ -979,6 +979,11 @@ def pm6_data():
                 }
                 l2.append(dict_object)
             # setting up properties or attributes
+            if row[6] is not None:
+                option=row[6].split('{')[1].split('}')[0]
+            else:
+                option=row[6]
+
             attributes = [{
                     'name': "Color",
                     "visible": True,
@@ -990,7 +995,7 @@ def pm6_data():
                     'name': "Size",
                     "visible": True,
                     "variation": True,
-                    "options": row[6]                
+                    "options": option                
                 }
                 ]
             price = ""
