@@ -1470,7 +1470,7 @@ def nordstromrack_data():
                     if "{" in x:
                         dict_object = {
                             
-                            "src": x.split('{')[1],
+                            "src": x.split('{')[1].split('}')[0],
                             "position": count
                         }
                     elif "}" in x:
