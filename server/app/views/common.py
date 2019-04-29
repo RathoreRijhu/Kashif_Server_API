@@ -979,9 +979,11 @@ def pm6_data():
                 }
                 l2.append(dict_object)
             # setting up properties or attributes
+            optionsList=[]
             if row[6] is not None:
                 option=row[6].split('{')[1].split('}')[0]
-            
+                for opt in option.split(','):
+                    optionsList.append(opt)
 
                 attributes = [{
                         'name': "Color",
@@ -994,8 +996,7 @@ def pm6_data():
                         'name': "Size",
                         "visible": True,
                         "variation": True,
-                        "options": for opt in option.split(','):
-                            opt                
+                        "options": optionsList               
                     }
                     ]
             else:
