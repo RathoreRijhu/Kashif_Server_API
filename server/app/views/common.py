@@ -873,7 +873,7 @@ def macys_data():
                 elif "}" in x:
                     dict_object = {
                         
-                        "src": x.split('}')[0][1:],
+                        "src": x.split('}')[0][2:],
                         "position": count
                     }
                 else:
