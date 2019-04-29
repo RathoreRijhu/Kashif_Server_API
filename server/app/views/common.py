@@ -867,13 +867,13 @@ def macys_data():
                 if "{" in x:
                     dict_object = {
                         
-                        "src": x.split('{')[1],
+                        "src": x.split('\{')[1],
                         "position": count
                     }
                 elif "}" in x:
                     dict_object = {
                         
-                        "src": x.split('}')[0],
+                        "src": x.split('/}')[0],
                         "position": count
                     }
                 else:
