@@ -981,23 +981,38 @@ def pm6_data():
             # setting up properties or attributes
             if row[6] is not None:
                 option=row[6].split('{')[1].split('}')[0]
+            
+
+                attributes = [{
+                        'name': "Color",
+                        "visible": True,
+                        "variation": True,
+                        "options": row[3]
+
+                    },
+                    {
+                        'name': "Size",
+                        "visible": True,
+                        "variation": True,
+                        "options": for opt in option.split(','):
+                            opt                
+                    }
+                    ]
             else:
-                option=row[6]
+                attributes = [{
+                        'name': "Color",
+                        "visible": True,
+                        "variation": True,
+                        "options": row[3]
 
-            attributes = [{
-                    'name': "Color",
-                    "visible": True,
-                    "variation": True,
-                    "options": row[3]
-
-                },
-                {
-                    'name': "Size",
-                    "visible": True,
-                    "variation": True,
-                    "options": option                
-                }
-                ]
+                    },
+                    {
+                        'name': "Size",
+                        "visible": True,
+                        "variation": True,
+                        "options": row[6]          
+                    }
+                    ]
             price = ""
             if row[2]:
                 db_price = float(row[2])
