@@ -1016,9 +1016,10 @@ def pm6_data():
                     }
                     ]
             price = ""
+            db_price=0
             if row[2]:
                 db_price = float(row[2])
-            elif row[11]:
+            elif row[11] :
                 db_price = float(row[11])
             if db_price > 500:
                 percent_30 = db_price * 0.3
