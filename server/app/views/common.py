@@ -105,6 +105,33 @@ def return_product_link(sku):
             browser.close()
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
+    elif(link is not None and 'macys' in link):
+        opts = Options()
+        opts.add_argument('--no-sandbox')
+        opts.add_argument('--headless')
+        browser = Chrome(options=opts)
+        browser.get(link)
+        #time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        quantity = None
+        try:
+            
+            quantity=soup.find("span",{'id':'qtySubTxt'}).text
+            quantity=re.findall("\d+",quantity)[0]
+        except Exception as e:
+            print(e)
+        price = None
+        availability = None
+        try:
+            availability = browser.find_element_by_xpath('//*[@id="mainContent"]/div/div[1]/div[2]/div[3]/div/div/div[2]/div[4]/div/div/div/div/form/div[1]/div[2]/div/span[1]').text.strip()
+            price = soup.find("span",{'data-auto':"sale-price"}).text.split('$')[1] or soup.find("div",{'data-auto':"main-price"}).text.split('$')[1]
+            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
+            browser.close()
+        except Exception as e:
+            browser.close()
+            data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+        return json.dumps(data)
+
     else:
         data={'availability':None, 'price':None, 'quantity':None}
         return json.dumps(data)
@@ -1689,6 +1716,8 @@ def shopguess_data():
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
+
+
 
 def assign_category(category_text):
     category_id = 0
