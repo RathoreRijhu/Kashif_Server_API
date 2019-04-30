@@ -1181,9 +1181,12 @@ def aldoshoes_data():
     all_data=[]
     #print all_asin
     for asin in all_asin:
-        #print(asin)
-        #print(asin[0])
+        print(asin)
+        print(asin[0])
+        all_rows1 = get_data_against_asin_aldoshoes(asin)
+        print(all_rows1)
         all_rows = get_data_against_asin_aldoshoes(asin[0])
+        print(all_rows)
         #print all_rows
         variation_list=[]
         for row in all_rows:
