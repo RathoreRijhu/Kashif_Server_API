@@ -1250,7 +1250,7 @@ def aldoshoes_data():
             if price or row[9]: 
                 variation = {
                     "regular_price": str(price),
-                    "image":{ 'src': row[9] },
+                    "image":{ 'src': row[9].split('jpg')[0]+'jpg' },
                     'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]}]
                 }
                 variation_list.append(variation)
