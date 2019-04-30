@@ -907,13 +907,16 @@ def macys_data():
             ]
         price = ""
         if row[2]:
-            db_price = float(row[2])
+            #db_price = float(row[2] #it is used for price in dollar
+            db_price = float(row[2]*0.0071) #changed because price in db is in pkr and convert to dollar
         elif row[11]:
-            db_price = float(row[11])
+            #db_price = float(row[11]
+            db_price = float(row[11]*0.0071)
         #print(db_price)
         if db_price > 500:
             percent_30 = db_price * 0.3
             price = (percent_30 + db_price) * (dollar_price + 3)
+
         elif row[8]:
             brand = row[8].replace(',', '').lower()
             price = setting_price(brand, row[10], db_price, dollar_price)
@@ -1017,7 +1020,7 @@ def pm6_data():
                     ]
             price = ""
             db_price=0
-            if row[2]:
+            if row[2] is not None:
                 db_price = float(row[2])
             elif row[11] :
                 db_price = float(row[11])
