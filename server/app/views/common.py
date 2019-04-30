@@ -961,7 +961,7 @@ def pm6_data():
                     elif "}" in x:
                         dict_object = {
                             
-                            "src": x.split('}')[0]+'jpg',
+                            "src": x.split('jpg')[0]+'jpg',
                             "position": count
                         }
                     else:
