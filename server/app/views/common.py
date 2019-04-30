@@ -908,10 +908,10 @@ def macys_data():
         price = ""
         if row[2]:
             #db_price = float(row[2] #it is used for price in dollar
-            db_price = float(row[2]*0.0071) #changed because price in db is in pkr and convert to dollar
+            db_price = float(row[2]*float(0.0071)) #changed because price in db is in pkr and convert to dollar
         elif row[11]:
             #db_price = float(row[11]
-            db_price = float(row[11]*0.0071)
+            db_price = float(row[11]*float(0.0071))
         #print(db_price)
         if db_price > 500:
             percent_30 = db_price * 0.3
