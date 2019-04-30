@@ -950,23 +950,24 @@ def pm6_data():
             # setting up images
             if row[7] is not None:
                 count = 0
-                for x in row[7].split(' ,'):
+                splited_images=row[7].split('jpg,')
+                for x in splited_images:
                     if "{" in x:
                         dict_object = {
                             
-                            "src": x.split('{')[1],
+                            "src": x.split('{')[1]+'jpg',
                             "position": count
                         }
                     elif "}" in x:
                         dict_object = {
                             
-                            "src": x.split('}')[0],
+                            "src": x.split('}')[0]+'jpg',
                             "position": count
                         }
                     else:
                         dict_object = {
                             
-                            "src": x.split(' ')[1],
+                            "src": x.split(' ')[1]+'jpg',
                             "position": count
                         }
 
