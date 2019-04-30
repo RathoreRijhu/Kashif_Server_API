@@ -936,7 +936,7 @@ def macys_data():
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
 
-@app.route('/6pm')
+@app.route('/6pm-data')
 @auto.doc()
 def pm6_data():
     all_asin = get_all_main_asin_of_6pm()
