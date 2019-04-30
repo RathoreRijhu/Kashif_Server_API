@@ -1219,20 +1219,41 @@ def aldoshoes_data():
                 }
                 l2.append(dict_object)
             # setting up properties or attributes
-            attributes = [{
-                    'name': "Color",
-                    "visible": True,
-                    "variation": True,
-                    "options": row[3]
+            optionsList=[]
+            if row[6] is not None:
+                option=row[6].split('{')[1].split('}')[0]
+                for opt in option.split(','):
+                    optionsList.append(opt)
+                    attributes = [{
+                        'name': "Color",
+                        "visible": True,
+                        "variation": True,
+                        "options": row[3]
 
-                },
-                {
-                    'name': "Size",
-                    "visible": True,
-                    "variation": True,
-                    "options": row[6]                
-                }
-                ]
+                        },
+                        {
+                        'name': "Size",
+                        "visible": True,
+                        "variation": True,
+                        "options": optionsList                
+                        }
+                        ]
+            else:
+                attributes = [{
+                        'name': "Color",
+                        "visible": True,
+                        "variation": True,
+                        "options": row[3]
+
+                        },
+                        {
+                        'name': "Size",
+                        "visible": True,
+                        "variation": True,
+                        "options": row[6]                
+                        }
+                        ]
+
             price = ""
             if row[2]:
                 db_price = float(row[2])
@@ -1251,7 +1272,7 @@ def aldoshoes_data():
                 variation = {
                     "regular_price": str(price),
                     "image":{ 'src': row[9].split('jpg')[0]+'jpg' },
-                    'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]}]
+                    'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]},]
                 }
                 variation_list.append(variation)
 
