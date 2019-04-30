@@ -1274,7 +1274,7 @@ def aldoshoes_data():
                     variation = {
                         "regular_price": str(price),
                         "image":{ 'src': row[9].split('jpg')[0]+'jpg' },
-                        'attributes':[{'slug':'color', 'name':"Color", 'option':single_row[3]},
+                        'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]},
                                     {'slug':'size', 'name':"Size", 'option':size}]
                     }
                     variation_list.append(variation)
