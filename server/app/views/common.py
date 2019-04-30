@@ -924,7 +924,8 @@ def macys_data():
             if not price:
                 price = float(db_price) * (dollar_price+3)
         
-        category_id = assign_category(row[10].split(' ')[0])
+        #category_id = assign_category(row[10].split(' ')[0])
+        category_id = assign_category(row[10])
         data = {
             'sku': row[0],
             #'type': 'variable',
@@ -1705,7 +1706,11 @@ def assign_category(category_text):
     elif 'training' in category_text:
         category_id = 87
     elif 'flat' in category_text:
-        category_id = 88    
+        category_id = 88 
+    elif 'sweater' in category_text:
+        category_id=303
+    elif 'jacket' in category_text:
+        category_id=302   
     return category_id
 
 
