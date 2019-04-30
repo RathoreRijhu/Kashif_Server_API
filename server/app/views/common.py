@@ -1165,11 +1165,24 @@ def aldoshoes_data():
             if row[7] is not None:
                 count = 0
                 for x in row[7].split(','):
-                    dict_object = {
-                        
-                        "src": x,
-                        "position": count
-                    }
+                    if "{" in x:
+                        dict_object = {
+                            
+                            "src": x.split("{")[1],
+                            "position": count
+                        }
+                    elif "}" in x:
+                        dict_object = {
+                            
+                            "src": x.split('}')[0],
+                            "position": count
+                        }
+                    else:
+                        dict_object = {
+                            
+                            "src": x,
+                            "position": count
+                        }
                     count = count+1
                     l2.append(dict_object)
             else:
@@ -1697,7 +1710,7 @@ def assign_category(category_text):
         category_id = 92
     elif 'watches' in category_text:
         category_id = 93
-    elif 'sandal' in category_text:
+    elif 'sandal' in category_text or 'heel' in category_text:
         category_id = 84
     elif 'running' in category_text:
         category_id = 85
