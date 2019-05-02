@@ -1052,7 +1052,7 @@ def pm6_data():
                     size_variations.append(variation)
                 variation_list.extend(size_variations)
 
-            category_id = assign_category(row[10].split(' ')[0])
+            category_id = assign_category(row[10])
         size_list=size_list
         color_list=color_list
         attributes = [{
@@ -1077,7 +1077,8 @@ def pm6_data():
             'attributes': attributes,
             'images': l2,
             'categories':[{ "id": category_id}],
-            'description': row[5]
+            'description': row[5],
+            'short_description': row[5].
             }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
@@ -1738,7 +1739,7 @@ def assign_category(category_text):
     category_id = 0
     if  'tshirt' in category_text:
         category_id = 150
-    elif 'jeans' in category_text :
+    elif 'jean' in category_text :
         category_id = 149
     elif 'handbag' in category_text :
         category_id = 80
