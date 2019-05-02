@@ -1053,33 +1053,33 @@ def pm6_data():
                 variation_list.extend(size_variations)
 
             category_id = assign_category(row[10])
-        size_list=size_list
-        color_list=color_list
-        attributes = [{
-                        'name': "Color",
-                        "visible": True,
-                        "variation": True,
-                        "options": color_list
-                    },
-                    {
-                        'name': "Size",
-                        "visible": True,
-                        "variation": True,
-                        "options": size_list               
-                    }
-                    ]
-        data = {
-            'sku': asin[0],
-            'type': 'variable',
-            'name': row[1],
-            'variations': variation_list,
-            'brand': row[8],
-            'attributes': attributes,
-            'images': l2,
-            'categories':[{ "id": category_id}],
-            'description': "testing",
-            'short_description': "testing"
-            }        
+            size_list=size_list
+            color_list=color_list
+            attributes = [{
+                            'name': "Color",
+                            "visible": True,
+                            "variation": True,
+                            "options": color_list
+                            },
+                            {
+                            'name': "Size",
+                            "visible": True,
+                            "variation": True,
+                            "options": size_list               
+                            }
+                            ]
+            data = {
+                'sku': asin[0],
+                'type': 'variable',
+                'name': row[1],
+                'variations': variation_list,
+                'brand': row[8],
+                'attributes': attributes,
+                'images': l2,
+                'categories':[{ "id": category_id}],
+                'description': "testing",
+                'short_description': "testing"
+                }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
@@ -1755,7 +1755,7 @@ def assign_category(category_text):
         category_id = 92
     elif 'watches' in category_text:
         category_id = 93
-    elif 'sandal' in category_text or 'heel' in category_text:
+    elif 'sandal' in category_text or 'heel' in category_text or 'boot' in category_text:
         category_id = 84
     elif 'running' in category_text:
         category_id = 85
