@@ -1067,18 +1067,18 @@ def pm6_data():
                     price = float(db_price) * (dollar_price+3)
             
             if price or row[9]:
-                for size in optionsList: 
-                    variation = {
-                        "regular_price": str(price),
-                        "image":{ 'src': row[9] },
-                        'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]},{
-                            'slug': "size",
-                            'name': "Size",
-                            'option':size
-                                      
-                        }]
-                    }
-                    variation_list.append(variation)
+                #for size in optionsList: 
+                variation = {
+                    "regular_price": str(price),
+                    "image":{ 'src': row[9] },
+                    'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]},{
+                        'slug': "size",
+                        'name': "Size",
+                        'option':row[6]
+                                  
+                    }]
+                }
+                variation_list.append(variation)
 
             category_id = assign_category(row[10].split(' ')[0])
         size_list=set(size_list)
