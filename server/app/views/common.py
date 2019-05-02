@@ -977,6 +977,8 @@ def pm6_data():
         all_rows = get_data_against_asin_6pm(asin[0])
         print all_rows
         variation_list=[]
+        size_list=[]
+        color_list=[]
         for row in all_rows:
             l2=[]
             # setting up images
@@ -1012,41 +1014,43 @@ def pm6_data():
                 }
                 l2.append(dict_object)
             # setting up properties or attributes
-            optionsList=[]
-            if row[6] is not None:
-                option=row[6].split('{')[1].split('}')[0]
-                for opt in option.split(','):
-                    optionsList.append(opt)
+            size_list.append(row[6])
+            color_list.append(row[3])
+            # optionsList=[]
+            # if row[6] is not None:
+            #     option=row[6].split('{')[1].split('}')[0]
+            #     for opt in option.split(','):
+            #         optionsList.append(opt)
 
-                attributes = [{
-                        'name': "Color",
-                        "visible": True,
-                        "variation": True,
-                        "options": list(str(row[3]))
+            #     attributes = [{
+            #             'name': "Color",
+            #             "visible": True,
+            #             "variation": True,
+            #             "options": row[3]
 
-                    },
-                    {
-                        'name': "Size",
-                        "visible": True,
-                        "variation": True,
-                        "options": optionsList               
-                    }
-                    ]
-            else:
-                attributes = [{
-                        'name': "Color",
-                        "visible": True,
-                        "variation": True,
-                        "options": row[3]
+            #         },
+            #         {
+            #             'name': "Size",
+            #             "visible": True,
+            #             "variation": True,
+            #             "options": optionsList               
+            #         }
+            #         ]
+            # else:
+            #     attributes = [{
+            #             'name': "Color",
+            #             "visible": True,
+            #             "variation": True,
+            #             "options": row[3]
 
-                    },
-                    {
-                        'name': "Size",
-                        "visible": True,
-                        "variation": True,
-                        "options": row[6]          
-                    }
-                    ]
+            #         },
+            #         {
+            #             'name': "Size",
+            #             "visible": True,
+            #             "variation": True,
+            #             "options": row[6]          
+            #         }
+            #         ]
             price = ""
             db_price=0
             if row[2] is not None:
@@ -1077,6 +1081,22 @@ def pm6_data():
                     variation_list.append(variation)
 
             category_id = assign_category(row[10].split(' ')[0])
+        size_list=set(size_list)
+        color_list=set(color_list)
+        attributes = [{
+                        'name': "Color",
+                        "visible": True,
+                        "variation": True,
+                        "options": color_list
+
+                    },
+                    {
+                        'name': "Size",
+                        "visible": True,
+                        "variation": True,
+                        "options": size_list               
+                    }
+                    ]
         data = {
             'sku': asin[0],
             #'type': 'variable',
