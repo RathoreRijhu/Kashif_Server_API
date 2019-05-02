@@ -1052,7 +1052,7 @@ def pm6_data():
                     variation_list.append(variation)
 
             category_id = assign_category(row[10].split(' ')[0])
-        size_list=set(size_list)
+        size_list=size_list
         color_list=color_list
         attributes = [{
                         'name': "Color",
