@@ -1014,9 +1014,14 @@ def pm6_data():
                 }
                 l2.append(dict_object)
             # setting up properties or attributes
-            size_list.append(row[6])
+            #size_list.append(row[6])
             color_list.append(row[3])
-            
+            optionsList=[]
+            if row[6] is not None:
+                option=row[6].split('{')[1].split('}')[0]
+                for opt in option.split(','):
+                    optionsList.append(opt)
+            size_list.extend(optionsList)
             price = ""
             db_price=0
             if row[2] is not None:
@@ -1033,71 +1038,36 @@ def pm6_data():
                     price = float(db_price) * (dollar_price+3)
             
             if price or row[9]:
-                #for size in optionsList: 
-                variation = {
-                    "regular_price": str(price),
-                    "image":{ 'src': row[9] },
-                    'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]},{
-                        'slug': "size",
-                        'name': "Size",
-                        'option':row[6]
-                                  
-                    }]
-                }
-                variation_list.append(variation)
+                for size in optionsList: 
+                    variation = {
+                        "regular_price": str(price),
+                        "image":{ 'src': row[9] },
+                        'attributes':[{'slug':'color', 'name':"Color", 'option':color_list},{
+                            'slug': "size",
+                            'name': "Size",
+                            'option':size_list
+                                      
+                        }]
+                    }
+                    variation_list.append(variation)
 
             category_id = assign_category(row[10].split(' ')[0])
-        size_list=size_list
+        size_list=set(size_list)
         color_list=color_list
-        optionsList=[]
-        if size_list is not None:
-            option=size_list.split('{')[1].split('}')[0]
-            for opt in option.split(','):
-                optionsList.append(opt)
+        attributes = [{
+                        'name': "Color",
+                        "visible": True,
+                        "variation": True,
+                        "options": color_list
 
-            attributes = [{
-                    'name': "Color",
-                    "visible": True,
-                    "variation": True,
-                    "options": color_list
-
-                },
-                {
-                    'name': "Size",
-                    "visible": True,
-                    "variation": True,
-                    "options": optionsList               
-                }
-                ]
-        else:
-            attributes = [{
-                    'name': "Color",
-                    "visible": True,
-                    "variation": True,
-                    "options": color_list
-
-                },
-                {
-                    'name': "Size",
-                    "visible": True,
-                    "variation": True,
-                    "options": size_list          
-                }
-                ]
-        # attributes = [{
-        #                 'name': "Color",
-        #                 "visible": True,
-        #                 "variation": True,
-        #                 "options": color_list
-
-        #             },
-        #             {
-        #                 'name': "Size",
-        #                 "visible": True,
-        #                 "variation": True,
-        #                 "options": size_list               
-        #             }
-        #             ]
+                    },
+                    {
+                        'name': "Size",
+                        "visible": True,
+                        "variation": True,
+                        "options": size_list               
+                    }
+                    ]
         data = {
             'sku': asin[0],
             #'type': 'variable',
