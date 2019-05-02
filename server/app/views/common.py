@@ -1059,7 +1059,7 @@ def pm6_data():
         attributes = [{
                         'name': "Color",
                         "visible": True,
-                        "variation": True,
+                        "variation": False,
                         "options": color_list
 
                     },
