@@ -1022,7 +1022,7 @@ def pm6_data():
                         'name': "Color",
                         "visible": True,
                         "variation": True,
-                        "options": list(row[3])
+                        "options": list(str(row[3]))
 
                     },
                     {
