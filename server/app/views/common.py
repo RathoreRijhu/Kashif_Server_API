@@ -1042,7 +1042,7 @@ def pm6_data():
                     variation = {
                         "regular_price": str(price),
                         "image":{ 'src': row[9] },
-                        'attributes':[{'slug':'color', 'name':"Color", 'option':color_list},{
+                        'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]},{
                             'slug': "size",
                             'name': "Size",
                             'option':size
