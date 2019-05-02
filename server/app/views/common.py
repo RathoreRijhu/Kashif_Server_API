@@ -1046,8 +1046,7 @@ def pm6_data():
                         'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]},{
                             'slug': "size",
                             'name': "Size",
-                            'option':size
-                                      
+                            'option':size             
                         }]
                     }
                     size_variations.append(variation)
@@ -1059,9 +1058,8 @@ def pm6_data():
         attributes = [{
                         'name': "Color",
                         "visible": True,
-                        "variation": False,
+                        "variation": True,
                         "options": color_list
-
                     },
                     {
                         'name': "Size",
@@ -1072,7 +1070,7 @@ def pm6_data():
                     ]
         data = {
             'sku': asin[0],
-            #'type': 'variable',
+            'type': 'variable',
             'name': row[1],
             'variations': variation_list,
             'brand': row[8],
