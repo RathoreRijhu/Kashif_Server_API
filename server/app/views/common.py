@@ -1038,6 +1038,7 @@ def pm6_data():
                     price = float(db_price) * (dollar_price+3)
             
             if price or row[9]:
+                size_variations=[]
                 for size in size_list: 
                     variation = {
                         "regular_price": str(price),
@@ -1049,7 +1050,8 @@ def pm6_data():
                                       
                         }]
                     }
-                    variation_list.append(variation)
+                    size_variations.append(variation)
+                variation_list.extend(size_variations)
 
             category_id = assign_category(row[10].split(' ')[0])
         size_list=size_list
