@@ -1209,7 +1209,7 @@ def aldoshoes_data():
                     l2.append(dict_object)
             else:
                 dict_object = {
-                'src':row[9],
+                'src':str(row[9]),
                 'position': 0
                 }
                 l2.append(dict_object)
@@ -1222,7 +1222,7 @@ def aldoshoes_data():
                 size_list.extend(optionsList)
             else:
                 size_list.append(row[6])
-            color_list.append(row[3])
+            color_list.append(str(row[3]))
 
             price = ""
             if row[2]:
@@ -1242,7 +1242,7 @@ def aldoshoes_data():
                 for size in optionsList: 
                     variation = {
                         "regular_price": str(price),
-                        "image":{ 'src': 'https://'+row[9].split('jpg')[0].strip()+'jpg'},
+                        "image":{ 'src': str('https://'+row[9].split('jpg')[0].strip()+'jpg')},
                         'attributes':[{'slug':'color', 'name':"Color", 'option':str(row[3])},
                                     {'slug':'size', 'name':"Size", 'option':str(size)}]
                     }
@@ -1264,9 +1264,9 @@ def aldoshoes_data():
             }
             ]
         data = {
-            'sku': asin[0],
+            'sku': str(asin[0]),
             'type': 'variable',
-            'name': row[1],
+            'name': str(row[1]),
             'variations': variation_list,
             'brand': str(row[8]),
             'attributes': attributes,
