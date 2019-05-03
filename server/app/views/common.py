@@ -1076,7 +1076,7 @@ def pm6_data():
             'brand': row[8],
             'attributes': attributes,
             'images': l2,
-            'categories':[{ "id": category_id}],
+            'categories':[{ "id": str(category_id)}],
             'description': "testing",
             'short_description': "testing"
             }        
