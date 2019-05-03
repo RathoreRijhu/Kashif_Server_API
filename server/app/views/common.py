@@ -1266,13 +1266,13 @@ def aldoshoes_data():
         data = {
             'sku': str(asin[0]),
             'type': 'variable',
-            'name': str(row[1]),
+            'name': "testing title",
             'variations': variation_list,
-            'brand': str(row[8]),
+            'brand': "tsting brand",
             'attributes': attributes,
             'images': l2,
             'categories':[{ "id": str(category_id)}],
-            'description': str(row[5])
+            'description': "testing description"
             }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
