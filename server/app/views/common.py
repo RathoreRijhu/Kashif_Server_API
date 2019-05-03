@@ -729,23 +729,15 @@ def amazon_attributes(asins, category_id, category_text):
             }]
         data = {
             'sku': asin[0],
-            'type sku':str(type(asin[0])),
             'type': 'variable',
             'name': single_row[0],
-            'type name':str(type(single_row[0])),
             'variations': variation_list,
-            'type variations':str(type(variation_list)),
             'brand': single_row[3],
-            'type brand':str(type(single_row[3])),
             'attributes': attributes,
-            'type attributes':str(type(attributes)),
             'images': image_list,
-            'type images':str(type(image_list)),
             'categories':[{ "id": category_id}],
             'short_description': description1,
-            'type short_description':str(type(description1)),
-            'description': description2,
-            'type description':str(type(description2))
+            'description': description2
             }
 
         all_data.append(data)
@@ -1273,21 +1265,14 @@ def aldoshoes_data():
             ]
         data = {
             'sku': str(asin[0]),
-            'type sku':str(type(asin[0])),
             'type': 'variable',
             'name': str(row[1]),
-            'type name':str(type(row[1])),
             'variations': variation_list,
-            'type var':str(type(variation_list)),
             'brand': str(row[8]),
-            'type brand':str(type(row[8])),
             'attributes': attributes,
-            'type':str(type(attributes)),
             'images': l2,
-            'type images':str(type(l2)),
             'categories':[{ "id": str(category_id)}],
-            'description': str(row[5]),
-            'type description':str(type(row[5]))
+            'description': str(row[5])
             }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
