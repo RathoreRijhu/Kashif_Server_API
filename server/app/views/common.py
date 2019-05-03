@@ -989,19 +989,19 @@ def pm6_data():
                     if "{" in x:
                         dict_object = {
                             
-                            "src": x.split('{')[1]+'jpg',
+                            "src": str(x.split('{')[1]+'jpg'),
                             "position": count
                         }
                     elif "}" in x:
                         dict_object = {
                             
-                            "src": x.split('jpg')[0]+'jpg',
+                            "src": str(x.split('jpg')[0]+'jpg'),
                             "position": count
                         }
                     else:
                         dict_object = {
                             
-                            "src": x+'jpg',
+                            "src": str(x+'jpg'),
                             "position": count
                         }
 
@@ -1009,18 +1009,18 @@ def pm6_data():
                     l2.append(dict_object)
             else:
                 dict_object = {
-                'src':row[9],
+                'src':str(row[9]),
                 'position': 0
                 }
                 l2.append(dict_object)
             # setting up properties or attributes
             #size_list.append(row[6])
-            color_list.append(row[3])
+            color_list.append(str(row[3]))
             optionsList=[]
             if row[6] is not None:
                 option=row[6].split('{')[1].split('}')[0]
                 for opt in option.split(','):
-                    optionsList.append(opt)
+                    optionsList.append(str(opt))
             size_list.extend(optionsList)
             price = ""
             db_price=0
@@ -1042,11 +1042,11 @@ def pm6_data():
                 for size in size_list: 
                     variation = {
                         "regular_price": str(price),
-                        "image":{ 'src': row[9] },
-                        'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]},{
+                        "image":{ 'src': str(row[9]) },
+                        'attributes':[{'slug':'color', 'name':"Color", 'option':str(row[3])},{
                             'slug': "size",
                             'name': "Size",
-                            'option':size             
+                            'option':str(size)             
                         }]
                     }
                     size_variations.append(variation)
@@ -1069,11 +1069,11 @@ def pm6_data():
                 }
                 ]
         data = {
-            'sku': asin[0],
+            'sku': str(asin[0]),
             'type': 'variable',
-            'name': row[1],
+            'name': str(row[1]),
             'variations': variation_list,
-            'brand': row[8],
+            'brand': str(row[8]),
             'attributes': attributes,
             'images': l2,
             'categories':[{ "id": str(category_id)}],
@@ -1218,10 +1218,10 @@ def aldoshoes_data():
             if row[6] is not None:
                 option=row[6].split('{')[1].split('}')[0]
                 for opt in option.split(','):
-                    optionsList.append(opt)
+                    optionsList.append(str(opt))
                 size_list.extend(optionsList)
             else:
-                size_list.append(row[6])
+                size_list.append(str(row[6]))
             color_list.append(str(row[3]))
 
             price = ""
