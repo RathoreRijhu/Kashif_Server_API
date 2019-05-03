@@ -1068,18 +1068,18 @@ def pm6_data():
                 "options": size_list               
                 }
                 ]
-            data = {
-                'sku': asin[0],
-                'type': 'variable',
-                'name': row[1],
-                'variations': variation_list,
-                'brand': row[8],
-                'attributes': attributes,
-                'images': l2,
-                'categories':[{ "id": category_id}],
-                'description': "testing",
-                'short_description': "testing"
-                }        
+        data = {
+            'sku': asin[0],
+            'type': 'variable',
+            'name': row[1],
+            'variations': variation_list,
+            'brand': row[8],
+            'attributes': attributes,
+            'images': l2,
+            'categories':[{ "id": category_id}],
+            'description': "testing",
+            'short_description': "testing"
+            }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
