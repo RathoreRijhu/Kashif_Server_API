@@ -1238,7 +1238,7 @@ def aldoshoes_data():
                 if not price:
                     price = float(db_price) * (dollar_price+3)
             
-            if price or row[9]:
+            if row[2] or row[9] or row[11]:
                 for size in optionsList: 
                     variation = {
                         "regular_price": str(price),
@@ -1248,33 +1248,33 @@ def aldoshoes_data():
                     }
                     variation_list.append(variation)
 
-            category_id = assign_category(row[10])
-            attributes = [{
-                'name': "Color",
-                "visible": True,
-                "variation": True,
-                "options": row[3]
+        category_id = assign_category(row[10])
+        attributes = [{
+            'name': "Color",
+            "visible": True,
+            "variation": True,
+            "options": list(set(color_list))
 
-                },
-                {
-                'name': "Size",
-                "visible": True,
-                "variation": True,
-                "options": list(set(optionsList))                
-                }
-                ]
-            data = {
-                'sku': asin[0],
-                'type': 'variable',
-                'name': row[1],
-                'variations': variation_list,
-                'brand': row[8],
-                'attributes': attributes,
-                'images': l2,
-                'categories':[{ "id": category_id}],
-                'description': row[5]
-                }        
-            all_data.append(data)
+            },
+            {
+            'name': "Size",
+            "visible": True,
+            "variation": True,
+            "options": list(set(size_list))                
+            }
+            ]
+        data = {
+            'sku': asin[0],
+            'type': 'variable',
+            'name': row[1],
+            'variations': variation_list,
+            'brand': row[8],
+            'attributes': attributes,
+            'images': l2,
+            'categories':[{ "id": category_id}],
+            'description': row[5]
+            }        
+        all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
 
