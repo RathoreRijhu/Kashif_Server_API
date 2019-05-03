@@ -666,7 +666,7 @@ def amazon_attributes(asins, category_id, category_text):
         size_list=[]
         color_list=[]
         data_against_main_asin = get_product_against_main_asin(asin[0])
-        
+        print("all rows",data_against_main_asin)
         for single_row in data_against_main_asin:    
             # making variations in desired format
             price = single_row[1]
@@ -1176,7 +1176,7 @@ def aldoshoes_data():
         print(asin)
         print(asin[0])
         all_rows = get_data_against_asin_aldoshoes(asin[0])
-        print(all_rows)
+        print("all rows ",all_rows)
         #print all_rows
         variation_list=[]
         size_list=[]
