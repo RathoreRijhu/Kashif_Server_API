@@ -1053,8 +1053,8 @@ def pm6_data():
                 variation_list.extend(size_variations)
 
             category_id = assign_category(row[10])
-            size_list=size_list
-            color_list=color_list
+            size_list=list(set(size_list))
+            color_list=list(set(color_list))
         attributes =[{
                 'name': "Color",
                 "visible": True,
@@ -1253,14 +1253,14 @@ def aldoshoes_data():
             'name': "Color",
             "visible": True,
             "variation": True,
-            "options": color_list
+            "options": list(set(color_list))
 
             },
             {
             'name': "Size",
             "visible": True,
             "variation": True,
-            "options": size_list                
+            "options": list(set(size_list))                
             }
             ]
         data = {
