@@ -1190,19 +1190,19 @@ def aldoshoes_data():
                     if "{" in x:
                         dict_object = {
                             
-                            "src": x.split("{")[1],
+                            "src": str(x.split("{")[1]),
                             "position": count
                         }
                     elif "}" in x:
                         dict_object = {
                             
-                            "src": x.split('}')[0],
+                            "src": str(x.split('}')[0]),
                             "position": count
                         }
                     else:
                         dict_object = {
                             
-                            "src": x,
+                            "src": str(x),
                             "position": count
                         }
                     count = count+1
@@ -1243,8 +1243,8 @@ def aldoshoes_data():
                     variation = {
                         "regular_price": str(price),
                         "image":{ 'src': 'https://'+row[9].split('jpg')[0].strip()+'jpg'},
-                        'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]},
-                                    {'slug':'size', 'name':"Size", 'option':size}]
+                        'attributes':[{'slug':'color', 'name':"Color", 'option':src(row[3])},
+                                    {'slug':'size', 'name':"Size", 'option':src(size)}]
                     }
                     variation_list.append(variation)
 
@@ -1268,11 +1268,11 @@ def aldoshoes_data():
             'type': 'variable',
             'name': row[1],
             'variations': variation_list,
-            'brand': row[8],
+            'brand': str(row[8]),
             'attributes': attributes,
             'images': l2,
             'categories':[{ "id": str(category_id)}],
-            'description': row[5]
+            'description': str(row[5])
             }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
