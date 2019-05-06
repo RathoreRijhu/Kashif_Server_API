@@ -1266,7 +1266,7 @@ def aldoshoes_data():
         data = {
             'sku': str(asin[0]),
             'type': 'variable',
-            'name': str(row[1]),
+            'name': str(row[1]).split('|')[0],
             'variations': variation_list,
             'brand': str(row[8]),
             'attributes': attributes,
