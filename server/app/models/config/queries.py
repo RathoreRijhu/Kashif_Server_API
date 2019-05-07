@@ -148,7 +148,7 @@ QUERIES = {
     "GetUrl": "SELECT product_link from shopify_db.amazon_products_details "
             "where  main_product_asin=%s and color=%s and  product_size=%s"
             "UNION SELECT product_link from shopify_db.ebay_scraped_data "
-            "where product_asin=%s",
+
     # "GetEbayUrl": "SELECT product_link from shopify_db.ebay_scraped_data "
     #         "where main_product_asin=%s and color=%s and  product_size=%s"
 
