@@ -1590,6 +1590,265 @@ def shopguess_data():
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
 
+
+@app.route('/ashford', methods=['GET'])
+@auto.doc()
+def ashford_data():
+    all_data=[]
+    all_rows = get_data_against_asin_ashford()
+    weight = size = shape = finish = material = width = case_length = water_resistance = crystal =\
+    thickness = case_back = attribute = color = hands = markers = watch_type = gems_count =\
+    gems = None
+    #print all_asin
+    for row in all_rows:
+        l2=[]
+        if row[8] is not None:
+            count = 0
+            for x in row[8].split(','):
+                dict_object = {
+                    
+                    "src": x,
+                    "position": count
+                }
+                count = count+1
+                l2.append(dict_object)
+        else:
+            dict_object = {
+            'src':row[4],
+            'position': 0
+            }
+            l2.append(dict_object)
+        # setting up properties or attributes
+        
+        if not row[6] == 'null': 
+            yes = json.loads(row[6])
+            for x in yes:
+                for k, v in x.items():
+                    if 'weight' == k.lower():
+                        weight = v
+                    if k.lower() == 'shape':
+                        shape = v
+                    if k.lower() == 'finish':
+                        finish = v
+                    if k.lower() == 'size':
+                        size = v
+                    if k.lower() == 'material':
+                        material = v
+                    if k.lower() == 'width':
+                        width = v
+                    if k.lower() == 'case length with lugs':
+                        case_length = v
+                    if k.lower() == 'water resistance':
+                        water_resistance = v
+                    if k.lower() == 'crystal':
+                        crystal = v
+                    if k.lower() == 'thickness':
+                        thickness = v
+                    if k.lower() == 'case back':
+                        case_back = v
+                    if k.lower() == 'Attributes':
+                        attribute = v 
+                    if k.lower() == 'color':
+                        color = v
+                    if k.lower() == 'hands':
+                        hands = v
+                    if k.lower() == 'markers':
+                        markers = v
+                    if k.lower() == 'type':
+                        watch_type = v
+                    if k.lower() == 'gems':
+                        gems = v
+                    if k.lower() == 'gems count':
+                        gems_count = v
+
+                if shape or color or finish or material:
+                    attributes = [{
+                        'name': "Size",
+                        'visible': True,
+                        'options': size
+                        },
+                        {
+                        'name': "Shape",
+                        "visible": True,
+                        'options': shape
+                        },
+                        {
+                        'name': "Finish",
+                        "visible": True,
+                        'options': finish                           
+                        },
+                        {
+                        'name': "Case Length With Lugs",
+                        "visible": True,
+                        'options': case_length
+                        },
+                        {
+                        'name': "Material",
+                        "visible": True,
+                        'options': material
+                        },
+                        {
+                        'name': "Water Resistance",
+                        "visible": True,
+                        'options': water_resistance
+                        },
+                        {
+                        'name': "Width",
+                        "visible": True,
+                        'options': width
+                        },
+                        {
+                        'name':'Type',
+                        'visible':True,
+                        'options': watch_type
+                        },
+                        {
+                        'name':'Crystal',
+                        'visible':True,
+                        'options': crystal
+                        },
+                        {
+                        'name':'Color',
+                        'visible': True,
+                        'options': color
+                        },
+                        {
+                        'name':'Attributes',
+                        'visible':True,
+                        'options': attribute
+                        },
+                        {
+                        'name': 'Thickness',
+                        'visible': True,
+                        'options': thickness
+                        },
+                        {
+                        'name': 'Case Back',
+                        'visible': True,
+                        'options': case_back
+                        },{
+                        'name': 'Hands',
+                        'visible': True,
+                        'options': hands
+                        },{
+                        'name': 'Markers',
+                        'visible': True,
+                        'options': markers
+                        },{
+                        'name': 'Gems',
+                        'visible': True,
+                        'options': gems
+                        },{
+                        'name': 'Gems Count',
+                        'visible': True,
+                        'options': gems_count
+                        }]
+
+        price = ""
+        if row[3]:
+            db_price = float(row[3])
+            if db_price > 500:
+                percent_30 = db_price * 0.3
+                price = (percent_30 + db_price) * (dollar_price + 3)
+            elif row[2]:
+                brand = row[2].replace(',', '').lower()
+                price = setting_price(brand, row[5], db_price, dollar_price)
+            if not price:
+                price = float(db_price) * (dollar_price+3)
+        
+        category_id = assign_category(row[5])
+        data = {
+            'sku': row[0],
+            #'type': 'variable',
+            'name': row[1],
+            "regular_price": str(price),
+            'brand': row[2],
+            'attributes': attributes,
+            'images': l2,
+            'categories':[{ "id": category_id}]
+            }        
+        all_data.append(data)
+    response = Response(json.dumps(all_data), status=200, mimetype='application/json')
+    return response
+
+
+@app.route('/toryburch', methods=['GET'])
+@auto.doc()
+def toryburch_data():
+    all_data=[]
+    variation_list=[]
+    all_rows = get_data_against_asin_toryburch()
+    for row in all_rows:
+        l2=[]
+        # setting up images
+        if row[10] is not None:
+            count = 0
+            for x in row[10].split(','):
+                dict_object = {
+                    
+                    "src": x,
+                    "position": count
+                }
+                count = count+1
+                l2.append(dict_object)
+        else:
+            dict_object = {
+            'src':row[4],
+            'position': 0
+            }
+            l2.append(dict_object)
+        # setting up properties or attributes
+        attributes = [{
+                'name': "Color",
+                "visible": True,
+                "variation": True,
+                "options": row[5]
+
+            },
+            {
+                'name': "Size",
+                "visible": True,
+                "variation": True,
+                "options": row[9]                
+            }
+            ]
+        price = ""
+        if row[3]:
+            db_price = float(row[3])
+            if db_price > 500:
+                percent_30 = db_price * 0.3
+                price = (percent_30 + db_price) * (dollar_price + 3)
+            elif row[2]:
+                brand = row[2].replace(',', '').lower()
+                price = setting_price(brand, row[6], db_price, dollar_price)
+            if not price:
+                price = float(db_price) * (dollar_price+3)
+        
+        if price or row[7]: 
+            variation = {
+                "regular_price": str(price),
+                "image":{ 'src': row[7] },
+                'attributes':[{'slug':'color', 'name':"Color", 'option':row[5]}]
+            }
+            variation_list.append(variation)
+
+        category_id = assign_category(row[6])
+        data = {
+            'sku': row[0],
+            #'type': 'variable',
+            'name': row[1],
+            'variations': variation_list,
+            'brand': row[2],
+            'attributes': attributes,
+            'images': l2,
+            'categories':[{ "id": category_id}],
+            'description': row[7]
+            }        
+        all_data.append(data)
+    response = Response(json.dumps(all_data), status=200, mimetype='application/json')
+    return response
+
+
 def assign_category(category_text):
     category_id = 0
     if  'tshirt' in category_text:
