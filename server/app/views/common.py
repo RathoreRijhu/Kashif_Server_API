@@ -1187,31 +1187,31 @@ def zappos_data():
             # setting up images
             if row[7] is not None:
                 count = 0
-                for x in row[7].split('jpg'):
-                    if "{" in x:
-                        dict_object = {
+                for x in row[7].split('","'):
+                    # if "{" in x:
+                    dict_object = {
+                        
+                        "src": x,
+                        "position": count
+                    }
+                    # elif "}" in x:
+                    #     dict_object = {
                             
-                            "src": str((x.split('{')[1])+'jpg'),
-                            "position": count
-                        }
-                    elif "}" in x:
-                        dict_object = {
+                    #         "src": str((x.split('}')[0])+'jpg'),
+                    #         "position": count
+                    #     }
+                    # elif "," in x:
+                    #     dict_object = {
                             
-                            "src": str((x.split('}')[0])+'jpg'),
-                            "position": count
-                        }
-                    elif "," in x:
-                        dict_object = {
+                    #         "src": str((x.split(',')[1])+'jpg'),
+                    #         "position": count
+                    #     }
+                    # else:
+                    #     dict_object = {
                             
-                            "src": str((x.split(',')[1])+'jpg'),
-                            "position": count
-                        }
-                    else:
-                        dict_object = {
-                            
-                            "src": str(x+'jpg'),
-                            "position": count
-                        }
+                    #         "src": str(x+'jpg'),
+                    #         "position": count
+                    #     }
                     count = count+1
                     l2.append(dict_object)
             else:
