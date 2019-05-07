@@ -1140,19 +1140,19 @@ def pm6_data():
                 variation_list.extend(size_variations)
 
             category_id = assign_category(row[10])
-            size_list=list(set(size_list))
-            color_list=list(set(color_list))
+            #size_list=list(set(size_list))
+            #color_list=list(set(color_list))
         attributes =[{
                 'name': "Color",
                 "visible": True,
                 "variation": True,
-                "options": color_list
+                "options": list(set(color_list))
                 },
                 {
                 'name': "Size",
                 "visible": True,
                 "variation": True,
-                "options": size_list               
+                "options": list(set(size_list))               
                 }
                 ]
         data = {
@@ -1182,6 +1182,8 @@ def zappos_data():
         all_rows = get_data_against_asin_zappos(asin[0])
         #print all_rows
         variation_list=[]
+        color_list=[]
+        size_list=[]
         for row in all_rows:
             l2=[]
             # setting up images
@@ -1221,20 +1223,7 @@ def zappos_data():
                 }
                 l2.append(dict_object)
             # setting up properties or attributes
-            attributes = [{
-                    'name': "Color",
-                    "visible": True,
-                    "variation": True,
-                    "options": row[3]
-
-                },
-                {
-                    'name': "Size",
-                    "visible": True,
-                    "variation": True,
-                    "options": row[6]                
-                }
-                ]
+        
             price = ""
             if row[2]:
                 db_price = float(row[2])
@@ -1248,16 +1237,42 @@ def zappos_data():
                 price = setting_price(brand, row[10], db_price, dollar_price)
                 if not price:
                     price = float(db_price) * (dollar_price+3)
-            
+            optionsList=[]
+            if row[6] is not None:
+                option=row[6].split('{')[1].split('}')[0]
+                for opt in option.split(','):
+                    optionsList.append(str(opt))
+            size_list.extend(optionsList)
             if price or row[9]: 
-                variation = {
-                    "regular_price": str(price),
-                    "image":{ 'src': row[9] },
-                    'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]}]
-                }
-                variation_list.append(variation)
+                for size in size_list:
+                    variation = {
+                        "regular_price": str(price),
+                        "image":{ 'src': row[9] },
+                        'attributes':[{'slug':'color', 'name':"Color", 'option':row[3]},{
+                            'slug': "size",
+                            'name': "Size",
+                            'option':str(size)             
+                        }]
+                    }
+                    variation_list.append(variation)
+            color_list.append(row[3])
+            size_list.append(row[6])
 
-            category_id = assign_category(row[10].split(' ')[0])
+            category_id = assign_category(row[10])
+        attributes = [{
+                'name': "Color",
+                "visible": True,
+                "variation": True,
+                "options": list(set(color_list))
+
+            },
+            {
+                'name': "Size",
+                "visible": True,
+                "variation": True,
+                "options": list(set(size_list))                
+            }
+            ]
         data = {
             'sku': asin[0],
             #'type': 'variable',
