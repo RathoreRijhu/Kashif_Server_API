@@ -1187,7 +1187,7 @@ def zappos_data():
             # setting up images
             if row[7] is not None:
                 count = 0
-                for x in row[7].split('jpg,'):
+                for x in row[7].split('jpg'):
                     if "{" in x:
                         dict_object = {
                             
@@ -1198,6 +1198,12 @@ def zappos_data():
                         dict_object = {
                             
                             "src": str((x.split('}')[0])+'jpg'),
+                            "position": count
+                        }
+                    elif "," in x:
+                        dict_object = {
+                            
+                            "src": str((x.split(',')[1])+'jpg'),
                             "position": count
                         }
                     else:
