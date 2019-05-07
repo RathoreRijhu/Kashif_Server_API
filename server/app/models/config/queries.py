@@ -149,6 +149,7 @@ QUERIES = {
             "where  main_product_asin=%s and color=%s and  product_size=%s"
             "UNION SELECT product_link from shopify_db.ebay_scraped_data "
             "where product_asin=%s"
+            "UNION SELECT product_link from shopify_db.zappos_scraped_data where main_asin=%s and color=%s"
     # "GetEbayUrl": "SELECT product_link from shopify_db.ebay_scraped_data "
     #         "where main_product_asin=%s and color=%s and  product_size=%s"
 
