@@ -1256,7 +1256,7 @@ def zappos_data():
                     }
                     variation_list.append(variation)
             color_list.append(row[3])
-            size_list.append(row[6])
+            #size_list.append(row[6])
 
             category_id = assign_category(row[10])
         attributes = [{
