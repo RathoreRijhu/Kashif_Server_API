@@ -236,7 +236,10 @@ def get_color_size(sku, color, size):
         if "luxury.zappos.com" in url:
             select=Select(browser.find_element_by_id("d3"))
             print(select.options)
-            select.select_by_visible_text(size)
+            try:
+                select.select_by_visible_text(size)
+            except Exception as e:
+                print(e)
             time.sleep(5)
             try:
                 availability=(browser.find_element_by_xpath('//*[@id="oosPopover"]/h1').text)
@@ -258,7 +261,10 @@ def get_color_size(sku, color, size):
         else:
             select=Select(browser.find_element_by_id("pdp-size-select"))
             #for opt in select.options:
-            select.select_by_visible_text(size)
+            try:
+                select.select_by_visible_text(size)
+            except Exception as e:
+                print(e)
             time.sleep(5)
             try:
                 availability=(browser.find_element_by_xpath('/html/body/div[5]/div/div/div[1]/h1').text)
