@@ -222,29 +222,59 @@ def get_color_size(sku, color, size):
             browser.close()
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
-    # elif(url is not None and "6pm" in url):
-    #     opts = Options()
-    #     opts.add_argument('--no-sandbox')
-    #     opts.add_argument('--headless')
-    #     browser = Chrome(options=opts)
-    #     browser.get(url)
-    #     time.sleep(5)
-    #     soup=BeautifulSoup(browser.page_source, 'lxml')
-    #     select=Select(browser.find_element_by_id("pdp-size-select"))
-    #     price=None
-    #     availability=None
-    #     try:
-    #         price=soup.find('span',{"class":'_1q0kwWbBMG _3pxa4LdwPN'}).text.split('$')[1]
-    #         for opt in select.options:
-    #             if(opt.text.strip('')==size):
-    #                 select.select_by_visible_text(opt.text)
-    #                 time.sleep(2)
-    #                 try:
-    #                     availability=browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text
-    #                 except Exception as e:
-    #                     pass
-    #         data={'availability':availability}
-    #     except:
+    elif(url is not None and "zappos" in url):
+        opts = Options()
+        opts.add_argument('--no-sandbox')
+        opts.add_argument('--headless')
+        browser = Chrome(options=opts)
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        if "luxury.zappos.com" in url:
+            select=Select(browser.find_element_by_id("d3"))
+            print(select.options)
+            select.select_by_visible_text(size)
+            time.sleep(5)
+            try:
+                availability=(browser.find_element_by_xpath('//*[@id="oosPopover"]/h1').text)
+            except Exception as e:
+                print(e)         
+                
+            try:
+                availability=(browser.find_element_by_xpath('//*[@id="oosLimitedTag"]').text)
+                quantity=re.findall('\d+',availability)[0]
+            except Exception as e:
+                print(e)
+            try:
+                price=(browser.find_element_by_xpath('//*[@id="priceSlot"]/span[1]').text.split('$')[1])
+            except Exception as e:
+                print(e)
+            #if availability.strip.lower()=='out of stock':
+            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':quantity}
+            return json.dumps(data)
+        else:
+            select=Select(browser.find_element_by_id("pdp-size-select"))
+            #for opt in select.options:
+            select.select_by_visible_text(size)
+            time.sleep(5)
+            try:
+                availability=(browser.find_element_by_xpath('/html/body/div[5]/div/div/div[1]/h1').text)
+            except Exception as e:         
+                print(e)
+            try:
+                availability=(browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text)
+                quantity=re.findall('\d+',availability)[0]
+            except Exception as e:
+                print(e)
+            try:
+                price=(browser.find_element_by_xpath('//*[@id="productRecap"]/div[3]/aside/div[2]/div/div/span[1]').text.split('$')[1])
+            except Exception as e:
+                print(e)
+            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':quantity}
+            return json.dumps(data)
 
 
     else:
