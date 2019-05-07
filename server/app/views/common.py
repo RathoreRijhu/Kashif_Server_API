@@ -968,6 +968,93 @@ def macys_data():
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
 
+@app.route('/macys')
+@auto.doc()
+def macys_data():
+    all_rows = get_all_data_of_macys()
+    all_data=[]
+    for row in all_rows:
+        #setting up images
+        l2=[]
+        if row[7] is not None:
+            count = 0
+            for x in row[7].split('","'):
+                if "{" in x:
+                    dict_object = {
+                        
+                        "src": x.split('{')[1][1:],
+                        "position": count
+                    }
+                elif "}" in x:
+                    dict_object = {
+                        
+                        "src": x.split('}')[0][:-1],
+                        "position": count
+                    }
+                else:
+                    dict_object = {
+                        
+                        "src": x,
+                        "position": count
+                    }
+                count = count+1
+                l2.append(dict_object)
+        else:
+            dict_object = {
+            'src':row[9],
+            'positsion': 0
+            }
+            l2.append(dict_object)
+        
+        attributes = [{
+                'name': "Color",
+                "visible": True,
+                "variation": True,
+                "options": row[3]
+
+            },
+            {
+                'name': "Size",
+                "visible": True,
+                "variation": True,
+                "options": row[6]                
+            }
+            ]
+        price = ""
+        if row[2]:
+            #db_price = float(row[2] #it is used for price in dollar
+            db_price = math.ceil(float(row[2])*float(0.0071)) #changed because price in db is in pkr and convert to dollar
+        elif row[11]:
+            #db_price = float(row[11]
+            db_price = math.ceil(float(row[11])*float(0.0071))
+        #print(db_price)
+        if db_price > 500:
+            percent_30 = db_price * 0.3
+            price = (percent_30 + db_price) * (dollar_price + 3)
+
+        elif row[8]:
+            brand = row[8].replace(',', '').lower()
+            price = setting_price(brand, row[10], db_price, dollar_price)
+            if not price:
+                price = float(db_price) * (dollar_price+3)
+        
+        #category_id = assign_category(row[10].split(' ')[0])
+        category_id = assign_category(row[10])
+        data = {
+            'sku': row[0],
+            #'type': 'variable',
+            'regular_price': str(price),
+            'name': row[1],
+            'brand': row[8],
+            'attributes': attributes,
+            'images': l2,
+            'categories':[{ "id": category_id}],
+            'description': row[5]
+            }        
+        all_data.append(data)
+    response = Response(json.dumps(all_data), status=200, mimetype='application/json')
+    return response
+
 @app.route('/6pm-data')
 @auto.doc()
 def pm6_data():
@@ -1100,12 +1187,25 @@ def zappos_data():
             # setting up images
             if row[7] is not None:
                 count = 0
-                for x in row[7].split(','):
-                    dict_object = {
-                        
-                        "src": x,
-                        "position": count
-                    }
+                for x in row[7].split('jpg,'):
+                    if "{" in x:
+                        dict_object = {
+                            
+                            "src": str((x.split('{')[1])+'jpg'),
+                            "position": count
+                        }
+                    elif "}" in x:
+                        dict_object = {
+                            
+                            "src": str((x.split('}')[0])+'jpg'),
+                            "position": count
+                        }
+                    else:
+                        dict_object = {
+                            
+                            "src": str(x+'jpg'),
+                            "position": count
+                        }
                     count = count+1
                     l2.append(dict_object)
             else:
