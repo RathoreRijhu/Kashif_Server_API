@@ -1503,7 +1503,7 @@ def tedbaker_data():
                 }
                 variation_list.append(variation)
 
-            category_id = assign_category(row[10].split(' ')[0])
+            category_id = assign_category(row[10])
         data = {
             'sku': asin[0],
             #'type': 'variable',
