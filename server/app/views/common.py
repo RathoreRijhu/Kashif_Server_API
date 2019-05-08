@@ -1121,10 +1121,10 @@ def pm6_data():
                             "src": str(x.split('jpg')[0]+'jpg'),
                             "position": count
                         }
-                    elif x.startswith(',') or x.startswith(' ,'):
+                    elif x.startswith(',') or x.startswith(' '):
                         dict_object = {
                             
-                            "src": str(x.split(', ')[1]+'jpg'),
+                            "src": str(x.split(' ')[1]+'jpg'),
                             "position": count
                         }
                     else:
