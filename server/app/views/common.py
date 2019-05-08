@@ -1107,8 +1107,7 @@ def pm6_data():
             # setting up images
             if row[7] is not None:
                 count = 0
-                count = count+1
-                l2.append(dict_object)
+
             else:
                 dict_object = {
                 'src':str(row[9]),
@@ -1179,8 +1178,7 @@ def pm6_data():
             'attributes': attributes,
             'images': l2,
             'categories':[{ "id": str(category_id)}],
-            'description': "testing",
-            'short_description': "testing"
+            'description': row[5]
             }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
