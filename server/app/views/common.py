@@ -1205,8 +1205,7 @@ def pm6_data():
             'attributes': attributes,
             'images': l2,
             'categories':[{ "id": str(category_id)}],
-            'description': "testing",
-            'short_description': "testing"
+            'description': row[5]
             }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
