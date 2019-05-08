@@ -1344,24 +1344,24 @@ def aldoshoes_data():
             if row[7] is not None:
                 count = 0
                 for x in row[7].split(','):
-                    if "{" in x:
-                        dict_object = {
+                    # if "{" in x:
+                    #     dict_object = {
                             
-                            "src": str(x.split("{")[1]),
-                            "position": count
-                        }
-                    elif "}" in x:
-                        dict_object = {
+                    #         "src": str(x.split("{")[1]),
+                    #         "position": count
+                    #     }
+                    # elif "}" in x:
+                    #     dict_object = {
                             
-                            "src": str(x.split('}')[0]),
-                            "position": count
-                        }
-                    else:
-                        dict_object = {
-                            
-                            "src": str(x),
-                            "position": count
-                        }
+                    #         "src": str(x.split('}')[0]),
+                    #         "position": count
+                    #     }
+                    #else:
+                    dict_object = {
+                        
+                        "src": x.split(':')[0]+'/'+x.split(':')[1],
+                        "position": count
+                    }
                     count = count+1
                     l2.append(dict_object)
             else:
