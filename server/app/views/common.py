@@ -1107,7 +1107,7 @@ def pm6_data():
             # setting up images
             if row[7] is not None:
                 count = 0
-                splited_images=row[7].split('jpg,')
+                splited_images=row[7].split('jpg')
                 for x in splited_images:
                     if "{" in x:
                         dict_object = {
@@ -1121,13 +1121,18 @@ def pm6_data():
                             "src": str(x.split('jpg')[0]+'jpg'),
                             "position": count
                         }
+                    elif x.startswith(','):
+                        dict_object = {
+                            
+                            "src": str(x.split(', ')[1]+'jpg'),
+                            "position": count
+                        }
                     else:
                         dict_object = {
                             
                             "src": str(x+'jpg'),
                             "position": count
                         }
-
                     count = count+1
                     l2.append(dict_object)
             else:
