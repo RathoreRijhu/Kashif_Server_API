@@ -1359,7 +1359,7 @@ def aldoshoes_data():
                     #else:
                     dict_object = {
                         
-                        "src": x.split(':')[0]+'/'+x.split(':')[1],
+                        "src": 'https//:'+x.split(':/')[1],
                         "position": count
                     }
                     count = count+1
