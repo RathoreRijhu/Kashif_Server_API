@@ -1107,9 +1107,8 @@ def pm6_data():
             # setting up images
             if row[7] is not None:
                 count = 0
-
-                    count = count+1
-                    l2.append(dict_object)
+                count = count+1
+                l2.append(dict_object)
             else:
                 dict_object = {
                 'src':str(row[9]),
@@ -1839,6 +1838,185 @@ def shopguess_data():
             'images': l2,
             'categories':[{ "id": category_id}],
             'description': row[5]
+            }        
+        all_data.append(data)
+    response = Response(json.dumps(all_data), status=200, mimetype='application/json')
+    return response
+
+@app.route('/ashford')
+@auto.doc()
+def ashford_data():
+    shape = finish = material = width = case_length = water_resistance = crystal = thickness = \
+    case_back = attribute = color = hands = markers = Type = gems = gems_count = None
+    all_data=[]
+    all_rows = get_data_against_asin_ashford()
+    variation_list=[]
+    for row in all_rows:
+        l2=[]
+        # setting up images
+        if row[8] is not None:
+            count = 0
+            for x in row[8].split(','):
+                if "{" in x:
+                    dict_object = {
+                        "src": x.split('{')[1],
+                        "position": count
+                    }
+                elif "}" in x:
+                    dict_object = {
+                        "src": x.split('}')[0],
+                        "position": count
+                    }
+                else:
+                    dict_object = {
+                        "src": x,
+                        "position": count
+                    }
+                count = count+1
+                l2.append(dict_object)
+        else:
+            dict_object = {
+            'src':row[9],
+            'position': 0
+            }
+            l2.append(dict_object)
+        # setting up properties or attributes
+        if not row[6] == 'null':
+            yes = json.loads(row[6])
+            for x in yes:
+                for k, v in x.items():
+                    if k.lower() == 'shape':
+                        shape = v
+                    if k.lower() == 'finish':
+                        finish = v
+                    if k.lower() == 'material':
+                        material = v
+                    if k.lower() == 'width':
+                        width = v
+                    if k.lower() == 'case length with lugs':
+                        case_length = v
+                    if k.lower() == 'water resistance':
+                        water_resistance = v
+                    if k.lower() == 'crystal':
+                        crystal = v
+                    if k.lower() == 'thickness':
+                        thickness = v
+                    if k.lower() == 'case Back':
+                        case_back = v
+                    if k.lower() == 'attributes':
+                        attribute = v
+                    if k.lower() == 'color':
+                        color = v
+                    if k.lower() == 'hands':
+                        hands = v
+                    if k.lower() == 'markers':
+                        markers = v
+                    if k.lower() == 'type':
+                        Type = v
+                    if k.lower() == 'gems':
+                        gems = v
+                    if k.lower() == 'gems count':
+                        gems_count = v
+                    
+                if  color or shape or material:
+                    attributes = [{
+                        'name': "Shape",
+                        'visible': True,
+                        'options': shape
+                        },
+                        {
+                        'name': "Finish",
+                        "visible": True,
+                        'options': finish
+                        },
+                        {
+                        'name': "Material",
+                        "visible": True,
+                        'options': material                           
+                        },
+                        {
+                        'name': "Width",
+                        "visible": True,
+                        'options': width
+                        },
+                        {
+                        'name': "Case Length with Lugs",
+                        "visible": True,
+                        'options': case_length
+                        },
+                        {
+                        'name': "Water Resistance",
+                        "visible": True,
+                        'options': water_resistance
+                        },
+                        {
+                        'name': "Crystal",
+                        "visible": True,
+                        'options': crystal
+                        },
+                        {
+                        'name':'Thickness',
+                        'visible':True,
+                        'options': thickness
+                        },
+                        {
+                        'name':'Case Back',
+                        'visible':True,
+                        'options': case_back
+                        },
+                        {
+                        'name':'Attribute',
+                        'visible': True,
+                        'options': attribute
+                        },
+                        {
+                        'name':'Color',
+                        'visible':True,
+                        'options': color
+                        },
+                        {
+                        'name': 'Hands',
+                        'visible': True,
+                        'options': hands
+                        },
+                        {
+                        'name': 'Markers',
+                        'visible': True,
+                        'options': markers
+                        },{
+                        'name': 'Type',
+                        'visible': True,
+                        'options': Type
+                        },{
+                        'name': 'Gems',
+                        'visible': True,
+                        'options': gems
+                        },{
+                        'name': 'Gems Count',
+                        'visible': True,
+                        'options': gems_count
+                        }]
+        price = ""
+        if row[3]:
+            db_price = float(row[3])
+            if db_price > 500:
+                percent_30 = db_price * 0.3
+                price = (percent_30 + db_price) * (dollar_price + 3)
+            elif row[2]:
+                brand = row[2].replace(',', '').lower()
+                price = setting_price(brand, row[5], db_price, dollar_price)
+                if not price:
+                    price = float(db_price) * (dollar_price+3)
+        category_id = assign_category(row[5])
+        data = {
+            'sku': row[0],
+            #'type': 'variable',
+            'name': row[1],
+            'regular_price': price,
+            'brand': row[2],
+            'attributes': attributes,
+            'images': l2,
+            'categories':[{ "id": category_id}]
             }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
