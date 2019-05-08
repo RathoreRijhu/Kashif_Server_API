@@ -1112,25 +1112,25 @@ def pm6_data():
                     if "{" in x:
                         dict_object = {
                             
-                            "src": str(x.split('{')[1]+'jpg'),
+                            "src": str(x.split('{')[1]+'jpg').strip(),
                             "position": count
                         }
                     elif "}" in x:
                         dict_object = {
                             
-                            "src": str(x.split('jpg')[0]+'.jpg'),
+                            "src": str(x.split('jpg')[0]+'.jpg').strip(),
                             "position": count
                         }
                     elif x.strip().startswith(','):
                         dict_object = {
                             
-                            "src": str(x.split(',')[1]+'.jpg'),
+                            "src": str(x.split(',')[1]+'.jpg').strip(),
                             "position": count
                         }
                     else:
                         dict_object = {
                             
-                            "src": str(x.strip()+'.jpg'),
+                            "src": str(x.strip()+'.jpg').strip(),
                             "position": count
                         }
                     count = count+1
