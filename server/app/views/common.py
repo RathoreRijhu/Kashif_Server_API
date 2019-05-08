@@ -1281,7 +1281,7 @@ def zappos_data():
             if row[6] is not None:
                 option=row[6].split('{')[1].split('}')[0]
                 for opt in option.split(','):
-                    optionsList.append(str(opt))
+                    optionsList.append(str(opt).strip())
             size_list.extend(optionsList)
             if price or row[9]: 
                 for size in size_list:
