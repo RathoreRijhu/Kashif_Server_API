@@ -1107,26 +1107,6 @@ def pm6_data():
             # setting up images
             if row[7] is not None:
                 count = 0
-                splited_images=row[7].split('jpg,')
-                for x in splited_images:
-                    if "{" in x:
-                        dict_object = {
-                            
-                            "src": str(x.split('{')[1]+'jpg'),
-                            "position": count
-                        }
-                    elif "}" in x:
-                        dict_object = {
-                            
-                            "src": str(x.split('jpg')[0]+'jpg'),
-                            "position": count
-                        }
-                    else:
-                        dict_object = {
-                            
-                            "src": str(x+'jpg'),
-                            "position": count
-                        }
 
                     count = count+1
                     l2.append(dict_object)
@@ -1344,24 +1324,7 @@ def aldoshoes_data():
             if row[7] is not None:
                 count = 0
                 for x in row[7].split(','):
-                    if "{" in x:
-                        dict_object = {
-                            
-                            "src": str(x.split("{")[1]),
-                            "position": count
-                        }
-                    elif "}" in x:
-                        dict_object = {
-                            
-                            "src": str(x.split('}')[0]),
-                            "position": count
-                        }
-                    else:
-                        dict_object = {
-                            
-                            "src": str(x),
-                            "position": count
-                        }
+
                     count = count+1
                     l2.append(dict_object)
             else:
@@ -1503,7 +1466,7 @@ def tedbaker_data():
                 }
                 variation_list.append(variation)
 
-            category_id = assign_category(row[10].split(' ')[0])
+            category_id = assign_category(row[10])
         data = {
             'sku': asin[0],
             #'type': 'variable',
