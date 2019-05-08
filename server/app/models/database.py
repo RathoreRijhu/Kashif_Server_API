@@ -559,3 +559,31 @@ def get_data_against_asin_shopguess(asin):
     except Exception as e:
         pg_.put_conn(pg_conn)
         return None
+
+
+def get_data_against_asin_ashford():
+    pg_conn, pg_cursor = pg_.get_conn()
+    query = QUERIES["AshfordData"]
+
+    try:
+        res = pg_.execute_query(pg_cursor, query, params='')
+        pg_.commit_changes(pg_conn)
+        pg_.put_conn(pg_conn)
+        return res
+    except Exception as e:
+        pg_.put_conn(pg_conn)
+        return None
+
+
+def get_data_against_asin_toryburch():
+    pg_conn, pg_cursor = pg_.get_conn()
+    query = QUERIES["ToryBurchData"]
+
+    try:
+        res = pg_.execute_query(pg_cursor, query, params='')
+        pg_.commit_changes(pg_conn)
+        pg_.put_conn(pg_conn)
+        return res
+    except Exception as e:
+        pg_.put_conn(pg_conn)
+        return None
