@@ -1860,21 +1860,22 @@ def ashford_data():
                 if inner_flag:
                     break
                 if '/ashford/' or '/maddy/ 'in x and count == 0:
-                    for x in row[8].split(',')[1:]:
+                    for x in row[8].split(','):
                         if "{" in x:
                             dict_object = {
                                 "src": x.split('{')[1].replace('/boyfriend/', '/ashford/'),
                                 "position": count
                             }
                         elif "}" in x:
-                            pass
+                            dict_object={}
                         else:
                             dict_object = {
                                 "src": x.replace('/boyfriend/', '/ashford/'),
                                 "position": count
                             }
-                        count = count+1
-                        l2.append(dict_object)
+                        if dict_object:
+                            count = count+1
+                            l2.append(dict_object)
                     inner_flag=True
                 if "{" in x:
                     dict_object = {
