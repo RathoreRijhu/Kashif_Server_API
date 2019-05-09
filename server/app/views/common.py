@@ -1841,6 +1841,7 @@ def shopguess_data():
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
 
+
 @app.route('/ashford')
 @auto.doc()
 def ashford_data():
@@ -1854,17 +1855,34 @@ def ashford_data():
         # setting up images
         if row[8] is not None:
             count = 0
+            inner_flag=None
             for x in row[8].split(','):
+                if inner_flag:
+                    break
+                if '/ashford/' or '/maddy/ 'in x and count == 0:
+                    for x in row[8].split(',')[1:]:
+                        if "{" in x:
+                            dict_object = {
+                                "src": x.split('{')[1].replace('/boyfriend/', '/ashford/'),
+                                "position": count
+                            }
+                        elif "}" in x:
+                            pass
+                        else:
+                            dict_object = {
+                                "src": x.replace('/boyfriend/', '/ashford/'),
+                                "position": count
+                            }
+                        count = count+1
+                        l2.append(dict_object)
+                    inner_flag=True
                 if "{" in x:
                     dict_object = {
                         "src": x.split('{')[1],
                         "position": count
                     }
                 elif "}" in x:
-                    dict_object = {
-                        "src": x.split('}')[0],
-                        "position": count
-                    }
+                    pass
                 else:
                     dict_object = {
                         "src": x,
