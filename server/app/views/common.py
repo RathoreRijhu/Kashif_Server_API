@@ -1869,7 +1869,7 @@ def ashford_data():
             for x in row[8].split(','):
                 if inner_flag:
                     break
-                if '/ashford/' or '/maddy/ 'in x and count == 0:
+                if '/ashford/' in x and count == 0:
                     for x in row[8].split(','):
                         if "{" in x:
                             dict_object = {
@@ -1893,7 +1893,7 @@ def ashford_data():
                         "position": count
                     }
                 elif "}" in x:
-                    pass
+                    dict_object={}
                 else:
                     dict_object = {
                         "src": x,
