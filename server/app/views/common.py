@@ -52,13 +52,13 @@ def return_product_link(sku):
     print(sku)
     link = get_product_link(sku)[0][0]
     print(link)
+    opts = Options()
+    opts.add_argument('--no-sandbox')
+    opts.add_argument('--headless')
+    browser = Chrome(options=opts)
+    
     if(link is not None and "amazon" in link):
-        opts = Options()
-        opts.add_argument('--no-sandbox')
-        opts.add_argument('--headless')
-        browser = Chrome(options=opts)
         browser.get(link)
-
         try:
             quantity = None
             select=Select(browser.find_element_by_id("quantity"))
@@ -81,10 +81,6 @@ def return_product_link(sku):
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif(link is not None and "ebay" in link):
-        opts = Options()
-        opts.add_argument('--no-sandbox')
-        opts.add_argument('--headless')
-        browser = Chrome(options=opts)
         browser.get(link)
         #time.sleep(5)
         soup=BeautifulSoup(browser.page_source, 'lxml')
@@ -106,13 +102,10 @@ def return_product_link(sku):
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif(link is not None and 'macys' in link):
-        opts = Options()
-        opts.add_argument('--no-sandbox')
-        opts.add_argument('--headless')
-        browser = Chrome(options=opts)
         browser.get(link)
         #time.sleep(5)
         soup=BeautifulSoup(browser.page_source, 'lxml')
+        browser.close()
         quantity = None
         try:
             
@@ -126,16 +119,31 @@ def return_product_link(sku):
             availability = browser.find_element_by_xpath('//*[@id="mainContent"]/div/div[1]/div[2]/div[3]/div/div/div[2]/div[4]/div/div/div/div/form/div[1]/div[2]/div/span[1]').text.strip()
             price = soup.find("span",{'data-auto':"sale-price"}).text.split('$')[1] or soup.find("div",{'data-auto':"main-price"}).text.split('$')[1]
             data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
-            browser.close()
         except Exception as e:
-            browser.close()
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+        return json.dumps(data)
+
+    elif link is not None and "ashford" in link:
+        browser.get(link)
+        #time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        browser.close()
+        try:
+            availability = "In Stock"
+            if soup.find("td",{'class':"highlight"}): 
+                price = float(soup.find("td",{'class':"highlight"}).text.\
+                                    encode('utf-8').replace('$', '').strip('\n'))
+            elif soup.find("tr",{'class':"out_stock"}):
+                price = float(soup.find("tr",{'class':"out_stock"}).find('td').text.\
+                                    encode('utf-8').replace('$', '').strip('\n'))
+            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':1}
+        except Exception as e:
+            data = {'availability':"out of stock", 'price':0, 'quantity':None}
         return json.dumps(data)
 
     else:
         data={'availability':None, 'price':None, 'quantity':None}
         return json.dumps(data)
-
 
 @app.route('/get-color-size/<sku>/<color>/<size>', methods=['GET'])
 @auto.doc()
