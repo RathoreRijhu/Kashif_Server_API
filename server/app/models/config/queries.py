@@ -18,7 +18,7 @@ QUERIES = {
                "WHERE product_asin=%s "
                "UNION SELECT product_link FROM shopify_db.zara_scraped_data "
                "WHERE product_asin=%s "
-               "UNION SELECT product_url FROM shopify_db.variations WHERE sku=%s",
+               "UNION SELECT product_link FROM shopify_db.ashford_data WHERE product_asin=%s",
 
     "GetWatches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
                       "FROM sorted_db.sorted_ebay_scraped_data where category='watches' "
