@@ -1867,6 +1867,7 @@ def ashford_data():
             count = 0
             inner_flag=None
             for x in row[8].split(','):
+                skip=True
                 if inner_flag:
                     break
                 if '/ashford/' in x and count == 0:
@@ -1877,17 +1878,16 @@ def ashford_data():
                                 "position": count
                             }
                         elif "}" in x:
-                            dict_object={
-                                "src":"",
-                                "position": ""
-                            }
+                            skip=False
                         else:
                             dict_object = {
                                 "src": x.replace('/boyfriend/', '/ashford/'),
                                 "position": count
                             }
-                        count = count+1
-                        l2.append(dict_object)
+                        if skip:
+                            count = count+1
+                            l2.append(dict_object)
+                            skip=True
                     inner_flag=True
                 if "{" in x:
                     dict_object = {
@@ -1895,17 +1895,16 @@ def ashford_data():
                         "position": count
                     }
                 elif "}" in x:
-                    dict_object={
-                        "src":"",
-                        "position":""
-                    }
+                    skip = False
                 else:
                     dict_object = {
                         "src": x,
                         "position": count
                     }
-                count = count+1
-                l2.append(dict_object)
+                if skip:
+                    count = count+1
+                    l2.append(dict_object)
+                    skip=True
         else:
             dict_object = {
             'src':row[4],
