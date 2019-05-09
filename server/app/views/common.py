@@ -2021,7 +2021,7 @@ def ashford_data():
     return response
 
 
-@app.route('/toruburch')
+@app.route('/toryburch')
 @auto.doc()
 def toryburch_data():
     all_data=[]
@@ -2163,6 +2163,8 @@ def toryburch_data():
             }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
+    return response
+
 
 def assign_category(category_text):
     category_id = 0
