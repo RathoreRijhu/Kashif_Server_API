@@ -1254,7 +1254,14 @@ def zappos_data():
             if row[6] is not None:
                 option=row[6].split('{')[1].split('}')[0]
                 for opt in option.split(','):
-                    optionsList.append(str(opt).strip())
+                    if len(opt.split('"'))>1:
+                        if opt.split('"')[1]!="Choose Women's Width":
+                            optionsList.append((opt.split('"')[1]).strip())
+                    else:
+                        print(opt.split('"')[0])
+                    #if str(opt.strip())=="'Choose Women's Width'":
+                    #print(str(opt))
+                        optionsList.append(str(opt.split('"')[0]).strip())
             size_list.extend(optionsList)
             if price or row[9]: 
                 for size in size_list:
@@ -1321,7 +1328,10 @@ def aldoshoes_data():
             if row[7] is not None:
                 count = 0
                 for x in row[7].split(','):
-
+                    dict_object={
+                    'src':str(x),
+                    'position':count
+                    }
                     count = count+1
                     l2.append(dict_object)
             else:
