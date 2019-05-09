@@ -1877,15 +1877,17 @@ def ashford_data():
                                 "position": count
                             }
                         elif "}" in x:
-                            dict_object={}
+                            dict_object={
+                                "src":"",
+                                "position": ""
+                            }
                         else:
                             dict_object = {
                                 "src": x.replace('/boyfriend/', '/ashford/'),
                                 "position": count
                             }
-                        if dict_object:
-                            count = count+1
-                            l2.append(dict_object)
+                        count = count+1
+                        l2.append(dict_object)
                     inner_flag=True
                 if "{" in x:
                     dict_object = {
@@ -1893,7 +1895,10 @@ def ashford_data():
                         "position": count
                     }
                 elif "}" in x:
-                    dict_object={}
+                    dict_object={
+                        "src":"",
+                        "position":""
+                    }
                 else:
                     dict_object = {
                         "src": x,
