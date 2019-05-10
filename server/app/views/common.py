@@ -52,13 +52,13 @@ def return_product_link(sku):
     print(sku)
     link = get_product_link(sku)[0][0]
     print(link)
-    opts = Options()
-    opts.add_argument('--no-sandbox')
-    opts.add_argument('--headless')
-    browser = Chrome(options=opts)
-    
     if(link is not None and "amazon" in link):
+        opts = Options()
+        opts.add_argument('--no-sandbox')
+        opts.add_argument('--headless')
+        browser = Chrome(options=opts)
         browser.get(link)
+
         try:
             quantity = None
             select=Select(browser.find_element_by_id("quantity"))
@@ -81,13 +81,17 @@ def return_product_link(sku):
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif(link is not None and "ebay" in link):
+        opts = Options()
+        opts.add_argument('--no-sandbox')
+        opts.add_argument('--headless')
+        browser = Chrome(options=opts)
         browser.get(link)
         #time.sleep(5)
         soup=BeautifulSoup(browser.page_source, 'lxml')
         try:
             quantity = None
             quantity=soup.find("span",{'id':'qtySubTxt'}).text
-	    quantity=re.findall("\d+",quantity)[0]
+        quantity=re.findall("\d+",quantity)[0]
         except Exception as e:
             print(e)
         price = None
@@ -102,10 +106,13 @@ def return_product_link(sku):
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif(link is not None and 'macys' in link):
+        opts = Options()
+        opts.add_argument('--no-sandbox')
+        opts.add_argument('--headless')
+        browser = Chrome(options=opts)
         browser.get(link)
         #time.sleep(5)
         soup=BeautifulSoup(browser.page_source, 'lxml')
-        browser.close()
         quantity = None
         try:
             
@@ -119,31 +126,16 @@ def return_product_link(sku):
             availability = browser.find_element_by_xpath('//*[@id="mainContent"]/div/div[1]/div[2]/div[3]/div/div/div[2]/div[4]/div/div/div/div/form/div[1]/div[2]/div/span[1]').text.strip()
             price = soup.find("span",{'data-auto':"sale-price"}).text.split('$')[1] or soup.find("div",{'data-auto':"main-price"}).text.split('$')[1]
             data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
+            browser.close()
         except Exception as e:
+            browser.close()
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
-        return json.dumps(data)
-
-    elif link is not None and "ashford" in link:
-        browser.get(link)
-        #time.sleep(5)
-        soup=BeautifulSoup(browser.page_source, 'lxml')
-        browser.close()
-        try:
-            availability = "In Stock"
-            if soup.find("td",{'class':"highlight"}): 
-                price = float(soup.find("td",{'class':"highlight"}).text.\
-                                    encode('utf-8').replace('$', '').strip('\n'))
-            elif soup.find("tr",{'class':"out_stock"}):
-                price = float(soup.find("tr",{'class':"out_stock"}).find('td').text.\
-                                    encode('utf-8').replace('$', '').strip('\n'))
-            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':1}
-        except Exception as e:
-            data = {'availability':"out of stock", 'price':0, 'quantity':None}
         return json.dumps(data)
 
     else:
         data={'availability':None, 'price':None, 'quantity':None}
         return json.dumps(data)
+
 
 @app.route('/get-color-size/<sku>/<color>/<size>', methods=['GET'])
 @auto.doc()
@@ -160,16 +152,16 @@ def get_color_size(sku, color, size):
     #from selenium.webdriver.firefox.options import Options
     if(url is not None and "amazon" in url):
         opts = Options()
-	rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxies.txt')
+    rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxies.txt')
         opts.add_argument('--user-agent= Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0')
         #opts.add_argument('--proxy-server=104.202.147.26:61336')
-	opts.add_argument('--no-sandbox')
+    opts.add_argument('--no-sandbox')
         opts.add_argument('--headless')
-	opts.add_argument('--proxy-server %s' % rotator.get_proxy())
+    opts.add_argument('--proxy-server %s' % rotator.get_proxy())
         browser = Chrome(options=opts)
         browser.get(url)
         time.sleep(5)
-	print(browser.title)
+    print(browser.title)
         # try:
         #     quantity = None
         #     select=Select(browser.find_element_by_id("quantity"))
@@ -205,11 +197,11 @@ def get_color_size(sku, color, size):
         return json.dumps(data)
     elif(url is not None and "ebay" in url):
         opts = Options()
-	rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxies.txt')
+    rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxies.txt')
         opts.add_argument('--user-agent= Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0')
         opts.add_argument('--no-sandbox')
         opts.add_argument('--headless')
-	opts.add_argument('--proxy-server %s' % rotator.get_proxy())
+    opts.add_argument('--proxy-server %s' % rotator.get_proxy())
         browser = Chrome(chrome_options=opts)
         browser.get(url)
         time.sleep(5)
@@ -263,6 +255,7 @@ def get_color_size(sku, color, size):
                 price=(browser.find_element_by_xpath('//*[@id="priceSlot"]/span[1]').text.split('$')[1])
             except Exception as e:
                 print(e)
+            browser.close()
             #if availability.strip.lower()=='out of stock':
             data={'sku':sku, 'availability':availability, 'price':price, 'quantity':quantity}
             return json.dumps(data)
@@ -287,12 +280,59 @@ def get_color_size(sku, color, size):
                 price=(browser.find_element_by_xpath('//*[@id="productRecap"]/div[3]/aside/div[2]/div/div/span[1]').text.split('$')[1])
             except Exception as e:
                 print(e)
+            browser.close()
             data={'sku':sku, 'availability':availability, 'price':price, 'quantity':quantity}
             return json.dumps(data)
 
 
+    elif (url is not None and "6pm" in url):
+        opts = Options()
+        opts.add_argument('--no-sandbox')
+        opts.add_argument('--headless')
+        browser = Chrome(options=opts)
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        try:
+            print(browser.find_element_by_xpath('//*[@id="searchPage"]/p').text)
+            availability="Out of Stock"
+        except:
+            pass
+        try:
+            select=Select(browser.find_element_by_id("pdp-size-select"))
+            select.select_by_visible_text(size)
+            time.sleep(5)
+            try:
+                print(browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text)
+                #time.sleep(5)
+                availability=browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text
+                browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/svg/path[2]').click()
+
+            except Exception as e:
+                print(e)
+            try:
+                availability=browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text
+                quantity=re.findall('\d+',availability)[0]
+                print(browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text)
+            except Exception as e:
+                # quantity='1'
+                # availability="only 1 in stock"
+                print(e)
+            try:
+                price=browser.find_element_by_xpath('//*[@id="productRecap"]/div[3]/aside/div[2]/div/div/span[1]').text.split('$')[1]
+                print(price)
+            except Exception as e:
+                print(e)
+        except Exception as e:
+            print(e)
+        browser.close()
+        data={'availability':availability, 'price':price, 'quantity':quantity}
+        return json.dumps(data)
     else:
-        data={'availability':None, 'price':None, 'quantity':None}
+        data={'sku':sku,'availability':None, 'price':None, 'quantity':None}
         return json.dumps(data)
 
 
@@ -729,7 +769,7 @@ def amazon_attributes(asins, category_id, category_text):
                     "regular_price": str(price),
                     "image":{ 'src': single_row[4] },
                     'attributes':[{'slug':'color', 'name':"Color", 'option':single_row[2]},
-                    			{'slug':'size', 'name':"Size", 'option':single_row[6]}]
+                                {'slug':'size', 'name':"Size", 'option':single_row[6]}]
                 }
                 variation_list.append(variation)
             
@@ -1012,6 +1052,92 @@ def macys_data():
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
 
+# @app.route('/macys')
+# @auto.doc()
+# def macys_data():
+#     all_rows = get_all_data_of_macys()
+#     all_data=[]
+#     for row in all_rows:
+#         #setting up images
+#         l2=[]
+#         if row[7] is not None:
+#             count = 0
+#             for x in row[7].split('","'):
+#                 if "{" in x:
+#                     dict_object = {
+                        
+#                         "src": x.split('{')[1][1:],
+#                         "position": count
+#                     }
+#                 elif "}" in x:
+#                     dict_object = {
+                        
+#                         "src": x.split('}')[0][:-1],
+#                         "position": count
+#                     }
+#                 else:
+#                     dict_object = {
+                        
+#                         "src": x,
+#                         "position": count
+#                     }
+#                 count = count+1
+#                 l2.append(dict_object)
+#         else:
+#             dict_object = {
+#             'src':row[9],
+#             'positsion': 0
+#             }
+#             l2.append(dict_object)
+        
+#         attributes = [{
+#                 'name': "Color",
+#                 "visible": True,
+#                 "variation": True,
+#                 "options": row[3]
+
+#             },
+#             {
+#                 'name': "Size",
+#                 "visible": True,
+#                 "variation": True,
+#                 "options": row[6]                
+#             }
+#             ]
+#         price = ""
+#         if row[2]:
+#             #db_price = float(row[2] #it is used for price in dollar
+#             db_price = math.ceil(float(row[2])*float(0.0071)) #changed because price in db is in pkr and convert to dollar
+#         elif row[11]:
+#             #db_price = float(row[11]
+#             db_price = math.ceil(float(row[11])*float(0.0071))
+#         #print(db_price)
+#         if db_price > 500:
+#             percent_30 = db_price * 0.3
+#             price = (percent_30 + db_price) * (dollar_price + 3)
+
+#         elif row[8]:
+#             brand = row[8].replace(',', '').lower()
+#             price = setting_price(brand, row[10], db_price, dollar_price)
+#             if not price:
+#                 price = float(db_price) * (dollar_price+3)
+        
+#         #category_id = assign_category(row[10].split(' ')[0])
+#         category_id = assign_category(row[10])
+#         data = {
+#             'sku': row[0],
+#             #'type': 'variable',
+#             'regular_price': str(price),
+#             'name': row[1],
+#             'brand': row[8],
+#             'attributes': attributes,
+#             'images': l2,
+#             'categories':[{ "id": category_id}],
+#             'description': row[5]
+#             }        
+#         all_data.append(data)
+#     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
+#     return response
 
 @app.route('/6pm-data')
 @auto.doc()
@@ -1131,7 +1257,10 @@ def zappos_data():
     all_asin = get_all_main_asin_of_zappos()
     all_data=[]
     for asin in all_asin:
+        #print(asin)
+        #print(asin[0])
         all_rows = get_data_against_asin_zappos(asin[0])
+        #print all_rows
         variation_list=[]
         color_list=[]
         size_list=[]
@@ -1147,6 +1276,24 @@ def zappos_data():
                         "src": x,
                         "position": count
                     }
+                    # elif "}" in x:
+                    #     dict_object = {
+                            
+                    #         "src": str((x.split('}')[0])+'jpg'),
+                    #         "position": count
+                    #     }
+                    # elif "," in x:
+                    #     dict_object = {
+                            
+                    #         "src": str((x.split(',')[1])+'jpg'),
+                    #         "position": count
+                    #     }
+                    # else:
+                    #     dict_object = {
+                            
+                    #         "src": str(x+'jpg'),
+                    #         "position": count
+                    #     }
                     count = count+1
                     l2.append(dict_object)
             else:
@@ -1178,7 +1325,9 @@ def zappos_data():
                         if opt.split('"')[1]!="Choose Women's Width":
                             optionsList.append((opt.split('"')[1]).strip())
                     else:
-                        print(opt.split('"')[0])
+                        #print(opt.split('"')[0])
+                    #if str(opt.strip())=="'Choose Women's Width'":
+                    #print(str(opt))
                         optionsList.append(str(opt.split('"')[0]).strip())
             size_list.extend(optionsList)
             if price or row[9]: 
@@ -1328,8 +1477,12 @@ def aldoshoes_data():
 def tedbaker_data():
     all_asin = get_all_main_asin_of_tedbaker()
     all_data=[]
+    #print all_asin
     for asin in all_asin:
+        #print(asin)
+        #print(asin[0])
         all_rows = get_data_against_asin_tedbaker(asin[0])
+        #print all_rows
         variation_list=[]
         for row in all_rows:
             l2=[]
@@ -1408,9 +1561,12 @@ def tedbaker_data():
 def katespade_data():
     all_asin = get_all_main_asin_of_katespade()
     all_data=[]
+    #print all_asin
     for asin in all_asin:
-        
+        #print(asin)
+        #print(asin[0])
         all_rows = get_data_against_asin_katespade(asin[0])
+        #print all_rows
         variation_list=[]
         for row in all_rows:
             l2=[]
@@ -1489,7 +1645,10 @@ def katespade_data():
 def michaelkors_data():
     all_asin = get_all_main_asin_of_michaelkors()
     all_data=[]
+    #print all_asin
     for asin in all_asin:
+        #print(asin)
+        #print(asin[0])
         all_rows = get_data_against_asin_michaelkors(asin[0])
         #print all_rows
         variation_list=[]
@@ -1570,8 +1729,12 @@ def michaelkors_data():
 def nordstromrack_data():
     all_asin = get_all_main_asin_of_nordstromrck()
     all_data=[]
+    #print all_asin
     for asin in all_asin:
+        #print(asin)
+        #print(asin[0])
         all_rows = get_data_against_asin_nordstromrack(asin[0])
+        #print all_rows
         variation_list=[]
         for row in all_rows:
             l2=[]
@@ -2071,6 +2234,8 @@ def toryburch_data():
                     variation_list.append(variation)
 
         category_id = assign_category(row[6])
+        #size_list=list(set(size_list))
+        #color_list=list(set(color_list))
         attributes =[{
                 'name': "Color",
                 "visible": True,
