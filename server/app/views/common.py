@@ -2269,37 +2269,39 @@ def toryburch_data():
 def assign_category(category_text):
     category_id = 0
     if  'tshirt' in category_text:
-        category_id = 150
+        category_id = 137
     elif 'jean' in category_text :
-        category_id = 149
+        category_id = 135
     elif 'handbag' in category_text :
-        category_id = 80
+        category_id = 138
     elif 'clutches' in category_text:
-        category_id = 81
+        category_id = 140
     elif 'bagpack' in category_text:
-        category_id = 82
+        category_id = 139
     elif 'bracelet' in category_text:
-        category_id = 90
+        category_id = 129
     elif 'earing' in category_text:
-        category_id = 91
+        category_id = 130
     elif 'jewelry' in category_text:
-        category_id = 92
+        category_id = 131
     elif 'watches' in category_text:
-        category_id = 93
-    elif 'sandal' in category_text or 'heel' in category_text or 'boot' in category_text:
-        category_id = 84
+        category_id = 132
+    elif 'heel' in category_text:
+        category_id=144
+    elif 'sandal' in category_text or 'boot' in category_text:
+        category_id = 146
     elif 'running' in category_text:
-        category_id = 85
+        category_id = 145
     elif 'sneaker' in category_text:
-        category_id = 86
+        category_id = 147
     elif 'training' in category_text:
-        category_id = 87
+        category_id = 148
     elif 'flat' in category_text:
-        category_id = 88 
+        category_id = 143
     elif 'sweater' in category_text:
-        category_id=303
+        category_id=136
     elif 'jacket' in category_text:
-        category_id=302   
+        category_id=134   
     return category_id
 
 
