@@ -327,7 +327,7 @@ def return_accessories(limit, offset):
     Returns accessories
     """
     return_data = get_ebay_earings(limit, offset)
-    set_category_id = '128'
+    set_category_id = '130'
     category_text = 'earing'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
