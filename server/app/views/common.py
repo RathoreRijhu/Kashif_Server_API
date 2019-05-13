@@ -150,15 +150,14 @@ def get_color_size(sku, color, size):
     headers = {'User-Agent': str( user_agent.random )}
     #from selenium.webdriver import Firefox
     #from selenium.webdriver.firefox.options import Options
+    opts = Options()
+    rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxies.txt')
+    opts.add_argument('--user-agent= Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0')
+    opts.add_argument('--no-sandbox')
+    opts.add_argument('--headless')
+    opts.add_argument('--proxy-server %s' % rotator.get_proxy())
+    browser = Chrome(chrome_options=opts)
     if(url is not None and "amazon" in url):
-        opts = Options()
-        rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxies.txt')
-        opts.add_argument('--user-agent= Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0')
-        #opts.add_argument('--proxy-server=104.202.147.26:61336')
-        opts.add_argument('--no-sandbox')
-        opts.add_argument('--headless')
-        opts.add_argument('--proxy-server %s' % rotator.get_proxy())
-        browser = Chrome(options=opts)
         browser.get(url)
         time.sleep(5)
         print(browser.title)
@@ -196,13 +195,6 @@ def get_color_size(sku, color, size):
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif(url is not None and "ebay" in url):
-        opts = Options()
-        rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxies.txt')
-        opts.add_argument('--user-agent= Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0')
-        opts.add_argument('--no-sandbox')
-        opts.add_argument('--headless')
-        opts.add_argument('--proxy-server %s' % rotator.get_proxy())
-        browser = Chrome(chrome_options=opts)
         browser.get(url)
         time.sleep(5)
         soup=BeautifulSoup(browser.page_source, 'lxml')
@@ -223,10 +215,6 @@ def get_color_size(sku, color, size):
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif(url is not None and "zappos" in url):
-        opts = Options()
-        opts.add_argument('--no-sandbox')
-        opts.add_argument('--headless')
-        browser = Chrome(options=opts)
         browser.get(url)
         time.sleep(5)
         soup=BeautifulSoup(browser.page_source, 'lxml')
@@ -286,10 +274,6 @@ def get_color_size(sku, color, size):
 
 
     elif (url is not None and "6pm" in url):
-        opts = Options()
-        opts.add_argument('--no-sandbox')
-        opts.add_argument('--headless')
-        browser = Chrome(options=opts)
         browser.get(url)
         time.sleep(5)
         soup=BeautifulSoup(browser.page_source, 'lxml')
