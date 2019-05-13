@@ -1189,7 +1189,7 @@ def pm6_data():
                 if not price:
                     price = float(db_price) * (dollar_price+3)
             
-            if price or row[9]:
+            if price or row[9] or row[2] or row[11]:
                 size_variations=[]
                 for size in size_list: 
                     variation = {
@@ -1314,7 +1314,7 @@ def zappos_data():
                     #print(str(opt))
                         optionsList.append(str(opt.split('"')[0]).strip())
             size_list.extend(optionsList)
-            if price or row[9]: 
+            if price or row[9] or row[2] or row[11]: 
                 for size in size_list:
                     variation = {
                         "regular_price": str(price),
