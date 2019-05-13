@@ -327,7 +327,7 @@ def return_accessories(limit, offset):
     Returns accessories
     """
     return_data = get_ebay_earings(limit, offset)
-    set_category_id = '91'
+    set_category_id = '128'
     category_text = 'earing'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -337,7 +337,7 @@ def return_accessories(limit, offset):
 @auto.doc()
 def ebay_watches(limit, offset):
     return_data = get_ebay_watches(limit, offset)
-    set_category_id = '93'
+    set_category_id = '132'
     category_text = 'watches'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -347,7 +347,7 @@ def ebay_watches(limit, offset):
 @auto.doc()
 def ebay_bracelets(limit, offset):
     return_data = get_ebay_bracelet(limit, offset)
-    set_category_id = '90'
+    set_category_id = '129'
     category_text = 'bracelet'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -357,7 +357,7 @@ def ebay_bracelets(limit, offset):
 @auto.doc()
 def ebay_jewelry(limit, offset):
     return_data = get_ebay_jewelry(limit, offset)
-    set_category_id = '92'
+    set_category_id = '131'
     category_text = 'jewelry'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -367,7 +367,7 @@ def ebay_jewelry(limit, offset):
 @auto.doc()
 def ebay_handbags(limit, offset):
     return_data = get_ebay_handbags(limit, offset)
-    set_category_id = '80'
+    set_category_id = '138'
     category_text = 'handbag'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -377,7 +377,7 @@ def ebay_handbags(limit, offset):
 @auto.doc()
 def ebay_clutches(limit, offset):
     return_data = get_ebay_clutches(limit, offset)
-    set_category_id = '81'
+    set_category_id = '140'
     category_text = 'clutches'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -387,7 +387,7 @@ def ebay_clutches(limit, offset):
 @auto.doc()
 def ebay_bagpack(limit, offset):
     return_data = get_ebay_bagpack(limit, offset)
-    set_category_id = '82'
+    set_category_id = '139'
     category_text = 'bagpack'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -397,7 +397,7 @@ def ebay_bagpack(limit, offset):
 def ebay_running(limit, offset):
     return_data = get_ebay_running(limit, offset)
     print(return_data)
-    set_category_id = '85'
+    set_category_id = '145'
     category_text = 'running'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -629,7 +629,7 @@ def ebay_attributes(return_data, set_category_id, category_text):
 @auto.doc()
 def amazon_sandals(limit, offset):
     asins = get_product_asin_sandals(int(limit), int(offset))
-    category_id = '84'
+    category_id = '146'
     category_text = 'sandal'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -639,7 +639,7 @@ def amazon_sandals(limit, offset):
 @auto.doc()
 def amazon_running(limit, offset):
     asins = get_product_asin_running(limit, offset)
-    category_id = '85'
+    category_id = '145'
     category_text = 'running'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -650,7 +650,7 @@ def amazon_running(limit, offset):
 def amazon_sneakers(limit, offset):
     asins = get_product_asin_sneakers(limit, offset)
     category_text = 'sneakers'
-    category_id = '86'
+    category_id = '147'
     response = amazon_attributes(asins, category_id, category_text)
     return response
 
@@ -659,7 +659,7 @@ def amazon_sneakers(limit, offset):
 @auto.doc()
 def amazon_training(limit, offset):
     asins = get_product_asin_training(limit, offset)
-    category_id = '87'
+    category_id = '148'
     category_text = 'training'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -669,7 +669,7 @@ def amazon_training(limit, offset):
 @auto.doc()
 def amazon_flats(limit, offset):
     asins = get_product_asin_flats(limit, offset)
-    category_id = '88'
+    category_id = '143'
     category_text = 'flat'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -679,7 +679,7 @@ def amazon_flats(limit, offset):
 @auto.doc()
 def amazon_watches(limit, offset):
     asins = get_product_asin_watches(limit, offset)
-    category_id = '93'
+    category_id = '132'
     category_text = 'watches'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -689,7 +689,7 @@ def amazon_watches(limit, offset):
 @auto.doc()
 def amazon_bracelet(limit, offset):
     asins = get_product_asin_bracelet(limit, offset)
-    category_id = '90'
+    category_id = '129'
     category_text = 'bracelet'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -699,7 +699,7 @@ def amazon_bracelet(limit, offset):
 @auto.doc()
 def amazon_handbags(limit, offset):
     asins = get_product_asin_handbags(limit, offset)
-    category_id = '80'
+    category_id = '141'
     category_text = 'handbags'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -709,7 +709,7 @@ def amazon_handbags(limit, offset):
 @auto.doc()
 def amazon_clutches(limit, offset):
     asins = get_product_asin_clutches(limit, offset)
-    category_id = '81'
+    category_id = '140'
     category_text = 'clutches'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -719,7 +719,7 @@ def amazon_clutches(limit, offset):
 @auto.doc()
 def amazon_bagpack(limit, offset):
     asins = get_product_asin_bagpack(limit, offset)
-    category_id = '82'
+    category_id = '139'
     category_text = 'bagpack'
     response = amazon_attributes(asins, category_id, category_text)
     return response
