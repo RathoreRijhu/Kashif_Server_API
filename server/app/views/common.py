@@ -1189,7 +1189,7 @@ def pm6_data():
                 if not price:
                     price = float(db_price) * (dollar_price+3)
             
-            if price or row[9] or price[2] or price[11]:
+            if price or row[9] or row[2] or row[11]:
                 size_variations=[]
                 for size in size_list: 
                     variation = {
