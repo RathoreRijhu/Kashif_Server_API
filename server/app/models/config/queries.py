@@ -146,8 +146,11 @@ QUERIES = {
       "FROM shopify_db.shop_guess_scraped_data where main_asin=%s",
 
     "GetUrl": "SELECT product_link from shopify_db.amazon_products_details "
-            "where  main_product_asin=%s and color=%s and  product_size=%s"
-            "UNION SELECT product_link from shopify_db.ebay_scraped_data ",
+          "where  main_product_asin=%s and color=%s and  product_size=%s"
+          "UNION SELECT product_link from shopify_db.ebay_scraped_data where product_asin=%s "
+          "UNION SELECT product_link from shopify_db.zappos_scraped_data where main_asin=%s and color=%s "
+          "UNION SELECT product_link from shopify_db.pm6_scraped_data where main_asin=%s and color=%s ",
+
 
     # "GetEbayUrl": "SELECT product_link from shopify_db.ebay_scraped_data "
     #         "where main_product_asin=%s and color=%s and  product_size=%s"
