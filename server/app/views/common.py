@@ -1110,7 +1110,7 @@ def dillards_data():
                 if not price:
                     price = float(db_price) * (dollar_price+3)
             
-            if row[2] or row[9] or row[11]:
+            if price or row[2] or row[9] or row[11]:
                 for size in optionsList: 
                     variation = {
                         "regular_price": str(price),
@@ -1341,7 +1341,7 @@ def zappos_data():
                     #print(str(opt))
                         optionsList.append(str(opt.split('"')[0]).strip())
             size_list.extend(optionsList)
-            if price or row[9] or row[2] or row[11]: 
+            if row[9] or row[2] or row[11]: 
                 for size in size_list:
                     variation = {
                         "regular_price": str(price),
@@ -1407,7 +1407,7 @@ def aldoshoes_data():
                 count = 0
                 for x in row[7].split(','):
                     dict_object={
-                    'src':str(x),
+                    'src':str(x.split(':')[0]+':/'+x.split(':')[1]),
                     'position':count
                     }
                     count = count+1
@@ -1443,7 +1443,7 @@ def aldoshoes_data():
                 if not price:
                     price = float(db_price) * (dollar_price+3)
             
-            if row[2] or row[9] or row[11]:
+            if price or row[2] or row[9] or row[11]:
                 for size in optionsList: 
                     variation = {
                         "regular_price": str(price),
