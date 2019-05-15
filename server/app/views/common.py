@@ -46,6 +46,14 @@ def index_route():
     """
     return '/'
 
+@app.route('/original-link/<sku>', methods=['GET'])
+@auto.doc()
+def original_product_link(sku):
+    print(sku)
+    link = get_original_link(sku)[0][0]
+    print(link)
+    return json.dumps(link)
+
 @app.route('/return-link/<sku>', methods=['GET'])
 @auto.doc()
 def return_product_link(sku):
@@ -1046,85 +1054,97 @@ def macys_data():
 @app.route('/dillards')
 @auto.doc()
 def dillards_data():
-    all_rows = get_all_data_of_dillards()
+    all_asin = get_all_main_asin_of_dillards()
     all_data=[]
-    for row in all_rows:
-        #setting up images
-        l2=[]
-        if row[7] is not None:
-            count = 0
-            for x in row[7].split('","'):
-                if "{" in x:
-                    dict_object = {
-                        
-                        "src": x.split('{')[1][1:],
-                        "position": count
+    #print all_asin
+    for asin in all_asin:
+        print(asin)
+        print(asin[0])
+        all_rows = get_data_against_asin_dillards(asin[0])
+        print("all rows ",all_rows)
+        #print all_rows
+        variation_list=[]
+        size_list=[]
+        color_list=[]
+        for row in all_rows:
+            l2=[]
+            # setting up images
+            if row[7] is not None:
+                count = 0
+                for x in row[7].split(','):
+                    dict_object={
+                    'src':str(x),
+                    'position':count
                     }
-                elif "}" in x:
-                    dict_object = {
-                        
-                        "src": x.split('}')[0][:-1],
-                        "position": count
-                    }
-                else:
-                    dict_object = {
-                        
-                        "src": x,
-                        "position": count
-                    }
-                count = count+1
+                    count = count+1
+                    l2.append(dict_object)
+            else:
+                dict_object = {
+                'src':str(row[9]),
+                'position': 0
+                }
                 l2.append(dict_object)
-        else:
-            dict_object = {
-            'src':row[9],
-            'positsion': 0
-            }
-            l2.append(dict_object)
-        
+            # setting up properties or attributes
+            optionsList=[]
+            if row[6] is not None:
+                option=row[6].split('{')[1].split('}')[0]
+                for opt in option.split(','):
+                    optionsList.append(str(opt))
+                size_list.extend(optionsList)
+            else:
+                size_list.append(str(row[6]))
+            color_list.append(str(row[3]))
+
+            price = ""
+            db_price=0
+            if row[2]:
+                db_price = float(row[2])
+            elif row[11]:
+                db_price = float(row[11])
+            if db_price > 500:
+                percent_30 = db_price * 0.3
+                price = (percent_30 + db_price) * (dollar_price + 3)
+            elif row[8]:
+                brand = row[8].replace(',', '').lower()
+                price = setting_price(brand, row[10], db_price, dollar_price)
+                if not price:
+                    price = float(db_price) * (dollar_price+3)
+            
+            if row[2] or row[9] or row[11]:
+                for size in optionsList: 
+                    variation = {
+                        "regular_price": str(price),
+                        "image":{ 'src': str('https://'+row[9].split('jpg')[0].strip()+'jpg')},
+                        'attributes':[{'slug':'color', 'name':"Color", 'option':str(row[3])},
+                                    {'slug':'size', 'name':"Size", 'option':str(size)}]
+                    }
+                    variation_list.append(variation)
+
+        category_id = assign_category(row[10])
         attributes = [{
-                'name': "Color",
-                "visible": True,
-                "variation": True,
-                "options": row[3]
+            'name': "Color",
+            "visible": True,
+            "variation": True,
+            "options": list(set(color_list))
 
             },
             {
-                'name': "Size",
-                "visible": True,
-                "variation": True,
-                "options": row[6]                
+            'name': "Size",
+            "visible": True,
+            "variation": True,
+            "options": list(set(size_list))                
             }
             ]
-        price = ""
-        if row[2]:
-            #db_price = float(row[2] #it is used for price in dollar
-            db_price = math.ceil(float(row[2])*float(0.0071)) #changed because price in db is in pkr and convert to dollar
-        elif row[11]:
-            #db_price = float(row[11]
-            db_price = math.ceil(float(row[11])*float(0.0071))
-        #print(db_price)
-        if db_price > 500:
-            percent_30 = db_price * 0.3
-            price = (percent_30 + db_price) * (dollar_price + 3)
-
-        elif row[8]:
-            brand = row[8].replace(',', '').lower()
-            price = setting_price(brand, row[10], db_price, dollar_price)
-            if not price:
-                price = float(db_price) * (dollar_price+3)
-        
-        #category_id = assign_category(row[10].split(' ')[0])
-        category_id = assign_category(row[10])
         data = {
-            'sku': row[0],
-            #'type': 'variable',
-            'regular_price': str(price),
-            'name': row[1],
-            'brand': row[8],
+            'sku': str(asin[0]),
+            'type': 'variable',
+            'name': str(row[1]).split('|')[0],
+            'variations': variation_list,
+            'brand': str(row[8]),
             'attributes': attributes,
             'images': l2,
-            'categories':[{ "id": category_id}],
-            'description': row[5]
+            'categories':[{ "id": str(category_id)}],
+            'description': str(row[5])
             }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
