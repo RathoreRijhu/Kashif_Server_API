@@ -18,7 +18,19 @@ def get_product_link(sku):
     except Exception as e:
         pg_.put_conn(pg_conn)
         return None
-
+def get_original_link(sku):
+    pg_conn, pg_cursor = pg_.get_conn()
+    query = QUERIES["GetLink"]
+    params = (sku, sku, sku, sku, sku, sku, sku, sku,sku,)
+    try:
+        res = pg_.execute_query(pg_cursor, query, params)
+        pg_.commit_changes(pg_conn)
+        pg_.put_conn(pg_conn)
+        print(res)
+        return res
+    except Exception as e:
+        pg_.put_conn(pg_conn)
+        return None
 
 
 def get_ebay_earings(limit, offset):
@@ -357,6 +369,32 @@ def get_all_data_of_macys():
 
     try:
         res = pg_.execute_query(pg_cursor, query, params='')
+        pg_.commit_changes(pg_conn)
+        pg_.put_conn(pg_conn)
+        return res
+    except Exception as e:
+        pg_.put_conn(pg_conn)
+        return None
+
+def get_all_main_asin_of_dillards():
+    pg_conn, pg_cursor = pg_.get_conn()
+    query = QUERIES["DillardsMainAsinData"]
+
+    try:
+        res = pg_.execute_query(pg_cursor, query, params='')
+        pg_.commit_changes(pg_conn)
+        pg_.put_conn(pg_conn)
+        return res
+    except Exception as e:
+        pg_.put_conn(pg_conn)
+        return None
+
+def get_data_against_asin_dillards(asin):
+    pg_conn, pg_cursor = pg_.get_conn()
+    query = QUERIES["DillardsData"]
+    params = (asin, )
+    try:
+        res = pg_.execute_query(pg_cursor, query, params)
         pg_.commit_changes(pg_conn)
         pg_.put_conn(pg_conn)
         return res
