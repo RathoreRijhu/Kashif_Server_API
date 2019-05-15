@@ -97,9 +97,11 @@ QUERIES = {
       "production_descr, allsizes, allimages_link, brand_name, image_link, category, old_price " 
       "FROM shopify_db.macys_scraped_data",
 
+    "DillardsMainAsinData": "SELECT DISTINCT(main_asin) from shopify_db.dillards_scraped_data",
+
     "DillardsData": "SELECT product_asin, title, new_price, color, category, " 
-      "production_descr, allsizes, allimages_link, brand_name, image_link, category, old_price " 
-      "FROM shopify_db.dillards_scraped_data",
+      "product_descr, allsizes, allimages_link, brand_name, image_link, category, old_price " 
+      "FROM shopify_db.dillards_scraped_data where main_asin=%s",
 
     "6PmDataAsin": "SELECT DISTINCT(main_asin) from shopify_db.pm6_scraped_data",
 
