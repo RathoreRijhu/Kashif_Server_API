@@ -1280,13 +1280,32 @@ def zappos_data():
             # setting up images
             if row[7] is not None:
                 count = 0
-                for x in row[7].split('","'):
+                #for x in row[7].split('","'):
+                for x in row[7].split('jpg')[:-1]:
+                    if x.strip().startswith(','):
+
+                        dict_object = {
+                        'src':str(x.split(',')[1]+'.jpg').strip(),
+                        'position': count
+                        }
+                    elif x.startswith('{'):
+                        dict_object = {
+                        'src':str(x.split('{')[1]+'jpg').strip(),
+                        'position': count
+                        }
+                    else:
+                        dict_object = {
+                        'src':str(x+'.jpg').strip(),
+                        'position': count
+                        }
+                    count = count+1
+                    l2.append(dict_object)
                     # if "{" in x:
-                    dict_object = {
+                    # dict_object = {
                         
-                        "src": x,
-                        "position": count
-                    }
+                    #     "src": x,
+                    #     "position": count
+                    # }
                     # elif "}" in x:
                     #     dict_object = {
                             
@@ -1315,7 +1334,8 @@ def zappos_data():
                 l2.append(dict_object)
             # setting up properties or attributes
         
-            price = ""
+            #price = ""
+            price=row[2]
             if row[2]:
                 db_price = float(row[2])
             elif row[11]:
