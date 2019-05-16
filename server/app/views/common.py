@@ -265,29 +265,35 @@ def get_color_size(sku, color, size):
             data={'sku':sku, 'availability':availability, 'price':price, 'quantity':quantity}
             return json.dumps(data)
         else:
-            select=Select(browser.find_element_by_id("pdp-size-select"))
-            #for opt in select.options:
             try:
-                select.select_by_visible_text(size)
+                select=Select(browser.find_element_by_id("pdp-size-select"))
+                #for opt in select.options:
+                try:
+                    select.select_by_visible_text(size)
+                except Exception as e:
+                    print(e)
+                time.sleep(5)
+                try:
+                    availability=(browser.find_element_by_xpath('/html/body/div[5]/div/div/div[1]/h1').text)
+                except Exception as e:         
+                    print(e)
+                try:
+                    availability=(browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text)
+                    quantity=re.findall('\d+',availability)[0]
+                except Exception as e:
+                    print(e)
+                try:
+                    price=(browser.find_element_by_xpath('//*[@id="productRecap"]/div[3]/aside/div[2]/div/div/span[1]').text.split('$')[1])
+                except Exception as e:
+                    print(e)
+                browser.close()
+                data={'sku':sku, 'availability':availability, 'price':price, 'quantity':quantity}
+                return json.dumps(data)
             except Exception as e:
                 print(e)
-            time.sleep(5)
-            try:
-                availability=(browser.find_element_by_xpath('/html/body/div[5]/div/div/div[1]/h1').text)
-            except Exception as e:         
-                print(e)
-            try:
-                availability=(browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text)
-                quantity=re.findall('\d+',availability)[0]
-            except Exception as e:
-                print(e)
-            try:
-                price=(browser.find_element_by_xpath('//*[@id="productRecap"]/div[3]/aside/div[2]/div/div/span[1]').text.split('$')[1])
-            except Exception as e:
-                print(e)
-            browser.close()
-            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':quantity}
-            return json.dumps(data)
+                browser.close()
+                data={'sku':sku, 'availability':availability, 'price':price, 'quantity':quantity}
+                return json.dumps(data)
 
 
     elif (url is not None and "6pm" in url):
@@ -351,9 +357,10 @@ def get_color_size(sku, color, size):
                     availability="In Stock"
                     price=browser.find_element_by_xpath('//*[@id="ProductDisplay"]/div/div[4]/div[3]/div/span').text.split('$')[1]
                     #print('size matched')
-                else:
-                    print('not found')
-                    availability="Out of Stock"
+                    break
+                # else:
+                #     print('not found')
+                #     availability="Out of Stock"
         except Exception as e:
             print(e)
         browser.close()
