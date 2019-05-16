@@ -330,6 +330,34 @@ def get_color_size(sku, color, size):
         browser.close()
         data={'availability':availability, 'price':price, 'quantity':quantity}
         return json.dumps(data)
+    elif (url is not None and "dillards" in url):
+        browser.get(url)
+        time.sleep(5)
+        try:
+            browser.find_element_by_xpath('//*[@id="button"]/button').click()
+        except Exception as e:
+            print(e)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        try:
+            all_sizes=soup.find('ul',{"class":"productDisplay__ul--flatSizeWrapper"}).findAll("li",{'class':"available"})
+            for s in all_sizes:
+                print(s.text)
+                if size==s.text:
+                    availability="In Stock"
+                    price=browser.find_element_by_xpath('//*[@id="ProductDisplay"]/div/div[4]/div[3]/div/span').text.split('$')[1]
+                    #print('size matched')
+                else:
+                    print('not found')
+                    availability="Out of Stock"
+        except Exception as e:
+            print(e)
+        browser.close()
+        data={'availability':availability, 'price':price, 'quantity':quantity}
+        return json.dumps(data)
+
     else:
         data={'sku':sku,'availability':None, 'price':None, 'quantity':None}
         return json.dumps(data)
@@ -1280,50 +1308,29 @@ def zappos_data():
             # setting up images
             if row[7] is not None:
                 count = 0
-                #for x in row[7].split('","'):
                 for x in row[7].split('jpg')[:-1]:
+                    dict_object = {
+                            
+                            "src": x,
+                            "position": count
+                        }
                     if x.strip().startswith(','):
 
                         dict_object = {
-                        'src':str(x.split(',')[1]+'.jpg').strip(),
-                        'position': count
+                         'src':str(x.split(',')[1]+'.jpg').strip(),
+                         'position': count
                         }
                     elif x.startswith('{'):
                         dict_object = {
-                        'src':str(x.split('{')[1]+'jpg').strip(),
-                        'position': count
+                         'src':str(x.split('{')[1]+'jpg').strip(),
+                         'position': count
                         }
                     else:
                         dict_object = {
-                        'src':str(x+'.jpg').strip(),
-                        'position': count
+                         'src':str(x+'.jpg').strip(),
+                         'position': count
                         }
-                    count = count+1
-                    l2.append(dict_object)
-                    # if "{" in x:
-                    # dict_object = {
-                        
-                    #     "src": x,
-                    #     "position": count
-                    # }
-                    # elif "}" in x:
-                    #     dict_object = {
-                            
-                    #         "src": str((x.split('}')[0])+'jpg'),
-                    #         "position": count
-                    #     }
-                    # elif "," in x:
-                    #     dict_object = {
-                            
-                    #         "src": str((x.split(',')[1])+'jpg'),
-                    #         "position": count
-                    #     }
-                    # else:
-                    #     dict_object = {
-                            
-                    #         "src": str(x+'jpg'),
-                    #         "position": count
-                    #     }
+                
                     count = count+1
                     l2.append(dict_object)
             else:
@@ -1361,7 +1368,7 @@ def zappos_data():
                     #print(str(opt))
                         optionsList.append(str(opt.split('"')[0]).strip())
             size_list.extend(optionsList)
-            if row[9] or row[2] or row[11]: 
+            if price or row[9] or row[2] or row[11]: 
                 for size in size_list:
                     variation = {
                         "regular_price": str(price),
@@ -1393,7 +1400,7 @@ def zappos_data():
             ]
         data = {
             'sku': asin[0],
-            #'type': 'variable',
+            'type': 'variable',
             'name': row[1],
             'variations': variation_list,
             'brand': row[8],
