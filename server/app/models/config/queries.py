@@ -7,7 +7,7 @@ QUERIES = {
                "UNION SELECT product_link FROM shopify_db.ebay_scraped_data "
                "WHERE product_asin=%s "
                "UNION SELECT product_link FROM shopify_db.dillards_scraped_data "
-               "WHERE product_asin=%s "
+               "WHERE main_asin=%s "
                "UNION SELECT product_link FROM shopify_db.macys_scraped_data "
                "WHERE product_asin=%s "
                "UNION SELECT product_link FROM shopify_db.pm6_scraped_data "
@@ -15,10 +15,10 @@ QUERIES = {
                "UNION SELECT product_link FROM shopify_db.spring_scraped_data "
                "WHERE product_asin=%s "
                "UNION SELECT product_link FROM shopify_db.zappos_scraped_data "
-               "WHERE product_asin=%s "
+               "WHERE main_asin=%s "
                "UNION SELECT product_link FROM shopify_db.zara_scraped_data "
-               "WHERE product_asin=%s "
-               "UNION SELECT product_link FROM shopify_db.ashford_data WHERE product_asin=%s",
+               "WHERE product_asin=%s ",
+               #"UNION SELECT product_link FROM shopify_db.ashford_data WHERE product_asin=%s",
 
     "GetWatches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
                       "FROM sorted_db.sorted_ebay_scraped_data where category='watches' "
