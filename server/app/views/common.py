@@ -992,7 +992,7 @@ def zara_data():
                     price = float(price_initial) * (dollar_price+3)
         # for size in size_list: 
         #         print("size in variations",size)
-        print(price)
+        #print(price)
         if price :
             for size in size_list: 
                 print("size in variations",size)
@@ -1130,7 +1130,7 @@ def dillards_data():
         print(asin)
         print(asin[0])
         all_rows = get_data_against_asin_dillards(asin[0])
-        print("all rows ",all_rows)
+        #print("all rows ",all_rows)
         #print all_rows
         variation_list=[]
         size_list=[]
