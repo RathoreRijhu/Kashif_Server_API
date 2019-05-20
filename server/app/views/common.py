@@ -979,20 +979,19 @@ def zara_data():
         else:
             size_list.append(str(row[6]))
         color_list.append(str(row[3]))
-
-        price = row[2] or row[11] or ""
-        print price
-        if price:
-            if price > 500:
-                percent_30 = float(price) * 0.3
-                price = (percent_30 + price) * (dollar_price + 3)
-            else:
-                price = setting_price(brand, row[10], price, dollar_price)
-                if not price:
-                    price = float(price) * (dollar_price+3)
-        # for size in size_list: 
-        #         print("size in variations",size)
-        #print(price)
+        price = ""
+        db_price=0
+        if row[2]:
+            db_price = float(row[2])
+        elif row[11]:
+            db_price = float(row[11])
+        if db_price > 500:
+            percent_30 = db_price * 0.3
+            price = (percent_30 + db_price) * (dollar_price + 3)
+        else: 
+            price = setting_price(brand, row[10], db_price, dollar_price)
+            if not price:
+                price = float(db_price) * (dollar_price+3)
         if price :
             for size in size_list: 
                 print("size in variations",size)
