@@ -279,9 +279,11 @@ def get_color_size(sku, color, size):
                     print(e)
                 try:
                     availability=(browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text)
+                    print(availability)
                     quantity=re.findall('\d+',availability)[0]
                 except Exception as e:
                     print(e)
+
                 try:
                     price=(browser.find_element_by_xpath('//*[@id="productRecap"]/div[3]/aside/div[2]/div/div/span[1]').text.split('$')[1])
                 except Exception as e:
@@ -355,7 +357,12 @@ def get_color_size(sku, color, size):
                 print(s.text)
                 if size==s.text:
                     availability="In Stock"
-                    price=browser.find_element_by_xpath('//*[@id="ProductDisplay"]/div/div[4]/div[3]/div/span').text.split('$')[1]
+                    quantity="1"
+                    price=browser.find_element_by_xpath('//*[@id="ProductDisplay"]/div/div[4]/div[3]/div/span').text
+                    if "PKR" in price:
+                        price=price.split('PKR')[1].strip()
+                    else:
+                        price=price.split('$')[1]
                     #print('size matched')
                     break
                 # else:
@@ -940,7 +947,9 @@ def zara_data():
     all_data=[]
     brand = 'zara'
     for row in all_rows:
-        
+        variation_list=[]
+        size_list=[]
+        color_list=[]
         #setting up images
         l2=[]
         if row[7] is not None:
@@ -959,41 +968,64 @@ def zara_data():
             'position': 0
             }
             l2.append(dict_object)
-        
+        # setting up properties or attributes
+        optionsList=[]
+        if row[6] is not None:
+            option=row[6].split('{')[1].split('}')[0]
+            for opt in option.split(','):
+                optionsList.append(str(opt))
+            size_list.extend(optionsList)
+            #print("data in size list",size_list)
+        else:
+            size_list.append(str(row[6]))
+        color_list.append(str(row[3]))
+
+        price_initial = row[2] or row[11]
+        print price_initial
+        if price_initial:
+            if price_initial > 500:
+                percent_30 = float(price_initial) * 0.3
+                price = (percent_30 + price_initial) * (dollar_price + 3)
+            else:
+                price = setting_price(brand, row[10], price_initial, dollar_price)
+                if not price:
+                    price = float(price_initial) * (dollar_price+3)
+        # for size in size_list: 
+        #         print("size in variations",size)
+        print(price)
+        if price :
+            for size in size_list: 
+                print("size in variations",size)
+                variation = {
+                    "regular_price": str(price),
+                    "image":{ 'src': row[9]},
+                    'attributes':[{'slug':'color', 'name':"Color", 'option':str(row[3])},
+                                {'slug':'size', 'name':"Size", 'option':str(size)}]
+                }
+                variation_list.append(variation)
+                #print(variation)
+        category_id = assign_category(row[10])
         attributes = [{
                 'name': "Color",
                 "visible": True,
                 "variation": True,
-                "options": row[3]
+                "options": list(set(color_list))
 
             },
             {
                 'name': "Size",
                 "visible": True,
                 "variation": True,
-                "options": row[6]                
+                "options": list(set(size_list))                
             }]
-
-        price = row[2]
-        print price
-        if price:
-            if price > 500:
-                percent_30 = float(price) * 0.3
-                price = (percent_30 + price) * (dollar_price + 3)
-            else:
-                price = setting_price(brand, row[10], row[2], dollar_price)
-                if not price:
-                    price = float(row[2]) * (dollar_price+3)
-        category_id = assign_category(row[10])
-
         data = {
             'sku': row[0],
-            #'type': 'variable',
-            'regular_price': str(price),
+            'type': 'variable',
             'name': row[1],
             'brand': 'zara',
             'attributes': attributes,
             'images': l2,
+            'variations': variation_list,
             'categories':[{ "id": category_id}],
             'description': row[5]
             }        
