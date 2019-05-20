@@ -19,7 +19,8 @@ QUERIES = {
                "UNION SELECT product_link FROM shopify_db.zara_scraped_data "
                "WHERE product_asin=%s "
                "UNION SELECT product_link FROM shopify_db.ashford_data WHERE product_asin=%s"
-               "UNION SELECT product_link FROM shopify_db.aldo_shoes_data WHERE main_asin=%s",
+               "UNION SELECT product_link FROM shopify_db.aldo_shoes_data WHERE main_asin=%s"
+               "UNION SELECT product_link FROM shopify_db.dillards_scraped_data WHERE main_asin=%s",
 
     "GetWatches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
                       "FROM sorted_db.sorted_ebay_scraped_data where category='watches' "
@@ -91,7 +92,7 @@ QUERIES = {
       "FROM shopify_db.spring_scraped_data LIMIT %s OFFSET %s",
 
     "ZaraData": "SELECT  product_asin, title, new_price, color, category, " 
-      "production_descr, allsizes, allimages_links, title, image_link, category " 
+      "production_descr, allsizes, allimages_links, title, image_link, category, old_price " 
       "FROM shopify_db.zara_scraped_data",
 
     "MacysData": "SELECT  product_asin, title, new_price, color, category, " 
