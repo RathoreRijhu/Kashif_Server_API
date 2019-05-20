@@ -980,7 +980,7 @@ def zara_data():
             size_list.append(str(row[6]))
         color_list.append(str(row[3]))
 
-        price = row[2] or row[11]
+        price = row[2] or row[11] or ""
         print price
         if price:
             if price > 500:
