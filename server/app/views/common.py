@@ -386,7 +386,7 @@ def return_accessories(limit, offset):
     Returns accessories
     """
     return_data = get_ebay_earings(limit, offset)
-    set_category_id = '130'
+    set_category_id = '91'
     category_text = 'earing'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -396,7 +396,7 @@ def return_accessories(limit, offset):
 @auto.doc()
 def ebay_watches(limit, offset):
     return_data = get_ebay_watches(limit, offset)
-    set_category_id = '132'
+    set_category_id = '93'
     category_text = 'watches'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -406,7 +406,7 @@ def ebay_watches(limit, offset):
 @auto.doc()
 def ebay_bracelets(limit, offset):
     return_data = get_ebay_bracelet(limit, offset)
-    set_category_id = '129'
+    set_category_id = '90'
     category_text = 'bracelet'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -416,7 +416,7 @@ def ebay_bracelets(limit, offset):
 @auto.doc()
 def ebay_jewelry(limit, offset):
     return_data = get_ebay_jewelry(limit, offset)
-    set_category_id = '131'
+    set_category_id = '92'
     category_text = 'jewelry'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -426,7 +426,7 @@ def ebay_jewelry(limit, offset):
 @auto.doc()
 def ebay_handbags(limit, offset):
     return_data = get_ebay_handbags(limit, offset)
-    set_category_id = '138'
+    set_category_id = '80'
     category_text = 'handbag'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -436,7 +436,7 @@ def ebay_handbags(limit, offset):
 @auto.doc()
 def ebay_clutches(limit, offset):
     return_data = get_ebay_clutches(limit, offset)
-    set_category_id = '140'
+    set_category_id = '81'
     category_text = 'clutches'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -446,7 +446,7 @@ def ebay_clutches(limit, offset):
 @auto.doc()
 def ebay_bagpack(limit, offset):
     return_data = get_ebay_bagpack(limit, offset)
-    set_category_id = '139'
+    set_category_id = '82'
     category_text = 'bagpack'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
@@ -456,7 +456,7 @@ def ebay_bagpack(limit, offset):
 def ebay_running(limit, offset):
     return_data = get_ebay_running(limit, offset)
     print(return_data)
-    set_category_id = '145'
+    set_category_id = '85'
     category_text = 'running'
     response = ebay_attributes(return_data, set_category_id, category_text)
     return response
