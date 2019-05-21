@@ -688,7 +688,7 @@ def ebay_attributes(return_data, set_category_id, category_text):
 @auto.doc()
 def amazon_sandals(limit, offset):
     asins = get_product_asin_sandals(int(limit), int(offset))
-    category_id = '146'
+    category_id = '84'
     category_text = 'sandal'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -698,7 +698,7 @@ def amazon_sandals(limit, offset):
 @auto.doc()
 def amazon_running(limit, offset):
     asins = get_product_asin_running(limit, offset)
-    category_id = '145'
+    category_id = '85'
     category_text = 'running'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -709,7 +709,7 @@ def amazon_running(limit, offset):
 def amazon_sneakers(limit, offset):
     asins = get_product_asin_sneakers(limit, offset)
     category_text = 'sneakers'
-    category_id = '147'
+    category_id = '86'
     response = amazon_attributes(asins, category_id, category_text)
     return response
 
@@ -718,7 +718,7 @@ def amazon_sneakers(limit, offset):
 @auto.doc()
 def amazon_training(limit, offset):
     asins = get_product_asin_training(limit, offset)
-    category_id = '148'
+    category_id = '87'
     category_text = 'training'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -728,7 +728,7 @@ def amazon_training(limit, offset):
 @auto.doc()
 def amazon_flats(limit, offset):
     asins = get_product_asin_flats(limit, offset)
-    category_id = '143'
+    category_id = '88'
     category_text = 'flat'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -738,7 +738,7 @@ def amazon_flats(limit, offset):
 @auto.doc()
 def amazon_watches(limit, offset):
     asins = get_product_asin_watches(limit, offset)
-    category_id = '132'
+    category_id = '93'
     category_text = 'watches'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -748,7 +748,7 @@ def amazon_watches(limit, offset):
 @auto.doc()
 def amazon_bracelet(limit, offset):
     asins = get_product_asin_bracelet(limit, offset)
-    category_id = '129'
+    category_id = '90'
     category_text = 'bracelet'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -758,7 +758,7 @@ def amazon_bracelet(limit, offset):
 @auto.doc()
 def amazon_handbags(limit, offset):
     asins = get_product_asin_handbags(limit, offset)
-    category_id = '141'
+    category_id = '80'
     category_text = 'handbags'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -768,7 +768,7 @@ def amazon_handbags(limit, offset):
 @auto.doc()
 def amazon_clutches(limit, offset):
     asins = get_product_asin_clutches(limit, offset)
-    category_id = '140'
+    category_id = '81'
     category_text = 'clutches'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -778,7 +778,7 @@ def amazon_clutches(limit, offset):
 @auto.doc()
 def amazon_bagpack(limit, offset):
     asins = get_product_asin_bagpack(limit, offset)
-    category_id = '139'
+    category_id = '82'
     category_text = 'bagpack'
     response = amazon_attributes(asins, category_id, category_text)
     return response
@@ -2367,39 +2367,39 @@ def toryburch_data():
 def assign_category(category_text):
     category_id = 0
     if  'tshirt' in category_text:
-        category_id = 137
+        category_id = 150
     elif 'jean' in category_text :
-        category_id = 135
+        category_id = 149
     elif 'handbag' in category_text :
-        category_id = 138
+        category_id = 80
     elif 'clutches' in category_text:
-        category_id = 140
+        category_id = 81
     elif 'bagpack' in category_text:
-        category_id = 139
+        category_id = 82
     elif 'bracelet' in category_text:
-        category_id = 129
+        category_id = 90
     elif 'earing' in category_text:
-        category_id = 130
+        category_id = 91
     elif 'jewelry' in category_text:
-        category_id = 131
+        category_id = 92
     elif 'watches' in category_text:
-        category_id = 132
+        category_id = 93
     elif 'heel' in category_text:
-        category_id=144
+        category_id=304
     elif 'sandal' in category_text or 'boot' in category_text:
-        category_id = 146
+        category_id = 84
     elif 'running' in category_text:
-        category_id = 145
+        category_id = 85
     elif 'sneaker' in category_text:
-        category_id = 147
+        category_id = 86
     elif 'training' in category_text:
-        category_id = 148
+        category_id = 87
     elif 'flat' in category_text:
-        category_id = 143
+        category_id = 88
     elif 'sweater' in category_text:
-        category_id=136
+        category_id=303
     elif 'jacket' in category_text:
-        category_id=134   
+        category_id=302   
     return category_id
 
 
