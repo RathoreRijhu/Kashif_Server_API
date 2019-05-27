@@ -50,8 +50,8 @@ def index_route():
 @auto.doc()
 def original_product_link(sku):
     print(sku)
-    link = get_original_link(sku)
-    print('return link:',link)
+    #link = get_original_link(sku)
+    #print('return link:',link)
     link = get_original_link(sku)[0][0]
     print(link)
     return json.dumps(link)
@@ -2449,6 +2449,225 @@ def toryburch_data():
             'images': l2,
             'categories':[{"id": str(category_id)}],
             'description': row[7]
+            }        
+        all_data.append(data)
+    response = Response(json.dumps(all_data), status=200, mimetype='application/json')
+    return response
+@app.route('/coach')
+@auto.doc()
+def coach_data():
+    all_asin = get_all_main_asin_of_coach()
+    all_data=[]
+    print all_asin
+    for asin in all_asin:
+        print(asin)
+        print(asin[0].strip())
+        all_rows = get_data_against_asin_coach(asin[0])
+        #print all_rows
+        variation_list=[]
+        color_list=[]
+        size_list=[]
+        for row in all_rows:
+            l2=[]
+            # setting up images
+            if row[7] is not None:
+                count = 0
+                for x in row[7].split(','):
+                    if "{" in x:
+                        dict_object = {
+                            
+                            "src": x.split('{')[1],
+                            "position": count
+                        }
+                    elif "}" in x:
+                        dict_object = {
+                            
+                            "src": x.split('}')[0],
+                            "position": count
+                        }
+                    else:
+                        dict_object = {
+                            
+                            "src": x,
+                            "position": count
+                        }
+                    count = count+1
+                    l2.append(dict_object)
+            else:
+                dict_object = {
+                'src':row[9],
+                'position': 0
+                }
+                l2.append(dict_object)
+            # setting up properties or attributes
+            optionsList=[]
+            if row[6] is not None:
+                option=row[6].split('{')[1].split('}')[0]
+                for opt in option.split(','):
+                    optionsList.append(str(opt))
+                size_list.extend(optionsList)
+            else:
+                size_list.append(str(row[6]))
+            color_list.append(row[3])
+            
+            price = ""
+            if row[2]:
+                db_price = float(row[2])
+            elif row[11]:
+                db_price = float(row[11])
+            if db_price > 500:
+                percent_30 = db_price * 0.3
+                price = (percent_30 + db_price) * (dollar_price + 3)
+            elif row[8]:
+                brand = row[8].replace(',', '').lower()
+                price = setting_price(brand, row[10], db_price, dollar_price)
+                if not price:
+                    price = float(db_price) * (dollar_price+3)
+            
+            if price or row[9]: 
+                for size in optionsList: 
+                    variation = {
+                        "regular_price": str(price),
+                        "image":{ 'src': row[9] },
+                        'attributes':[{'slug':'color', 'name':"Color", 'option':(row[3])},
+                                    {'slug':'size', 'name':"Size", 'option':str(size)}]
+                    }
+                    variation_list.append(variation)
+        attributes = [{
+                'name': "Color",
+                "visible": True,
+                "variation": True,
+                "options": list(set(color_list))
+
+            },
+            {
+                'name': "Size",
+                "visible": True,
+                "variation": True,
+                "options": list(set(size_list))                
+            }
+            ]
+        category_id = assign_category(row[10])
+        data = {
+            'sku': asin[0].strip(),
+            'type': 'variable',
+            'name': row[1],
+            'variations': variation_list,
+            'brand': row[8],
+            'attributes': attributes,
+            'images': l2,
+            'categories':[{ "id": category_id}],
+            'description': row[5]
+            }        
+        all_data.append(data)
+    response = Response(json.dumps(all_data), status=200, mimetype='application/json')
+    return response
+
+@app.route('/calvinklein')
+@auto.doc()
+def calvin_data():
+    all_asin = get_all_main_asin_of_calvin()
+    all_data=[]
+    print all_asin
+    for asin in all_asin:
+        print(asin)
+        print(asin[0].strip())
+        all_rows = get_data_against_asin_calvin(asin[0])
+        #print all_rows
+        variation_list=[]
+        color_list=[]
+        size_list=[]
+        for row in all_rows:
+            l2=[]
+            # setting up images
+            if row[7] is not None:
+                count = 0
+                for x in row[7].split(','):
+                    if "{" in x:
+                        dict_object = {
+                            
+                            "src": x.split('{')[1],
+                            "position": count
+                        }
+                    elif "}" in x:
+                        dict_object = {
+                            
+                            "src": x.split('}')[0],
+                            "position": count
+                        }
+                    else:
+                        dict_object = {
+                            
+                            "src": x,
+                            "position": count
+                        }
+                    count = count+1
+                    l2.append(dict_object)
+            else:
+                dict_object = {
+                'src':row[9],
+                'position': 0
+                }
+                l2.append(dict_object)
+            # setting up properties or attributes
+            optionsList=[]
+            if row[6] is not None:
+                option=row[6].split('{')[1].split('}')[0]
+                for opt in option.split(','):
+                    optionsList.append(str(opt))
+                size_list.extend(optionsList)
+            else:
+                size_list.append(str(row[6]))
+            color_list.append(row[3])
+            
+            price = ""
+            if row[2]:
+                db_price = float(row[2])
+            elif row[11]:
+                db_price = float(row[11])
+            if db_price > 500:
+                percent_30 = db_price * 0.3
+                price = (percent_30 + db_price) * (dollar_price + 3)
+            elif row[8]:
+                brand = row[8].replace(',', '').lower()
+                price = setting_price(brand, row[10], db_price, dollar_price)
+                if not price:
+                    price = float(db_price) * (dollar_price+3)
+            
+            if price or row[9]: 
+                for size in optionsList: 
+                    variation = {
+                        "regular_price": str(price),
+                        "image":{ 'src': row[9] },
+                        'attributes':[{'slug':'color', 'name':"Color", 'option':(row[3])},
+                                    {'slug':'size', 'name':"Size", 'option':str(size)}]
+                    }
+                    variation_list.append(variation)
+        attributes = [{
+                'name': "Color",
+                "visible": True,
+                "variation": True,
+                "options": list(set(color_list))
+
+            },
+            {
+                'name': "Size",
+                "visible": True,
+                "variation": True,
+                "options": list(set(size_list))                
+            }
+            ]
+        category_id = assign_category(row[10])
+        data = {
+            'sku': asin[0].strip(),
+            'type': 'variable',
+            'name': row[1],
+            'variations': variation_list,
+            'brand': row[8],
+            'attributes': attributes,
+            'images': l2,
+            'categories':[{ "id": category_id}],
+            'description': row[5]
             }        
         all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
