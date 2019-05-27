@@ -1315,18 +1315,19 @@ def pm6_data():
                 "options": list(set(size_list))               
                 }
                 ]
-        data = {
-            'sku': str(asin[0]),
-            'type': 'variable',
-            'name': str(row[1]),
-            'variations': variation_list,
-            'brand': str(row[8]),
-            'attributes': attributes,
-            'images': l2,
-            'categories':[{ "id": str(category_id)}],
-            'description': row[5]
-            }        
-        all_data.append(data)
+        if variation_list:
+            data = {
+                'sku': str(asin[0]),
+                'type': 'variable',
+                'name': str(row[1]),
+                'variations': variation_list,
+                'brand': str(row[8]),
+                'attributes': attributes,
+                'images': l2,
+                'categories':[{ "id": str(category_id)}],
+                'description': row[5]
+                }        
+            all_data.append(data)
     response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
 
@@ -1408,7 +1409,8 @@ def zappos_data():
                     #print(str(opt))
                         optionsList.append(str(opt.split('"')[0]).strip())
             size_list.extend(optionsList)
-            if price or row[9] or row[2] or row[11]: 
+            #if price or row[9] or row[2] or row[11]: 
+            if price:
                 for size in size_list:
                     variation = {
                         "regular_price": str(price),
