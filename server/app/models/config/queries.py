@@ -30,7 +30,7 @@ QUERIES = {
                "UNION SELECT product_link FROM shopify_db.calvinklein_scraped_data WHERE main_asin=%s",
 
     "GetWatches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM sorted_db.ebay_scraped_data where category='watches' "
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='watches' "
                       "LIMIT %s OFFSET %s",
 
     "GetBracelet": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
@@ -46,7 +46,7 @@ QUERIES = {
                       "LIMIT %s OFFSET %s",
 
     "GetClutches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM shopify_db.ebay_scraped_data where category='clutches' "
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='clutches' "
                       "LIMIT %s OFFSET %s",
 
     "GetBagpack": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
