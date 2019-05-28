@@ -8,7 +8,7 @@ pg_ = PgPool()
 def get_product_link(sku):
     pg_conn, pg_cursor = pg_.get_conn()
     query = QUERIES["GetLink"]
-    params = (sku, sku, sku, sku, sku, sku, sku, sku,sku,)
+    params = (sku, sku, sku, sku, sku, sku, sku, sku, sku,sku,sku,sku,sku,sku,sku,sku,sku,sku,)
     try:
         res = pg_.execute_query(pg_cursor, query, params)
         pg_.commit_changes(pg_conn)
@@ -21,7 +21,7 @@ def get_product_link(sku):
 def get_original_link(sku):
     pg_conn, pg_cursor = pg_.get_conn()
     query = QUERIES["GetLink"]
-    params = (sku, sku, sku, sku, sku, sku, sku, sku, sku,sku,)
+    params = (sku, sku, sku, sku, sku, sku, sku, sku, sku,sku,sku,sku,sku,sku,sku,sku,sku,sku,)
     try:
         res = pg_.execute_query(pg_cursor, query, params)
         pg_.commit_changes(pg_conn)
@@ -619,6 +619,57 @@ def get_data_against_asin_toryburch():
 
     try:
         res = pg_.execute_query(pg_cursor, query, params='')
+        pg_.commit_changes(pg_conn)
+        pg_.put_conn(pg_conn)
+        return res
+    except Exception as e:
+        pg_.put_conn(pg_conn)
+        return None
+def get_all_main_asin_of_coach():
+    pg_conn, pg_cursor = pg_.get_conn()
+    query = QUERIES["CoachDataAsin"]
+
+    try:
+        res = pg_.execute_query(pg_cursor, query, params='')
+        pg_.commit_changes(pg_conn)
+        pg_.put_conn(pg_conn)
+        return res
+    except Exception as e:
+        pg_.put_conn(pg_conn)
+        return None
+
+def get_data_against_asin_coach(asin):
+    pg_conn, pg_cursor = pg_.get_conn()
+    query = QUERIES["CoachData"]
+    params = (asin, )
+    try:
+        res = pg_.execute_query(pg_cursor, query, params)
+        pg_.commit_changes(pg_conn)
+        pg_.put_conn(pg_conn)
+        return res
+    except Exception as e:
+        pg_.put_conn(pg_conn)
+        return None
+
+def get_all_main_asin_of_calvin():
+    pg_conn, pg_cursor = pg_.get_conn()
+    query = QUERIES["CalvinDataAsin"]
+
+    try:
+        res = pg_.execute_query(pg_cursor, query, params='')
+        pg_.commit_changes(pg_conn)
+        pg_.put_conn(pg_conn)
+        return res
+    except Exception as e:
+        pg_.put_conn(pg_conn)
+        return None
+
+def get_data_against_asin_calvin(asin):
+    pg_conn, pg_cursor = pg_.get_conn()
+    query = QUERIES["CalvinData"]
+    params = (asin, )
+    try:
+        res = pg_.execute_query(pg_cursor, query, params)
         pg_.commit_changes(pg_conn)
         pg_.put_conn(pg_conn)
         return res

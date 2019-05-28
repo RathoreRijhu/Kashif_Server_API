@@ -20,7 +20,14 @@ QUERIES = {
                "WHERE product_asin=%s "
                "UNION SELECT product_link FROM shopify_db.ashford_data WHERE product_asin=%s"
                "UNION SELECT product_link FROM shopify_db.aldo_shoes_data WHERE main_asin=%s"
-               "UNION SELECT product_link FROM shopify_db.dillards_scraped_data WHERE main_asin=%s",
+               "UNION SELECT product_link FROM shopify_db.dillards_scraped_data WHERE main_asin=%s"
+               "UNION SELECT product_link FROM shopify_db.katespade_data WHERE main_asin=%s"
+               "UNION SELECT product_link FROM shopify_db.nordstromrack_scraped_data WHERE main_asin=%s"
+               "UNION SELECT product_link FROM shopify_db.michael_products_details WHERE main_asin=%s"
+               "UNION SELECT product_link FROM shopify_db.tedbaker_data WHERE main_asin=%s"
+               "UNION SELECT product_link FROM shopify_db.shop_guess_scraped_data WHERE main_asin=%s"
+               "UNION SELECT product_link FROM shopify_db.coach_scraped_data WHERE main_asin=%s"
+               "UNION SELECT product_link FROM shopify_db.calvinklein_scraped_data WHERE main_asin=%s",
 
     "GetWatches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
                       "FROM sorted_db.sorted_ebay_scraped_data where category='watches' "
@@ -39,7 +46,7 @@ QUERIES = {
                       "LIMIT %s OFFSET %s",
 
     "GetClutches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
-                      "FROM shopify_db.ebay_scraped_data where category='clutches' "
+                      "FROM sorted_db.sorted_ebay_scraped_data where category='clutches' "
                       "LIMIT %s OFFSET %s",
 
     "GetBagpack": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
@@ -163,6 +170,19 @@ QUERIES = {
 
     "AshfordData": "SELECT * FROM shopify_db.ashford_data;",
 
-    "ToryBurchData": "SELECT * FROM shopify_db.tory_burch_data;"
+    "ToryBurchData": "SELECT * FROM shopify_db.tory_burch_data;",
+
+    "CoachDataAsin": "SELECT DISTINCT(main_asin) from shopify_db.coach_scraped_data",
+
+    "CoachData": "SELECT product_asin, title, new_price, color, category, " 
+      "production_descr, allsizes, allimages_link, brand_name, image_link, category, old_price " 
+      "FROM shopify_db.coach_scraped_data where main_asin=%s",
+
+    "CalvinDataAsin": "SELECT DISTINCT(main_asin) from shopify_db.calvinklein_scraped_data",
+    
+    "CalvinData": "SELECT product_asin, title, new_price, color, category, " 
+      "production_descr, allsizes, allimages_link, brand_name, image_link, category, old_price " 
+      "FROM shopify_db.calvinklein_scraped_data where main_asin=%s"
+
 
 }
