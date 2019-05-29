@@ -52,9 +52,12 @@ def original_product_link(sku):
     print(sku)
     link = get_original_link(sku)
     print('return link:',link)
-    link = get_original_link(sku)[0][0]
-    print(link)
-    return json.dumps(link)
+    try:
+        link = get_original_link(sku)[0][0]
+        print(link)
+        return json.dumps(link)
+    except:
+        return json.dumps("product link not found")
 
 @app.route('/return-link/<sku>', methods=['GET'])
 @auto.doc()
