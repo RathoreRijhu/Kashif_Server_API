@@ -332,7 +332,7 @@ def get_color_size(sku, color, size):
             try:
                 #print(browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text)
                 #time.sleep(5)
-                availability=browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text
+                availability=browser.find_element_by_xpath('//*[@id="productRecap"]/div[6]/div/h1').text
                 #browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/svg/path[2]').click()
             except Exception as e:
                 print(e)
