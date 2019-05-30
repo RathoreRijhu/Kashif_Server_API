@@ -330,21 +330,20 @@ def get_color_size(sku, color, size):
             select.select_by_visible_text(size)
             time.sleep(5)
             try:
-                print(browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text)
+                #print(browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text)
                 #time.sleep(5)
                 availability=browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text
-                browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/svg/path[2]').click()
-
+                #browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/svg/path[2]').click()
             except Exception as e:
                 print(e)
-            try:
-                availability=browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text
-                quantity=re.findall('\d+',availability)[0]
-                print(browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text)
-            except Exception as e:
-                # quantity='1'
-                # availability="only 1 in stock"
-                print(e)
+                try:
+                    availability=browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text
+                    quantity=re.findall('\d+',availability)[0]
+                    #print(browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text)
+                except Exception as e:
+                    # quantity='1'
+                    # availability="only 1 in stock"
+                    print(e)
             try:
                 price=browser.find_element_by_xpath('//*[@id="productRecap"]/div[3]/aside/div[2]/div/div/span[1]').text.split('$')[1]
                 print(price)
@@ -363,6 +362,8 @@ def get_color_size(sku, color, size):
             print(e)
         browser.close()
         if price is not None and availability is not None and quantity is not None:
+            data={'availability':availability, 'price':price, 'quantity':quantity}
+        elif price is not None and availability is not None and quantity is None:
             data={'availability':availability, 'price':price, 'quantity':quantity}
         elif price is not None and availability is None and quantity is None:
             data={'availability':"In Stock", 'price':price, 'quantity':int("1")}
