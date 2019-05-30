@@ -110,8 +110,12 @@ def return_product_link(sku):
         except Exception as e:
             print(e)
         try:
-            price = soup.find("span",{'id':"prcIsum"}).text.split('$')[1] or soup.find("span",{'id':"mm-saleDscPrc"}).text.split('$')[1]
+            price = soup.find("span",{'id':"prcIsum"}).text.split('$')[1]
         except Exception as e:
+            try:
+                price=soup.find("span",{'id':"mm-saleDscPrc"}).text.split('$')[1]
+            except:
+                pass
             print(e) 
         if price is not None and quantity is not None:    
             data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
