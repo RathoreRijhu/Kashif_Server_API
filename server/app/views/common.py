@@ -351,9 +351,23 @@ def get_color_size(sku, color, size):
             except Exception as e:
                 print(e)
         except Exception as e:
+            try:
+                if size==browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[2]/div[1]/div').text:
+
+                    price=browser.find_element_by_xpath('//*[@id="productRecap"]/div[3]/aside/div[2]/div/div/span[1]').text.split('$')[1]
+                    availability=browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text
+                    quantity=re.findall('\d+',availability)[0]
+            except:
+                pass
+
             print(e)
         browser.close()
-        data={'availability':availability, 'price':price, 'quantity':quantity}
+        if price is not None and availability is not None and quantity is not None:
+            data={'availability':availability, 'price':price, 'quantity':quantity}
+        elif price is not None and availability is None and quantity is None:
+            data={'availability':"In Stock", 'price':price, 'quantity':int("1")}
+        else:
+            data={'availability':"Out of Stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif (url is not None and "dillards" in url):
         browser.get(url)
