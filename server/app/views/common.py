@@ -363,6 +363,8 @@ def get_color_size(sku, color, size):
         browser.close()
         if price is not None and availability is not None and quantity is not None:
             data={'availability':availability, 'price':price, 'quantity':quantity}
+        elif price is not None and availability is not None and quantity is None:
+            data={'availability':availability, 'price':price, 'quantity':quantity}
         elif price is not None and availability is None and quantity is None:
             data={'availability':"In Stock", 'price':price, 'quantity':int("1")}
         else:
