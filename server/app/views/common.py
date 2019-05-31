@@ -52,9 +52,12 @@ def original_product_link(sku):
     print(sku)
     link = get_original_link(sku)
     print('return link:',link)
-    link = get_original_link(sku)[0][0]
-    print(link)
-    return json.dumps(link)
+    try:
+        link = get_original_link(sku)[0][0]
+        print(link)
+        return json.dumps(link)
+    except:
+        return json.dumps("product link not found")
 
 @app.route('/return-link/<sku>', methods=['GET'])
 @auto.doc()
@@ -104,9 +107,21 @@ def return_product_link(sku):
         availability = None
         try:
             availability = soup.find("span",{'id':'qtySubTxt'}).text.strip()
-            price = soup.find("span",{'id':"prcIsum"}).text.split('$')[1] or soup.find("span",{'id':"mm-saleDscPrc"}).text.split('$')[1]
-            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
         except Exception as e:
+            print(e)
+        try:
+            price = soup.find("span",{'id':"prcIsum"}).text.split('$')[1]
+        except Exception as e:
+            try:
+                price=soup.find("span",{'id':"mm-saleDscPrc"}).text.split('$')[1]
+            except:
+                pass
+            print(e) 
+        if price is not None and quantity is not None:    
+            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
+        elif price is not None and quantity is None:
+            data={'sku':sku, 'availability':"In Stock", 'price':price, 'quantity':int("1")}
+        else:
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     
@@ -315,17 +330,16 @@ def get_color_size(sku, color, size):
             select.select_by_visible_text(size)
             time.sleep(5)
             try:
-                print(browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text)
+                #print(browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text)
                 #time.sleep(5)
-                availability=browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/h1').text
-                browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/svg/path[2]').click()
-
+                availability=browser.find_element_by_xpath('//*[@id="productRecap"]/div[6]/div/h1').text
+                #browser.find_element_by_xpath('//*[@id="productRecap"]/div[7]/div/svg/path[2]').click()
             except Exception as e:
                 print(e)
             try:
                 availability=browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text
                 quantity=re.findall('\d+',availability)[0]
-                print(browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text)
+                #print(browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text)
             except Exception as e:
                 # quantity='1'
                 # availability="only 1 in stock"
@@ -336,9 +350,25 @@ def get_color_size(sku, color, size):
             except Exception as e:
                 print(e)
         except Exception as e:
+            try:
+                if size==browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[2]/div[1]/div').text:
+
+                    price=browser.find_element_by_xpath('//*[@id="productRecap"]/div[3]/aside/div[2]/div/div/span[1]').text.split('$')[1]
+                    availability=browser.find_element_by_xpath('//*[@id="buyBox"]/div[1]/form/div[3]/div/div').text
+                    quantity=re.findall('\d+',availability)[0]
+            except:
+                pass
+
             print(e)
         browser.close()
-        data={'availability':availability, 'price':price, 'quantity':quantity}
+        if price is not None and availability is not None and quantity is not None:
+            data={'availability':availability, 'price':price, 'quantity':quantity}
+        elif price is not None and (availability is not None and len(availability)!=0) and quantity is None:
+            data={'availability':availability, 'price':price, 'quantity':quantity}
+        elif price is not None and (availability is None or len(availability)==0)  and quantity is None:
+            data={'availability':"In Stock", 'price':price, 'quantity':int("1")}
+        else:
+            data={'availability':"Out of Stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif (url is not None and "dillards" in url):
         browser.get(url)
