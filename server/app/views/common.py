@@ -437,7 +437,9 @@ def get_color_size(sku, color, size):
         else:
             try:
                 s=browser.find_element_by_xpath('//*[@id="sizeValue"]').text.strip()
-                if s==size:
+                print("outside if",s)
+                if size in s:
+                    #print("size scraped",s)
                     try:
                         price=browser.find_element_by_xpath('//*[@id="price_display"]/span[2]').text.split('$')[1]
                     except:
