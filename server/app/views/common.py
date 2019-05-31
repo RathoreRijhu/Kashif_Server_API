@@ -405,7 +405,7 @@ def get_color_size(sku, color, size):
         return json.dumps(data)
     elif (url is not None and "calvinklein" in url):
         browser.get(url)
-        time.sleep(5)
+        time.sleep(10)
         soup=BeautifulSoup(browser.page_source, 'lxml')
         price=None
         availability=None
@@ -432,10 +432,11 @@ def get_color_size(sku, color, size):
                     except Exception as e:
                         print(e)
                     browser.close()
-                    data={'availability':availability, 'price':price, 'quantity':quantity}
+                    #data={'availability':availability, 'price':price, 'quantity':quantity}
+                    #return json.dumps(data)
         else:
             try:
-                s=browser.find_element_by_xpath('//*[@id="sizeValue"]').text
+                s=browser.find_element_by_xpath('//*[@id="sizeValue"]').text.strip()
                 if s==size:
                     try:
                         price=browser.find_element_by_xpath('//*[@id="price_display"]/span[2]').text.split('$')[1]
@@ -443,10 +444,13 @@ def get_color_size(sku, color, size):
                         price=browser.find_element_by_xpath('//*[@id="price_display"]/span[1]').text.split('$')[1]
                         pass
                     browser.close()
-                    data={'availability':"In Stock", 'price':price, 'quantity':int("1")}
+                    availability="In Stock"
+                    quantity=1
+                    #data={'availability':"In Stock", 'price':price, 'quantity':int("1")}
+                    #return json.dumps(data)
             except Exception as e:
                 print(e)
-
+        data={'availability':availability, 'price':price, 'quantity':quantity}
         return json.dumps(data)
 
 
