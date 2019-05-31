@@ -403,6 +403,38 @@ def get_color_size(sku, color, size):
         browser.close()
         data={'availability':availability, 'price':price, 'quantity':quantity}
         return json.dumps(data)
+    elif (url is not None and "calvinklein" in url):
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        try:
+            allsizes=soup.find("div",{"class":"sizeSelector"}).findAll("li",{"class":"available"})
+        except Exception as e:
+            print(e)
+        if allsizes:
+            for s in allsizes:
+                a='//*[@id="'
+                b='"]'
+                if s.find("span").text==size:
+                    browser.find_element_by_xpath(a+s.find("span")['id']+b).click()
+                    time.sleep(5)
+                    try:
+                        price=browser.find_element_by_xpath('//*[@id="price_display"]/span[2]').text.split('$')[1]
+                    except:
+                        price=browser.find_element_by_xpath('//*[@id="price_display"]/span[1]').text.split('$')[1]
+                        pass
+                    try:
+                        availability=browser.find_element_by_xpath('//*[@id="sizeContainer"]/span[1]').text
+                        quantity=re.findall('\d+',availability)[0]
+                    except Exception as e:
+                        print(e)
+                    browser.close()
+                    data={'availability':availability, 'price':price, 'quantity':quantity}
+        return json.dumps(data)
+
 
     else:
         data={'sku':sku,'availability':None, 'price':None, 'quantity':None}
