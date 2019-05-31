@@ -433,6 +433,20 @@ def get_color_size(sku, color, size):
                         print(e)
                     browser.close()
                     data={'availability':availability, 'price':price, 'quantity':quantity}
+        else:
+            try:
+                s=browser.find_element_by_xpath('//*[@id="sizeValue"]').text
+                if s==size:
+                    try:
+                        price=browser.find_element_by_xpath('//*[@id="price_display"]/span[2]').text.split('$')[1]
+                    except:
+                        price=browser.find_element_by_xpath('//*[@id="price_display"]/span[1]').text.split('$')[1]
+                        pass
+                    browser.close()
+                    data={'availability':"In Stock", 'price':price, 'quantity':int("1")}
+            except Exception as e:
+                print(e)
+
         return json.dumps(data)
 
 
