@@ -163,7 +163,7 @@ QUERIES = {
           "UNION SELECT product_link from shopify_db.pm6_scraped_data where main_asin=%s and color=%s "
           "UNION SELECT product_link from shopify_db.dillards_scraped_data where main_asin=%s and color=%s"
           "UNION SELECT product_link FROM shopify_db.calvinklein_scraped_data where main_asin=%s and color=%s"
-          "UNION SELECT product_link FROM shopify_db.zara_scraped_data WHERE main_asin=%s and color=%s",
+          "UNION SELECT product_link FROM shopify_db.zara_scraped_data WHERE product_asin=%s and color=%s",
 
 
     # "GetEbayUrl": "SELECT product_link from shopify_db.ebay_scraped_data "
