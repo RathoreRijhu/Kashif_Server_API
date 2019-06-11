@@ -129,21 +129,20 @@ def return_product_link(sku):
         browser.get(link)
         soup=BeautifulSoup(browser.page_source, 'lxml')
         quantity = None
-        try:    
-            quantity=soup.find("span",{'id':'qtySubTxt'}).text
-            quantity=re.findall("\d+",quantity)[0]
+        availability=None
+        price=None
+        try:
+            availability=browser.find_element_by_xpath('//*[@id="mainCont"]/div/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/p').text
+            #data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int('0')}
         except Exception as e:
             print(e)
-        price = None
-        availability = None
         try:
-            availability = browser.find_element_by_xpath('//*[@id="mainContent"]/div/div[1]/div[2]/div[3]/div/div/div[2]/div[4]/div/div/div/div/form/div[1]/div[2]/div/span[1]').text.strip()
             price = soup.find("span",{'data-auto':"sale-price"}).text.split('$')[1] or soup.find("div",{'data-auto':"main-price"}).text.split('$')[1]
-            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
-            browser.close()
+            quantity="1"
+            availability="In Stock"
         except Exception as e:
-            browser.close()
-            data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+            print(e)
+        data = {'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
 
     elif link is not None and "ashford" in link:
