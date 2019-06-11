@@ -464,7 +464,7 @@ def get_color_size(sku, color, size):
         quantity=None
         available_sizes_list=[]
         try:
-            available_sizes=soup.find('div',{"class":"size-list"}).findAll('label',{"class":"product-size _product-size "})
+            available_sizes=soup.find('div',{"class":"size-list"}).findAll('label',{"class":"product-size _product-size "}) or soup.find('div',{"class":"size-list"}).findAll('label',{"class":"product-size _product-size selected "})
             for s in available_sizes:
                 available_sizes_list.append(s['data-name'])
             if size in available_sizes_list:
