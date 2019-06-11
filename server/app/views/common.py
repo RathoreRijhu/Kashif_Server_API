@@ -455,6 +455,30 @@ def get_color_size(sku, color, size):
         return json.dumps(data)
 
 
+    elif (url is not None and "zara" in url):
+        browser.get(url)
+        time.sleep(10)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        available_sizes_list=[]
+        try:
+            available_sizes=soup.find('div',{"class":"size-list"}).findAll('label',{"class":"product-size _product-size "})
+            for s in available_sizes:
+                available_sizes_list.append(s['data-name'])
+            if size in available_sizes_list:
+                try:
+                    price=soup.find('div',{"class":"price _product-price"}).find("span").text.split('USD')[0]
+                except Exception as e:
+                    print(e)
+                availability="In Stock."
+                quantity=1
+        except Exception as e:
+            print(e)
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':quantity}
+        return json.dumps(data)
+
     else:
         data={'sku':sku,'availability':None, 'price':None, 'quantity':None}
         return json.dumps(data)
