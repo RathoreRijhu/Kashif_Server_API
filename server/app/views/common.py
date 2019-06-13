@@ -770,21 +770,22 @@ def ebay_attributes(return_data, set_category_id, category_text):
                 else:
                     brand = ret_data[5].replace(',', '').lower()
                     price = setting_price(brand, category_text, ret_data[1], dollar_price)
-        accessories = {
-            "name": ret_data[5],
-            "regular_price": str(price),
-            "categories": category,
-            "image": ret_data[3],
-            "brand": ret_data[5],
-            "sku": ret_data[7],
-            "images": l2,
-            "weight": weight,
-            "shape": shape,
-            "gender": gender,
-            "attributes": attributes
-        }
+        if price is not None:
+            accessories = {
+                "name": ret_data[5],
+                "regular_price": str(price),
+                "categories": category,
+                "image": ret_data[3],
+                "brand": ret_data[5],
+                "sku": ret_data[7],
+                "images": l2,
+                "weight": weight,
+                "shape": shape,
+                "gender": gender,
+                "attributes": attributes
+            }
 
-        l1.append(accessories)
+            l1.append(accessories)
     response = Response(json.dumps(l1), status=200, mimetype='application/json')
     return response
 
