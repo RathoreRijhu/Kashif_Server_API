@@ -326,7 +326,7 @@ def get_product_asin_bagpack(limit, offset):
 def get_url(sku, color, size):
     pg_conn, pg_cursor = pg_.get_conn()
     query = QUERIES["GetUrl"]
-    params = (sku, color, size,sku,sku,color,sku, color, sku, color, sku, color,sku, color, sku, color,sku, color,)
+    params = (sku, color, size,sku,sku,color,sku, color, sku, color, sku, color,sku, color, sku, color,sku, color,sku, color,)
     try:
         res = pg_.execute_query(pg_cursor, query, params)
         pg_.commit_changes(pg_conn)
