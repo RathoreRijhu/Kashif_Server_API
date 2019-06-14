@@ -184,7 +184,30 @@ def return_product_link(sku):
         else:
             availability="Out of Stock"
             quantity=0
-        data={'sku':sku,'availability':availability, 'price':price, 'quantity':quantity}
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data)
+    elif (url is not None and "katespade" in url):
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        try:
+            price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[2]').text.strip().split('$')[1])
+        except:
+            pass
+        try:
+            price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[1]').text.strip().split('$')[1])
+        except:
+            pass
+        if price:
+            availability="In Stock"
+            quantity=1
+        else:
+            availability="Out of Stock"
+            quantity=0
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
 
     else:
@@ -500,7 +523,7 @@ def get_color_size(sku, color, size):
                 quantity=1
         except Exception as e:
             print(e)
-        data={'sku':sku,'availability':availability, 'price':price, 'quantity':quantity}
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
 
     elif (url is not None and "aldoshoes" in url):
@@ -532,8 +555,57 @@ def get_color_size(sku, color, size):
                 quantity=0
         except Exception as e:
             print(e)
-        data={'sku':sku,'availability':availability, 'price':price, 'quantity':quantity}
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
+
+    elif (url is not None and "katespade" in url):
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        unavailable_sizes_list=[]
+        available_sizes_list=[]
+        try:
+            unavailable_sizes=soup.findAll('li',{"class":"emptyswatch unselectable"})
+            for s in unavailable_sizes:
+                unavailable_sizes_list.append(s.text.strip())
+            if size in unavailable_sizes_list:
+                availability="Out of Stock"
+                quantity=0
+            else:
+                availability="In Stock"
+                quantity=1
+                try:
+                    price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[2]').text.strip().split('$')[1])
+                except:
+                    try:
+                        price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[1]').text.strip().split('$')[1])
+                    except:
+                        pass
+        except Exception as e:
+            print(e)
+            try:
+                availablesizes=soup.findAll('li',{"class":"emptyswatch"})
+                for s in availablesizes:
+                    available_sizes_list.append(s.text.strip())
+                if size in available_sizes_list:
+                    availability="In Stock"
+                    quantity=1
+                    try:
+                        price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[2]').text.strip().split('$')[1])
+                    except:
+                        try:
+                            price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[1]').text.strip().split('$')[1])
+                        except:
+                            pass
+            except Exception as e:
+                print(e)
+
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data)
+
 
     else:
         data={'sku':sku,'availability':None, 'price':None, 'quantity':None}
