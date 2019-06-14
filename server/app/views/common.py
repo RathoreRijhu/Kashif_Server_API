@@ -162,6 +162,30 @@ def return_product_link(sku):
         except Exception as e:
             data = {'availability':"out of stock", 'price':0, 'quantity':None}
         return json.dumps(data)
+    elif (url is not None and "aldoshoes" in url):
+        browser.get(url)
+        time.sleep(10)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        try:
+            price=browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span[3]').text.split('$')[1] 
+        except:
+            try:
+                price=browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span[2]').text.split('$')[1]
+            except:
+                price=browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span').text.split('$')[1]
+        #except Exception as e:
+            print(e)
+        if price:
+            availability="In Stock"
+            quantity=1
+        else:
+            availability="Out of Stock"
+            quantity=0
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':quantity}
+        return json.dumps(data)
 
     else:
         data={'availability':None, 'price':None, 'quantity':None}
@@ -474,6 +498,38 @@ def get_color_size(sku, color, size):
                     print(e)
                 availability="In Stock."
                 quantity=1
+        except Exception as e:
+            print(e)
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':quantity}
+        return json.dumps(data)
+
+    elif (url is not None and "aldoshoes" in url):
+        browser.get(url)
+        time.sleep(10)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        available_sizes_list=[]
+        try:
+            available_sizes=soup.find('ul',{'id':"PdpProductSizeSelectorOpts"}).findAll('li')
+            for x in available_sizes:
+                available_sizes_list.append(s.text)
+            if size in available_sizes_list:
+                try:
+                    price=(browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span[3]').text.split('$')[1]) 
+                except:
+                    try:
+                        price=(browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span[2]').text.split('$')[1])
+                    except:
+                        price=(browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span').text.split('$')[1])
+                #except Exception as e:
+                    print(e)
+                availability="In Stock"
+                quantity=1
+            else:
+                availability="Out of Stock"
+                quantity=0
         except Exception as e:
             print(e)
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':quantity}
