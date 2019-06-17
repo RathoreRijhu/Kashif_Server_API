@@ -138,7 +138,7 @@ def return_product_link(sku):
             print(e)
         try:
             price = soup.find("span",{'data-auto':"sale-price"}).text.split('$')[1] or soup.find("div",{'data-auto':"main-price"}).text.split('$')[1]
-            quantity="1"
+            quantity=1
             availability="In Stock"
         except Exception as e:
             print(e)
@@ -740,7 +740,7 @@ def get_color_size(sku, color, size):
                     price=browser.find_element_by_xpath('//*[@id="root"]/div/main/div/div[1]/div[1]/div/div[2]/div[2]/div[1]/span').text.split('$')[1]
                 except:
                     pass
-                    
+
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         browser.close()
         return json.dumps(data)
