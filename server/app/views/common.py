@@ -142,7 +142,7 @@ def return_product_link(sku):
             availability="In Stock"
         except Exception as e:
             print(e)
-        data = {'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
+        data = {'sku':sku, 'availability':availability, 'price':price, 'quantity':(quantity)}
         return json.dumps(data)
 
     elif link is not None and "ashford" in link:
