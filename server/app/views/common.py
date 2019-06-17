@@ -653,6 +653,36 @@ def get_color_size(sku, color, size):
 
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
+    elif (url is not None and "michaelkors" in url):
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        available_sizes_list=[]
+        try:
+            all_sizes=soup.findAll("li",{"class":"facet-size-options"})
+            for s in all_sizes:
+                available_sizes_list.append(size.find('label').text)
+            if size in available_sizes_list:
+                availability="In Stock"
+                quantity=1
+                try:
+                    price=browser.find_element_by_xpath('//*[@id="app"]/div/div/section/div[2]/section[1]/div[2]/div/div[1]/div[1]/div/div/div[2]/span[2]/span[1]').text.split('$')[1]
+                except:
+                    try:
+                        price=browser.find_element_by_xpath('//*[@id="app"]/div/div/section/div[2]/section[1]/div[2]/div/div[1]/div[1]/div/div/div/span/span[1]').text.split('$')[1]
+                    except:
+                        pass
+            else:
+                availability="Out of Stock"
+                quantity=0
+        except Exception as e:
+            print(e)
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data)    
+
 
     else:
         data={'sku':sku,'availability':None, 'price':None, 'quantity':None}
