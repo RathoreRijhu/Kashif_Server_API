@@ -137,11 +137,19 @@ def return_product_link(sku):
         except Exception as e:
             print(e)
         try:
-            price = soup.find("span",{'data-auto':"sale-price"}).text.split('$')[1] or soup.find("div",{'data-auto':"main-price"}).text.split('$')[1]
+            price = soup.find("span",{'data-auto':"sale-price"}).text.split('$')[1] 
+        except:
+            try:
+                price=soup.find("div",{'data-auto':"main-price"}).text.split('$')[1]
+            except:
+                pass
+        if price:
             quantity=1
             availability="In Stock"
-        except Exception as e:
-            print(e)
+        else:
+            quantity=0
+            availability="Out of Stock"
+        browser.close()
         data = {'sku':sku, 'availability':availability, 'price':price, 'quantity':(quantity)}
         return json.dumps(data)
 
@@ -184,6 +192,7 @@ def return_product_link(sku):
         else:
             availability="Out of Stock"
             quantity=0
+        browser.close()
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
     elif (url is not None and "katespade" in url):
@@ -207,6 +216,7 @@ def return_product_link(sku):
         else:
             availability="Out of Stock"
             quantity=0
+        browser.close()
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
     elif (url is not None and "michaelkors" in url):
@@ -229,11 +239,12 @@ def return_product_link(sku):
         else:
             availability="Out of Stock"
             quantity=0
-
+        browser.close()
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data) 
 
     else:
+        browser.close()
         data={'availability':None, 'price':None, 'quantity':None}
         return json.dumps(data)
 
