@@ -99,8 +99,8 @@ def return_product_link(sku):
         browser.close()
         try:
             quantity = None
-            quantity=soup.find("span",{'id':'qtySubTxt'}).text
-            quantity=re.findall("\d+",quantity)[0]
+            quantity1=soup.find("span",{'id':'qtySubTxt'}).text
+            quantity=re.findall("\d+",quantity1)[0]
         except Exception as e:
             print(e)
         price = None
