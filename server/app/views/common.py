@@ -209,6 +209,29 @@ def return_product_link(sku):
             quantity=0
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
+    elif (url is not None and "michaelkors" in url):
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        try:
+            price=browser.find_element_by_xpath('//*[@id="app"]/div/div/section/div[2]/section[1]/div[2]/div/div[1]/div[1]/div/div/div[2]/span[2]/span[1]').text.split('$')[1]
+        except:
+            try:
+                price=browser.find_element_by_xpath('//*[@id="app"]/div/div/section/div[2]/section[1]/div[2]/div/div[1]/div[1]/div/div/div/span/span[1]').text.split('$')[1]
+            except:
+                pass
+        if price:
+            availability="In Stock"
+            quantity=1
+        else:
+            availability="Out of Stock"
+            quantity=0
+
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data) 
 
     else:
         data={'availability':None, 'price':None, 'quantity':None}
@@ -523,6 +546,7 @@ def get_color_size(sku, color, size):
                 quantity=1
         except Exception as e:
             print(e)
+        browser.close()
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
 
@@ -555,6 +579,7 @@ def get_color_size(sku, color, size):
                 quantity=0
         except Exception as e:
             print(e)
+        browser.close()
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
 
@@ -602,7 +627,7 @@ def get_color_size(sku, color, size):
                             pass
             except Exception as e:
                 print(e)
-
+        browser.close()
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
 
@@ -650,7 +675,7 @@ def get_color_size(sku, color, size):
                             pass
             except Exception as e:
                 print(e)
-
+        browser.close()
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
     elif (url is not None and "michaelkors" in url):
@@ -680,9 +705,45 @@ def get_color_size(sku, color, size):
                 quantity=0
         except Exception as e:
             print(e)
+        browser.close()
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
-        return json.dumps(data)    
+        return json.dumps(data)  
 
+    elif (url is not None and "toryburch" in url):
+        browser.get(url)
+        time.sleep(5)  
+        try:
+            browser.find_element_by_xpath('/html/body/div[2]/div/div/div[1]/button').click()
+        except:
+            pass
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        unavailable_sizes_list=[]
+        available_sizes=soup.find("ul",{"class":"dropdown__options-2YA"}).findAll('li')
+        for s in available_sizes:
+            try:
+                unavailable_sizes_list.append(s.find('div',{"class":"size-option-qrz size-option--disabled-1zP"}).find('span').text)
+            except:
+                pass
+        if size in unavailable_sizes_list:
+            availability="Out of Stock"
+            quantity=0
+        else:
+            availability="In Stock"
+            quantity=1
+            try:
+                price=browser.find_element_by_xpath('//*[@id="root"]/div/main/div/div[1]/div[1]/div/div[2]/div[2]/div[1]/span[2]').text.split('$')[1]
+            except:
+                try:
+                    price=browser.find_element_by_xpath('//*[@id="root"]/div/main/div/div[1]/div[1]/div/div[2]/div[2]/div[1]/span').text.split('$')[1]
+                except:
+                    pass
+                    
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        browser.close()
+        return json.dumps(data)
 
     else:
         data={'sku':sku,'availability':None, 'price':None, 'quantity':None}
