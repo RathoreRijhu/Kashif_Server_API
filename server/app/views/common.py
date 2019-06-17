@@ -129,21 +129,20 @@ def return_product_link(sku):
         browser.get(link)
         soup=BeautifulSoup(browser.page_source, 'lxml')
         quantity = None
-        try:    
-            quantity=soup.find("span",{'id':'qtySubTxt'}).text
-            quantity=re.findall("\d+",quantity)[0]
+        availability=None
+        price=None
+        try:
+            availability=browser.find_element_by_xpath('//*[@id="mainCont"]/div/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/p').text
+            #data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int('0')}
         except Exception as e:
             print(e)
-        price = None
-        availability = None
         try:
-            availability = browser.find_element_by_xpath('//*[@id="mainContent"]/div/div[1]/div[2]/div[3]/div/div/div[2]/div[4]/div/div/div/div/form/div[1]/div[2]/div/span[1]').text.strip()
             price = soup.find("span",{'data-auto':"sale-price"}).text.split('$')[1] or soup.find("div",{'data-auto':"main-price"}).text.split('$')[1]
-            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
-            browser.close()
+            quantity="1"
+            availability="In Stock"
         except Exception as e:
-            browser.close()
-            data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+            print(e)
+        data = {'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
         return json.dumps(data)
 
     elif link is not None and "ashford" in link:
@@ -163,6 +162,76 @@ def return_product_link(sku):
         except Exception as e:
             data = {'availability':"out of stock", 'price':0, 'quantity':None}
         return json.dumps(data)
+    elif (url is not None and "aldoshoes" in url):
+        browser.get(url)
+        time.sleep(10)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        try:
+            price=browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span[3]').text.split('$')[1] 
+        except:
+            try:
+                price=browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span[2]').text.split('$')[1]
+            except:
+                price=browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span').text.split('$')[1]
+        #except Exception as e:
+            print(e)
+        if price:
+            availability="In Stock"
+            quantity=1
+        else:
+            availability="Out of Stock"
+            quantity=0
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data)
+    elif (url is not None and "katespade" in url):
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        try:
+            price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[2]').text.strip().split('$')[1])
+        except:
+            pass
+        try:
+            price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[1]').text.strip().split('$')[1])
+        except:
+            pass
+        if price:
+            availability="In Stock"
+            quantity=1
+        else:
+            availability="Out of Stock"
+            quantity=0
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data)
+    elif (url is not None and "michaelkors" in url):
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        try:
+            price=browser.find_element_by_xpath('//*[@id="app"]/div/div/section/div[2]/section[1]/div[2]/div/div[1]/div[1]/div/div/div[2]/span[2]/span[1]').text.split('$')[1]
+        except:
+            try:
+                price=browser.find_element_by_xpath('//*[@id="app"]/div/div/section/div[2]/section[1]/div[2]/div/div[1]/div[1]/div/div/div/span/span[1]').text.split('$')[1]
+            except:
+                pass
+        if price:
+            availability="In Stock"
+            quantity=1
+        else:
+            availability="Out of Stock"
+            quantity=0
+
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data) 
 
     else:
         data={'availability':None, 'price':None, 'quantity':None}
@@ -405,7 +474,7 @@ def get_color_size(sku, color, size):
         return json.dumps(data)
     elif (url is not None and "calvinklein" in url):
         browser.get(url)
-        time.sleep(5)
+        time.sleep(10)
         soup=BeautifulSoup(browser.page_source, 'lxml')
         price=None
         availability=None
@@ -432,23 +501,249 @@ def get_color_size(sku, color, size):
                     except Exception as e:
                         print(e)
                     browser.close()
-                    data={'availability':availability, 'price':price, 'quantity':quantity}
+                    #data={'availability':availability, 'price':price, 'quantity':quantity}
+                    #return json.dumps(data)
         else:
             try:
-                s=browser.find_element_by_xpath('//*[@id="sizeValue"]').text
-                if s==size:
+                s=browser.find_element_by_xpath('//*[@id="sizeValue"]').text.strip()
+                print("outside if",s)
+                if size in s:
+                    #print("size scraped",s)
                     try:
                         price=browser.find_element_by_xpath('//*[@id="price_display"]/span[2]').text.split('$')[1]
                     except:
                         price=browser.find_element_by_xpath('//*[@id="price_display"]/span[1]').text.split('$')[1]
                         pass
                     browser.close()
-                    data={'availability':"In Stock", 'price':price, 'quantity':int("1")}
+                    availability="In Stock"
+                    quantity=1
+                    #data={'availability':"In Stock", 'price':price, 'quantity':int("1")}
+                    #return json.dumps(data)
             except Exception as e:
                 print(e)
-
+        data={'availability':availability, 'price':price, 'quantity':quantity}
         return json.dumps(data)
 
+
+    elif (url is not None and "zara" in url):
+        browser.get(url)
+        time.sleep(10)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        available_sizes_list=[]
+        try:
+            available_sizes=soup.find('div',{"class":"size-list"}).findAll('label',{"class":"product-size _product-size "}) or soup.find('div',{"class":"size-list"}).findAll('label',{"class":"product-size _product-size selected "})
+            for s in available_sizes:
+                available_sizes_list.append(s['data-name'])
+            if size in available_sizes_list:
+                try:
+                    price=soup.find('div',{"class":"price _product-price"}).find("span").text.split('USD')[0]
+                except Exception as e:
+                    print(e)
+                availability="In Stock."
+                quantity=1
+        except Exception as e:
+            print(e)
+        browser.close()
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data)
+
+    elif (url is not None and "aldoshoes" in url):
+        browser.get(url)
+        time.sleep(10)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        available_sizes_list=[]
+        try:
+            available_sizes=soup.find('ul',{'id':"PdpProductSizeSelectorOpts"}).findAll('li')
+            for x in available_sizes:
+                available_sizes_list.append(s.text)
+            if size in available_sizes_list:
+                try:
+                    price=(browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span[3]').text.split('$')[1]) 
+                except:
+                    try:
+                        price=(browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span[2]').text.split('$')[1])
+                    except:
+                        price=(browser.find_element_by_xpath('//*[@id="c-product-detail__parallax"]/div/div[1]/div/header/div[2]/div/span').text.split('$')[1])
+                #except Exception as e:
+                    print(e)
+                availability="In Stock"
+                quantity=1
+            else:
+                availability="Out of Stock"
+                quantity=0
+        except Exception as e:
+            print(e)
+        browser.close()
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data)
+
+    elif (url is not None and "katespade" in url):
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        unavailable_sizes_list=[]
+        available_sizes_list=[]
+        try:
+            unavailable_sizes=soup.findAll('li',{"class":"emptyswatch unselectable"})
+            for s in unavailable_sizes:
+                unavailable_sizes_list.append(s.text.strip())
+            if size in unavailable_sizes_list:
+                availability="Out of Stock"
+                quantity=0
+            else:
+                availability="In Stock"
+                quantity=1
+                try:
+                    price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[2]').text.strip().split('$')[1])
+                except:
+                    try:
+                        price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[1]').text.strip().split('$')[1])
+                    except:
+                        pass
+        except Exception as e:
+            print(e)
+            try:
+                availablesizes=soup.findAll('li',{"class":"emptyswatch"})
+                for s in availablesizes:
+                    available_sizes_list.append(s.text.strip())
+                if size in available_sizes_list:
+                    availability="In Stock"
+                    quantity=1
+                    try:
+                        price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[2]').text.strip().split('$')[1])
+                    except:
+                        try:
+                            price=(browser.find_element_by_xpath('//*[@id="product-content"]/div[1]/span[1]').text.strip().split('$')[1])
+                        except:
+                            pass
+            except Exception as e:
+                print(e)
+        browser.close()
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data)
+
+    elif (url is not None and "nordstromrack" in url):
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        unavailable_sizes_list=[]
+        available_sizes_list=[]
+        try:
+            unavailable_sizes=soup.findAll('label',{"class":"sku-item sku-item--sold-out sku-item--disabled sku-item--text"})
+            for s in unavailable_sizes:
+                unavailable_sizes_list.append(s.find('span',{"class":"sku-item__text"}).text.strip())
+            if size in unavailable_sizes_list:
+                availability="Out of Stock"
+                quantity=0
+            else:
+                availability="In Stock"
+                quantity=1
+                try:
+                    price=(browser.find_element_by_xpath('//*[@id="bundle"]/div[2]/div[1]/div[2]/div[2]/section/div[2]/div/div/div[1]/span').text.strip().split('$')[1])
+                except:
+                    try:
+                        price=(browser.find_element_by_xpath('//*[@id="bundle"]/div[2]/div[1]/div[2]/div[2]/section/div[2]/div/div/div/span').text.strip().split('$')[1])
+                    except:
+                        pass
+        except Exception as e:
+            print(e)
+            try:
+                availablesizes=soup.findAll('label',{"class":"sku-item sku-item--available sku-item--text"})
+                for s in availablesizes:
+                    available_sizes_list.append(s.find('span',{"class":"sku-item__text"}).text.strip())
+                if size in available_sizes_list:
+                    availability="In Stock"
+                    quantity=1
+                    try:
+                        price=(browser.find_element_by_xpath('//*[@id="bundle"]/div[2]/div[1]/div[2]/div[2]/section/div[2]/div/div/div[1]/span').text.strip().split('$')[1])
+                    except:
+                        try:
+                            price=(browser.find_element_by_xpath('//*[@id="bundle"]/div[2]/div[1]/div[2]/div[2]/section/div[2]/div/div/div/span').text.strip().split('$')[1])
+                        except:
+                            pass
+            except Exception as e:
+                print(e)
+        browser.close()
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data)
+    elif (url is not None and "michaelkors" in url):
+        browser.get(url)
+        time.sleep(5)
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        available_sizes_list=[]
+        try:
+            all_sizes=soup.findAll("li",{"class":"facet-size-options"})
+            for s in all_sizes:
+                available_sizes_list.append(size.find('label').text)
+            if size in available_sizes_list:
+                availability="In Stock"
+                quantity=1
+                try:
+                    price=browser.find_element_by_xpath('//*[@id="app"]/div/div/section/div[2]/section[1]/div[2]/div/div[1]/div[1]/div/div/div[2]/span[2]/span[1]').text.split('$')[1]
+                except:
+                    try:
+                        price=browser.find_element_by_xpath('//*[@id="app"]/div/div/section/div[2]/section[1]/div[2]/div/div[1]/div[1]/div/div/div/span/span[1]').text.split('$')[1]
+                    except:
+                        pass
+            else:
+                availability="Out of Stock"
+                quantity=0
+        except Exception as e:
+            print(e)
+        browser.close()
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        return json.dumps(data)  
+
+    elif (url is not None and "toryburch" in url):
+        browser.get(url)
+        time.sleep(5)  
+        try:
+            browser.find_element_by_xpath('/html/body/div[2]/div/div/div[1]/button').click()
+        except:
+            pass
+        soup=BeautifulSoup(browser.page_source, 'lxml')
+        price=None
+        availability=None
+        quantity=None
+        unavailable_sizes_list=[]
+        available_sizes=soup.find("ul",{"class":"dropdown__options-2YA"}).findAll('li')
+        for s in available_sizes:
+            try:
+                unavailable_sizes_list.append(s.find('div',{"class":"size-option-qrz size-option--disabled-1zP"}).find('span').text)
+            except:
+                pass
+        if size in unavailable_sizes_list:
+            availability="Out of Stock"
+            quantity=0
+        else:
+            availability="In Stock"
+            quantity=1
+            try:
+                price=browser.find_element_by_xpath('//*[@id="root"]/div/main/div/div[1]/div[1]/div/div[2]/div[2]/div[1]/span[2]').text.split('$')[1]
+            except:
+                try:
+                    price=browser.find_element_by_xpath('//*[@id="root"]/div/main/div/div[1]/div[1]/div/div[2]/div[2]/div[1]/span').text.split('$')[1]
+                except:
+                    pass
+                    
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
+        browser.close()
+        return json.dumps(data)
 
     else:
         data={'sku':sku,'availability':None, 'price':None, 'quantity':None}
@@ -741,21 +1036,22 @@ def ebay_attributes(return_data, set_category_id, category_text):
                 else:
                     brand = ret_data[5].replace(',', '').lower()
                     price = setting_price(brand, category_text, ret_data[1], dollar_price)
-        accessories = {
-            "name": ret_data[5],
-            "regular_price": str(price),
-            "categories": category,
-            "image": ret_data[3],
-            "brand": ret_data[5],
-            "sku": ret_data[7],
-            "images": l2,
-            "weight": weight,
-            "shape": shape,
-            "gender": gender,
-            "attributes": attributes
-        }
+        if price is not None:
+            accessories = {
+                "name": ret_data[5],
+                "regular_price": str(price),
+                "categories": category,
+                "image": ret_data[3],
+                "brand": ret_data[5],
+                "sku": ret_data[7],
+                "images": l2,
+                "weight": weight,
+                "shape": shape,
+                "gender": gender,
+                "attributes": attributes
+            }
 
-        l1.append(accessories)
+            l1.append(accessories)
     response = Response(json.dumps(l1), status=200, mimetype='application/json')
     return response
 

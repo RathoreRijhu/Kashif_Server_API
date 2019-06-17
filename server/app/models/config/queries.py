@@ -162,7 +162,13 @@ QUERIES = {
           "UNION SELECT product_link from shopify_db.zappos_scraped_data where main_asin=%s and color=%s "
           "UNION SELECT product_link from shopify_db.pm6_scraped_data where main_asin=%s and color=%s "
           "UNION SELECT product_link from shopify_db.dillards_scraped_data where main_asin=%s and color=%s"
-          "UNION SELECT product_link FROM shopify_db.calvinklein_scraped_data where main_asin=%s and color=%s",
+          "UNION SELECT product_link FROM shopify_db.calvinklein_scraped_data where main_asin=%s and color=%s"
+          "UNION SELECT product_link FROM shopify_db.zara_scraped_data WHERE product_asin=%s and color=%s"
+          "UNION SELECT product_link FROM shopify_db.aldo_shoes_data WHERE main_asin=%s and color=%s"
+          "UNION SELECT product_link FROM shopify_db.katespade_data WHERE main_asin=%s and color=%s"
+          "UNION SELECT product_link FROM shopify_db.nordstromrack_scraped_data where main_asin=%s and color=%s"
+          "UNION SELECT product_link FROM shopify_db.michael_products_details WHERE main_asin=%s and color=%s"
+          "UNION SELECT product_link FROM shopify_db.tory_burch_data WHERE main_asin=%s and color=%s",
 
 
     # "GetEbayUrl": "SELECT product_link from shopify_db.ebay_scraped_data "
