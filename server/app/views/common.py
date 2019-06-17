@@ -120,7 +120,7 @@ def return_product_link(sku):
         if price is not None and quantity is not None:    
             data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
         elif price is not None and quantity is None:
-            data={'sku':sku, 'availability':"In Stock", 'price':price, 'quantity':int("1")}
+            data={'sku':sku, 'availability':"In Stock", 'price':price, 'quantity':1}
         else:
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
