@@ -137,7 +137,8 @@ def return_product_link(sku):
         except Exception as e:
             print(e)
         try:
-            price = soup.find("span",{'data-auto':"sale-price"}).text.split('$')[1] 
+            #price = soup.find("span",{'data-auto':"sale-price"}).text.split('$')[1]
+            price=browser.find_element_by_xpath('//*[@id="mainCont"]/div/div[1]/div[1]/div[2]/div[2]/div/div[1]/div/div[4]/div/span[1]').text.strip().split('$')[1] 
         except:
             try:
                 price=soup.find("div",{'data-auto':"main-price"}).text.split('$')[1]
