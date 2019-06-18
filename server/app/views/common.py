@@ -99,33 +99,44 @@ def return_product_link(sku):
     elif(link is not None and "ebay" in link):
         browser.get(link)
         soup=BeautifulSoup(browser.page_source, 'lxml')
-        browser.close()
+        #browser.close()
+        sold=None
         try:
-            quantity = None
-            quantity1=soup.find("span",{'id':'qtySubTxt'}).text
-            quantity=re.findall("\d+",quantity1)[0]
+            sold=browser.find_element_by_xpath('//*[@id="CenterPanel"]/div[1]/section/div/div/div/div/div[1]/div[1]/div/span').text
         except Exception as e:
             print(e)
-        price = None
-        availability = None
-        try:
-            availability = soup.find("span",{'id':'qtySubTxt'}).text.strip()
-        except Exception as e:
-            print(e)
-        try:
-            price = soup.find("span",{'id':"prcIsum"}).text.split('$')[1]
-        except Exception as e:
-            try:
-                price=soup.find("span",{'id':"mm-saleDscPrc"}).text.split('$')[1]
-            except:
-                pass
-            print(e) 
-        if price is not None and quantity is not None:    
-            data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
-        elif price is not None and quantity is None:
-            data={'sku':sku, 'availability':"In Stock", 'price':price, 'quantity':1}
-        else:
+        if sold:
+            quantity=None
+            availability=None
+            price=None
             data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+        else:
+            try:
+                quantity = None
+                quantity1=soup.find("span",{'id':'qtySubTxt'}).text
+                quantity=re.findall("\d+",quantity1)[0]
+            except Exception as e:
+                print(e)
+            price = None
+            availability = None
+            try:
+                availability = soup.find("span",{'id':'qtySubTxt'}).text.strip()
+            except Exception as e:
+                print(e)
+            try:
+                price = soup.find("span",{'id':"prcIsum"}).text.split('$')[1]
+            except Exception as e:
+                try:
+                    price=soup.find("span",{'id':"mm-saleDscPrc"}).text.split('$')[1]
+                except:
+                    pass
+                print(e) 
+            if price is not None and quantity is not None:    
+                data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
+            elif price is not None and quantity is None:
+                data={'sku':sku, 'availability':"In Stock", 'price':price, 'quantity':1}
+            else:
+                data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     
     elif(link is not None and 'macys' in link):
@@ -760,6 +771,7 @@ def get_color_size(sku, color, size):
         data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
         browser.close()
         return json.dumps(data)
+
 
     else:
         data={'sku':sku,'availability':None, 'price':None, 'quantity':None}
