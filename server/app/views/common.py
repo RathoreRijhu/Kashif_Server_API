@@ -66,7 +66,7 @@ def return_product_link(sku):
     link = get_product_link(sku)[0][0]
     print(link)
     opts = Options()
-    rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxies.txt')
+    rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxyies.txt')
     opts.add_argument('--user-agent= Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0')
     opts.add_argument('--no-sandbox')
     opts.add_argument('--headless')
@@ -268,7 +268,7 @@ def get_color_size(sku, color, size):
     #from selenium.webdriver import Firefox
     #from selenium.webdriver.firefox.options import Options
     opts = Options()
-    rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxies.txt')
+    rotator = ProxyRotator('/root/Kashif_Server_API/server/app/views/Proxyies.txt')
     opts.add_argument('--user-agent= Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0')
     opts.add_argument('--no-sandbox')
     opts.add_argument('--headless')
