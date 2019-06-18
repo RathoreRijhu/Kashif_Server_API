@@ -131,6 +131,7 @@ def return_product_link(sku):
         quantity = None
         availability=None
         price=None
+        print(browser.title)
         # try:
         #     availability=browser.find_element_by_xpath('//*[@id="mainCont"]/div/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/p').text
         #     #data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int('0')}
