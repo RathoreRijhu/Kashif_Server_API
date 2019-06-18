@@ -131,19 +131,19 @@ def return_product_link(sku):
         quantity = None
         availability=None
         price=None
+        # try:
+        #     availability=browser.find_element_by_xpath('//*[@id="mainCont"]/div/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/p').text
+        #     #data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int('0')}
+        # except Exception as e:
+        #     print(e)
         try:
-            availability=browser.find_element_by_xpath('//*[@id="mainCont"]/div/div[1]/div[1]/div[2]/div[2]/div/div[2]/div/p').text
-            #data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int('0')}
-        except Exception as e:
-            print(e)
-        try:
-            #price = soup.find("span",{'data-auto':"sale-price"}).text.split('$')[1]
-            price=browser.find_element_by_xpath('//*[@id="mainCont"]/div/div[1]/div[1]/div[2]/div[2]/div/div[1]/div/div[4]/div/span[1]').text.strip().split('$')[1] 
+            price = soup.find("span",{'data-auto':"sale-price"}).text.strip().split('$')[1]
+            #price=browser.find_element_by_xpath('//*[@id="mainCont"]/div/div[1]/div[1]/div[2]/div[2]/div/div[1]/div/div[4]/div/span[1]').text.strip().split('$')[1] 
         except:
             try:
-                price=soup.find("div",{'data-auto':"main-price"}).text.split('$')[1]
-            except:
-                pass
+                price=soup.find("div",{'data-auto':"main-price"}).text.strip().split('$')[1]
+            except Exception as e:
+                print(e)
         if price:
             quantity=1
             availability="In Stock"
