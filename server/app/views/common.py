@@ -1420,9 +1420,9 @@ def zara_data():
             }]
         title=row[1].split('-')[0]
         data = {
-            'sku': title,
+            'sku': row[0],
             'type': 'variable',
-            'name': row[1],
+            'name': title,
             'brand': 'zara',
             'attributes': attributes,
             'images': l2,
