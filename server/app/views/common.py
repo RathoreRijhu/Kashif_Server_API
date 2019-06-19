@@ -30,8 +30,9 @@ opts.add_argument('--headless')
 browser = Chrome(options=opts )
 #browser = Firefox(firefox_options=opts )
 browser.get(url)
-
-price = browser.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[2]/table/tbody/tr[3]/td/table/tbody/tr[3]/td/table/tbody/tr/td[2]/table/tbody/tr[24]/td[3]')
+# add dollor's selling price
+#price = browser.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[2]/table/tbody/tr[3]/td/table/tbody/tr[3]/td/table/tbody/tr/td[2]/table/tbody/tr[24]/td[3]')
+price=browser.find_element_by_xpath('/html/body/table/tbody/tr[1]/td[2]/table/tbody/tr[3]/td/table/tbody/tr[3]/td/table/tbody/tr/td[2]/table/tbody/tr[24]/td[4]')
 dollar_price = float(price.text)
 print dollar_price
 browser.close()
@@ -1504,11 +1505,12 @@ def macys_data():
         
         #category_id = assign_category(row[10].split(' ')[0])
         category_id = assign_category(row[10])
+        title=row[1].split('&')[0]
         data = {
             'sku': row[0],
             #'type': 'variable',
             'regular_price': str(price),
-            'name': row[1],
+            'name': title,
             'brand': row[8],
             'attributes': attributes,
             'images': l2,
