@@ -894,17 +894,17 @@ def ebay_running(limit, offset):
         #     size_list.append(str(row[6]))
         
         for s in row[8].split(','):
-            if '[' in s:
+            if s.startswith( '[' ):
                 size_list.append(s.split('[')[1])
-            elif ']' in s:
+            elif s.endswith(']'):
                 size_list.append(s.split(']')[0])
             else:
                 size_list.append(s)
         print(size_list)
         for c in row[9].split(','):
-            if '[' in c:
+            if c.startswith('['):
                 color_list.append(c.split('[')[1])
-            elif ']' in c:
+            elif c.endswith(']'):
                 color_list.append(c.split(']')[0])
             else:
                 color_list.append(c)
