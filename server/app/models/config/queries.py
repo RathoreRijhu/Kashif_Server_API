@@ -53,7 +53,7 @@ QUERIES = {
                       "FROM sorted_db.sorted_ebay_scraped_data where category='bagpacks' "
                       "LIMIT %s OFFSET %s",
 
-    "GetRunning": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
+    "GetRunning": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin, size, color "
                       "FROM sorted_db.sorted_ebay_scraped_data where category='running' "
                       "LIMIT %s OFFSET %s",
     
