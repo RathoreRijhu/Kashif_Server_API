@@ -855,12 +855,95 @@ def ebay_bagpack(limit, offset):
 @app.route('/ebay_running/<limit>/<offset>', methods=['GET'])
 @auto.doc()
 def ebay_running(limit, offset):
-    return_data = get_ebay_running(limit, offset)
-    print(return_data)
-    set_category_id = '85'
+    all_rows = get_ebay_running(limit, offset)
+    print(all_rows)
+    category_id = '85'
     category_text = 'running'
-    response = ebay_attributes(return_data, set_category_id, category_text)
+    all_data=[]
+    for row in all_rows:
+        variation_list=[]
+        size_list=[]
+        color_list=[]
+        #setting up images
+        l2=[]
+        if row[4] is not None:
+            count = 0
+            for x in row[4].split(','):
+                dict_object = {
+                    
+                    "src": x,
+                    "position": count
+                }
+                count = count+1
+                l2.append(dict_object)
+        else:
+            dict_object = {
+            'src':row[3],
+            'position': 0
+            }
+            l2.append(dict_object)
+        # setting up properties or attributes
+        # optionsList=[]
+        # if row[8] is not None:
+        #     # option=row[8].split('{')[1].split('}')[0]
+        #     for opt in row[8]:
+        #         optionsList.append(str(opt))
+        #     size_list.extend(optionsList)
+            #print("data in size list",size_list)
+        # else:
+        #     size_list.append(str(row[6]))
+        size_list=row[8]
+        color_list=row[9]
+        price = row[1]
+        if price:
+            if row[5]:
+                if price > 500:
+                    percent_30 = float(price)*0.3
+                    price = (float(price)+percent_30) * (dollar_price+3)   
+                else:
+                    brand = row[5].replace(',', '').lower()
+                    price = setting_price(brand, category_text, row[1], dollar_price)
+        if price :
+            for color in color_list:
+                for size in size_list: 
+                    print("size in variations",size)
+                    variation = {
+                        "regular_price": str(price),
+                        "image":{ 'src': row[3]},
+                        'attributes':[{'slug':'color', 'name':"Color", 'option':color},
+                                    {'slug':'size', 'name':"Size", 'option':str(size)}]
+                    }
+                    variation_list.append(variation)
+                #print(variation)
+        attributes = [{
+                'name': "Color",
+                "visible": True,
+                "variation": True,
+                "options": list(set(color_list))
+
+            },
+            {
+                'name': "Size",
+                "visible": True,
+                "variation": True,
+                "options": list(set(size_list))                
+            }]
+        title=row[0]
+        data = {
+            'sku': row[7],
+            'type': 'variable',
+            'name': title,
+            'brand': row[5],
+            'attributes': attributes,
+            'images': l2,
+            'variations': variation_list,
+            'categories':[{ "id": category_id}],
+            'description': row[6]
+            }        
+        all_data.append(data)
+    response = Response(json.dumps(all_data), status=200, mimetype='application/json')
     return response
+
 
 
 def ebay_attributes(return_data, set_category_id, category_text):
