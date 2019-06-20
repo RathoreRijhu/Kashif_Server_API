@@ -893,7 +893,10 @@ def ebay_running(limit, offset):
         # else:
         #     size_list.append(str(row[6]))
         size_list=row[8]
+        print(size_list)
+
         color_list=row[9]
+        print(color_list)
         price = row[1]
         if price:
             if row[5]:
