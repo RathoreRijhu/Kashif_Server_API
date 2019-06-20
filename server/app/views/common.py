@@ -60,6 +60,23 @@ def original_product_link(sku):
     except:
         return json.dumps("product link not found")
 
+@app.route('/scraping-status/<url>', methods=['GET'])
+@auto.doc()
+def scraping_status_product_link(url):
+    print(url)
+    link = get_link(url)
+    print('return link:',link)
+    try:
+        link = get_original_link_sku(url)
+        if link[0][0]:
+            data={'sku':link[0][1],'status':"product scraped"}
+        else:
+            data={'sku':link[0][1],'status':"product not scraped"}
+        print(link)
+        return json.dumps(data)
+    except:
+        return json.dumps("product link not found")
+
 @app.route('/return-link/<sku>', methods=['GET'])
 @auto.doc()
 def return_product_link(sku):
