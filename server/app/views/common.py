@@ -907,8 +907,8 @@ def ebay_running(limit, offset):
                     brand = row[5].replace(',', '').lower()
                     price = setting_price(brand, category_text, row[1], dollar_price)
         if price :
-            for color in color_list:
-                for size in size_list: 
+            for color in color_list.split(','):
+                for size in size_list.split(','): 
                     print("size in variations",size)
                     variation = {
                         "regular_price": str(price),
