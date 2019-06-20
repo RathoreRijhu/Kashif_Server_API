@@ -89,12 +89,12 @@ def return_product_link(sku):
             availability = browser.find_element_by_xpath('//*[@id="availability"]/span').text
             print(availability)
             price = browser.find_element_by_xpath('//*[@id="priceblock_ourprice"]').text[1:]
-            data={'availability':availability, 'price':price, 'quantity':int(quantity)}
+            data={'sku':sku,'availability':availability, 'price':price, 'quantity':int(quantity)}
             browser.close()
         except Exception as e:
             print(e)
             browser.close()
-            data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+            data = {'sku':sku,'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     
     elif(link is not None and "ebay" in link):
@@ -110,7 +110,7 @@ def return_product_link(sku):
             quantity=None
             availability=None
             price=None
-            data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+            data = {'sku':sku,'availability':"out of stock", 'price':price, 'quantity':quantity}
         else:
             try:
                 quantity = None
@@ -137,7 +137,7 @@ def return_product_link(sku):
             elif price is not None and quantity is None:
                 data={'sku':sku, 'availability':"In Stock", 'price':price, 'quantity':1}
             else:
-                data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+                data = {'sku':sku,'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     
     elif(link is not None and 'macys' in link):
@@ -185,7 +185,7 @@ def return_product_link(sku):
                                     encode('utf-8').replace('$', '').strip('\n'))
             data={'sku':sku, 'availability':availability, 'price':price, 'quantity':1}
         except Exception as e:
-            data = {'availability':"out of stock", 'price':0, 'quantity':None}
+            data = {'sku':sku,'availability':"out of stock", 'price':0, 'quantity':None}
         return json.dumps(data)
     elif (url is not None and "aldoshoes" in url):
         browser.get(url)
@@ -262,7 +262,7 @@ def return_product_link(sku):
 
     else:
         browser.close()
-        data={'availability':None, 'price':None, 'quantity':None}
+        data={'sku':sku,'availability':None, 'price':None, 'quantity':None}
         return json.dumps(data)
 
 
@@ -321,7 +321,7 @@ def get_color_size(sku, color, size):
             browser.close()
         except Exception as e:
             browser.close()
-            data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+            data = {'sku':sku,'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif(url is not None and "ebay" in url):
         browser.get(url)
@@ -341,7 +341,7 @@ def get_color_size(sku, color, size):
             browser.close()
         except Exception as e:
             browser.close()
-            data = {'availability':"out of stock", 'price':price, 'quantity':quantity}
+            data = {'sku':sku,'availability':"out of stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif(url is not None and "zappos" in url):
         browser.get(url)
@@ -459,13 +459,13 @@ def get_color_size(sku, color, size):
             print(e)
         browser.close()
         if price is not None and availability is not None and quantity is not None:
-            data={'availability':availability, 'price':price, 'quantity':quantity}
+            data={'sku':sku,'availability':availability, 'price':price, 'quantity':quantity}
         elif price is not None and (availability is not None and len(availability)!=0) and quantity is None:
-            data={'availability':availability, 'price':price, 'quantity':quantity}
+            data={'sku':sku,'availability':availability, 'price':price, 'quantity':quantity}
         elif price is not None and (availability is None or len(availability)==0)  and quantity is None:
-            data={'availability':"In Stock", 'price':price, 'quantity':int("1")}
+            data={'sku':sku,'availability':"In Stock", 'price':price, 'quantity':int("1")}
         else:
-            data={'availability':"Out of Stock", 'price':price, 'quantity':quantity}
+            data={'sku':sku,'availability':"Out of Stock", 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif (url is not None and "dillards" in url):
         browser.get(url)
@@ -498,7 +498,7 @@ def get_color_size(sku, color, size):
         except Exception as e:
             print(e)
         browser.close()
-        data={'availability':availability, 'price':price, 'quantity':quantity}
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':quantity}
         return json.dumps(data)
     elif (url is not None and "calvinklein" in url):
         browser.get(url)
@@ -549,7 +549,7 @@ def get_color_size(sku, color, size):
                     #return json.dumps(data)
             except Exception as e:
                 print(e)
-        data={'availability':availability, 'price':price, 'quantity':quantity}
+        data={'sku':sku,'availability':availability, 'price':price, 'quantity':quantity}
         return json.dumps(data)
 
 
@@ -1843,10 +1843,11 @@ def zappos_data():
                 "options": list(set(size_list))                
             }
             ]
+        title=row[1].split('at')[0]
         data = {
             'sku': asin[0],
             'type': 'variable',
-            'name': row[1],
+            'name': title,
             'variations': variation_list,
             'brand': row[8],
             'attributes': attributes,
