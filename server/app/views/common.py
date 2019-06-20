@@ -892,10 +892,22 @@ def ebay_running(limit, offset):
             #print("data in size list",size_list)
         # else:
         #     size_list.append(str(row[6]))
-        size_list=row[8]
+        
+        for s in row[8].split(','):
+            if '[' in s:
+                size_list.append(s.split('[')[1])
+            elif ']' in s:
+                size_list.append(s.split(']')[0])
+            else:
+                size_list.append(s)
         print(size_list)
-
-        color_list=row[9]
+        for c in row[9].split(','):
+            if '[' in c:
+                color_list.append(c.split('[')[1])
+            elif ']' in c:
+                color_list.append(c.split(']')[0])
+            else:
+                color_list.append(c)
         print(color_list)
         price = row[1]
         if price:
@@ -907,13 +919,13 @@ def ebay_running(limit, offset):
                     brand = row[5].replace(',', '').lower()
                     price = setting_price(brand, category_text, row[1], dollar_price)
         if price :
-            for color in color_list.split(','):
-                for size in size_list.split(','): 
+            for color in color_list:
+                for size in size_list: 
                     print("size in variations",size)
                     variation = {
                         "regular_price": str(price),
                         "image":{ 'src': row[3]},
-                        'attributes':[{'slug':'color', 'name':"Color", 'option':color},
+                        'attributes':[{'slug':'color', 'name':"Color", 'option':str(color)},
                                     {'slug':'size', 'name':"Size", 'option':str(size)}]
                     }
                     variation_list.append(variation)
