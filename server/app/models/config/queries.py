@@ -27,7 +27,8 @@ QUERIES = {
                "UNION SELECT product_link FROM shopify_db.tedbaker_data WHERE main_asin=%s"
                "UNION SELECT product_link FROM shopify_db.shop_guess_scraped_data WHERE main_asin=%s"
                "UNION SELECT product_link FROM shopify_db.coach_scraped_data WHERE main_asin=%s"
-               "UNION SELECT product_link FROM shopify_db.calvinklein_scraped_data WHERE main_asin=%s",
+               "UNION SELECT product_link FROM shopify_db.calvinklein_scraped_data WHERE main_asin=%s"
+               "UNION SELECT product_link FROM shopify_db.tory_burch_data WHERE product_asin=%s",
 
     "GetWatches": "SELECT title, price, category, image_link, all_images, brand, item_specification, product_asin "
                       "FROM sorted_db.sorted_ebay_scraped_data where category='watches' "

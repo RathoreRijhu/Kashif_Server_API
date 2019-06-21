@@ -892,14 +892,14 @@ def ebay_running(limit, offset):
             #print("data in size list",size_list)
         # else:
         #     size_list.append(str(row[6]))
-        
-        for s in row[8].split(','):
-            if s.startswith( '[' ):
-                size_list.append(s.split('[')[1])
-            elif s.endswith(']'):
-                size_list.append(s.split(']')[0])
-            else:
-                size_list.append(s)
+        if row[8]:
+            for s in row[8].split(','):
+                if s.startswith( '[' ):
+                    size_list.append(s.split('[')[1])
+                elif s.endswith(']') and "out of stock" not in s:
+                    size_list.append(s.split(']')[0])
+                else:
+                    size_list.append(s)
         print(size_list)
         for c in row[9].split(','):
             if c.startswith('['):
