@@ -331,18 +331,31 @@ def get_color_size(sku, color, size):
         try:
             quantity = None
             quantity=soup.find("span",{'id':'qtySubTxt'}).text.split()[0]
+            if "Last" in quantity:
+                quantity="1"
         except Exception as e:
             print(e)
         price = None
         availability = None
         try:
-            availability = soup.find("span",{'id':'qtySubTxt'}).text.split()[1]
-            price = soup.find("span",{'id':"prcIsum"}).text.split('$')[1] or soup.find("span",{'id':"mm-saleDscPrc"}).text.split('$')[1]
+            availability = soup.find("span",{'id':'qtySubTxt'}).text
+        except Exception as e:
+            print(e)
+        try:
+            price = soup.find("span",{'id':"prcIsum"}).text.split('$')[1] 
+        except:
+            try:
+                price=soup.find("span",{'id':"mm-saleDscPrc"}).text.split('$')[1]
+            except Exception as e:
+                print(e)
+        if price:
             data={'sku':sku, 'availability':availability, 'price':price, 'quantity':int(quantity)}
             browser.close()
-        except Exception as e:
-            browser.close()
+        # except Exception as e:
+        #     browser.close()
+        else:
             data = {'sku':sku,'availability':"out of stock", 'price':price, 'quantity':quantity}
+        browser.close()
         return json.dumps(data)
     elif(url is not None and "zappos" in url):
         browser.get(url)
