@@ -355,7 +355,7 @@ def get_color_size(sku, color, size):
         #     browser.close()
         else:
             data = {'sku':sku,'availability':"out of stock", 'price':price, 'quantity':quantity}
-        browser.close()
+        # browser.close()
         return json.dumps(data)
     elif(url is not None and "zappos" in url):
         browser.get(url)
