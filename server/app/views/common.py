@@ -910,7 +910,7 @@ def ebay_running(limit, offset):
                 if "out of stock" not in s:
                     if s.startswith( '[' ):
                         size_list.append(s.split('[')[1])
-                    elif s.endswith(']'):
+                    elif s.endswith(']') or ']' in s:
                         size_list.append(s.split(']')[0])
                     else:
                         size_list.append(s)
