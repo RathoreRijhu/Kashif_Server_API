@@ -18,7 +18,7 @@ def setting_price(brand, category, price , dollar_price):
 	'marc jacobs', 'tommy bahama', 'calvin klein', 'armani exchange', 'gigi', 
 	'french connection', 'marc by marc jacobs', 'mbm1315 marc', 'mk5970 michael']
 
-	brand_list_4=['skechers', 'nike', 'puma', 'converse', 'reebok', 'toms', 'asics', 'bobs', 
+	brand_list_4=['skechers', 'nike', 'adidas','puma', 'converse', 'reebok', 'toms', 'asics', 'bobs', 
 	'under armour', 'disney', 'kenneth cole', 'kenneth', 'cole', 'columbia', 'nine west', 
 	'original', 'alice', 'bubbles', 'fossil', 'nine', 'vail', 'marvel', 'womens']
 
